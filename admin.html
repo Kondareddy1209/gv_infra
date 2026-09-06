@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — GV Infra Projects</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { padding-bottom: 40px; }
+  .admin-shell { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 76px); }
+  .admin-nav { border-right: 1px solid var(--stone-line); padding: 24px 16px; }
+  .admin-nav a { display:block; padding: 10px 12px; border-radius: var(--radius-s); font-size: 0.9rem; color: var(--ink-soft); margin-bottom:4px; }
+  .admin-nav a.active { background: var(--forest); color: #fff; }
+  .admin-main { padding: 32px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--stone-line); }
+  th { color: var(--ink-soft); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.02em; }
+  select, input[type=number] { padding: 6px 8px; border: 1px solid var(--stone-line); border-radius: var(--radius-xs); font-family: inherit; }
+  .kpi-row { display:flex; gap:16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .kpi { flex: 1; min-width: 140px; border: 1px solid var(--stone-line); border-radius: var(--radius-m); padding: 16px 18px; background:#fff; box-shadow: var(--shadow-1); }
+  .kpi .num { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; color: var(--forest); }
+  .kpi .label { font-size: 0.78rem; color: var(--ink-soft); margin-top: 2px; }
+  .note-box { background: var(--surface-soft); border: 1px solid var(--stone-line); padding: 14px 18px; border-radius: var(--radius-m); font-size: 0.85rem; margin-bottom: 24px; }
+  .tab-section { display:none; }
+  .tab-section.active { display:block; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      GV Infra <span>Admin</span>
+      <span class="brand-badge">Demo Portal</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">← Back to website</a>
+    </div>
+  </div>
+</nav>
+
+<div class="admin-shell">
+  <aside class="admin-nav">
+    <a href="#" class="tab-link active" data-tab="dashboard">Dashboard</a>
+    <a href="#" class="tab-link" data-tab="plots">Plots &amp; Pricing</a>
+    <a href="#" class="tab-link" data-tab="leads">Leads</a>
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="note-box">
+      This is a demo admin panel backed by <code>localStorage</code> so you can show the "live update" flow with no real backend:
+      change a plot's status or price below, then open <a href="project.html" target="_blank" style="text-decoration:underline;">the public masterplan in a new tab</a> — it updates automatically because both pages read from the same mock data layer (<code>js/data.js</code>). Swap that file for real Supabase calls in production.
+    </div>
+
+    <section id="tab-dashboard" class="tab-section active">
+      <h2 style="margin-bottom:20px;">Dashboard</h2>
+      <div class="kpi-row" id="kpi-row"></div>
+      <h3 style="font-size:1.05rem; margin-bottom:12px;">Plot status breakdown</h3>
+      <table>
+        <thead><tr><th>Status</th><th>Count</th></tr></thead>
+        <tbody id="status-breakdown"></tbody>
+      </table>
+    </section>
+
+    <section id="tab-plots" class="tab-section">
+      <h2 style="margin-bottom:8px;">Plots — Stambadri Enclave</h2>
+      <p style="color:var(--ink-soft); font-size:0.88rem; margin-bottom:20px;">Change status or price, then check the public 3D masterplan in another tab.</p>
+      <table>
+        <thead>
+          <tr><th>Plot</th><th>Block</th><th>Size</th><th>Facing</th><th>Status</th><th>Price (₹)</th><th>Updated</th></tr>
+        </thead>
+        <tbody id="plots-table"></tbody>
+      </table>
+      <button class="btn btn-ghost btn-small mt-24" id="reset-demo">Reset demo data</button>
+    </section>
+
+    <section id="tab-leads" class="tab-section">
+      <h2 style="margin-bottom:8px;">Leads</h2>
+      <p style="color:var(--ink-soft); font-size:0.88rem; margin-bottom:20px;">Captured from the callback form, site-visit requests, and plot enquiries on the public site.</p>
+      <table>
+        <thead><tr><th>Name</th><th>Phone</th><th>Project</th><th>Plot</th><th>Source</th><th>Status</th><th>Received</th></tr></thead>
+        <tbody id="leads-table"></tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

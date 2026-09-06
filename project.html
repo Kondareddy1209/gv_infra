@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stambadri Enclave — 3D Masterplan | GV Infra Projects</title>
+<meta name="description" content="Explore Stambadri Enclave's plot layout in realistic 3D — rotate, walk the street view, select a plot, and see illustrative availability, price and Vastu facing.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="css/land-map.css">
+<link rel="stylesheet" href="css/plot-showcase.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
+      <span class="brand-badge">Interactive 3D</span>
+    </a>
+    <div class="nav-links">
+      <a href="projects.html">Projects</a>
+      <a href="project.html" style="color:var(--brand-green);">3D Masterplan</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="admin.html" style="font-size:0.82rem; color:var(--ink-soft);">Admin ↗</a>
+    </div>
+    <a href="tel:+919000000000" class="btn btn-primary btn-small">Call Sales</a>
+  </div>
+</nav>
+
+<header style="padding: 44px 0 24px;">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--brand-green); font-weight:700; letter-spacing:0.04em;">Gurralapadu, Khammam–Kodada Highway · 302 Plots</span>
+    <h1 style="font-size: clamp(2.2rem, 3.5vw, 3rem); max-width: 22ch; margin-top:6px;">Stambadri Enclave — See the land. Explore the possibilities.</h1>
+    <p class="lede" style="margin-top:14px; color:var(--ink-soft); max-width:54ch; font-size:1.05rem;">Explore real satellite imagery and the surrounding roads, then switch to our illustrative 3D layout to compare plots and walk the proposed streets.</p>
+  </div>
+</header>
+
+<section class="wrap" style="padding-top:0;">
+  <!-- Live Plot Inventory Ticker -->
+  <div class="live-ticker-strip">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span class="live-dot-pulse"></span>
+      <span style="font-weight:700;">Live Layout Inventory</span>
+    </div>
+    <span class="ticker-divider">|</span>
+    <span class="ticker-item"><strong style="color:#16A34A;" data-live-count="available">28</strong> Available</span>
+    <span class="ticker-divider">•</span>
+    <span class="ticker-item"><strong style="color:#EA580C;" data-live-count="reserved">8</strong> Reserved</span>
+    <span class="ticker-divider">•</span>
+    <span class="ticker-item"><strong style="color:#D97706;" data-live-count="hold">4</strong> On Hold</span>
+    <span class="ticker-divider">•</span>
+    <span class="ticker-item"><strong style="color:#64748B;" data-live-count="sold">8</strong> Sold (3D Villas Built)</span>
+    <span class="ticker-divider" style="margin-left:auto;">|</span>
+    <div class="bank-badges-strip" style="margin-top:0;">
+      <span class="bank-badge">🏦 Loan Assistance</span>
+      <span class="bank-badge">✅ DTCP &amp; RERA Approved</span>
+    </div>
+  </div>
+
+  <div class="land-view-switch" role="group" aria-label="Property viewer">
+    <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer">3D layout preview</button>
+    <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase">Plot showcase</button>
+    <button id="view-land" aria-pressed="false" aria-controls="land-explorer">Satellite land map</button>
+    <span>Illustrative 3D layout · Card browser · Real surroundings</span>
+  </div>
+  <p id="layout-loading" role="status" hidden></p>
+  <div class="masterplan-shell" id="layout-explorer">
+    <aside class="mp-sidebar">
+      <h4>Find a plot</h4>
+      <input type="text" id="plot-search" class="mp-search" placeholder="Plot number, e.g. 114">
+
+      <div class="filter-group">
+        <div class="label">Max Price (₹)</div>
+        <div class="price-slider-wrap">
+          <div class="price-slider-labels">
+            <span>₹30 Lakhs</span>
+            <span id="price-val-label">All Prices</span>
+          </div>
+          <input type="range" id="filter-price" class="range-input" min="3000000" max="8000000" step="100000" value="8000000">
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="label">Status</div>
+        <div class="chip-row" id="filter-status">
+          <button class="chip active" data-value="all">All</button>
+          <button class="chip" data-value="available">Available</button>
+          <button class="chip" data-value="hold">On Hold</button>
+          <button class="chip" data-value="reserved">Reserved</button>
+          <button class="chip" data-value="sold">Sold</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="label">Facing</div>
+        <div class="chip-row" id="filter-facing">
+          <button class="chip active" data-value="all">All</button>
+          <button class="chip" data-value="East">East</button>
+          <button class="chip" data-value="West">West</button>
+          <button class="chip" data-value="North">North</button>
+          <button class="chip" data-value="South">South</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="label">Size (sq.ft)</div>
+        <div class="chip-row" id="filter-size">
+          <button class="chip active" data-value="all">All</button>
+          <button class="chip" data-value="1800">1800</button>
+          <button class="chip" data-value="2000">2000</button>
+          <button class="chip" data-value="2100">2100</button>
+          <button class="chip" data-value="2400">2400</button>
+          <button class="chip" data-value="3000">3000</button>
+        </div>
+      </div>
+
+      <div class="legend" id="legend-status">
+        <div class="legend-item"><span class="dot" style="background:#3E7A4F"></span> Available</div>
+        <div class="legend-item"><span class="dot" style="background:#B98A22"></span> On Hold</div>
+        <div class="legend-item"><span class="dot" style="background:#A85F3A"></span> Reserved</div>
+        <div class="legend-item"><span class="dot" style="background:#837C6D"></span> Sold (3D Houses)</div>
+      </div>
+
+      <div class="legend is-hidden" id="legend-vastu">
+        <div class="legend-item"><span class="dot" style="background:#B9962C"></span> Highly Auspicious (North/East)</div>
+        <div class="legend-item"><span class="dot" style="background:#3E7A93"></span> Balanced (West)</div>
+        <div class="legend-item"><span class="dot" style="background:#A85F3A"></span> Needs Remedies (South)</div>
+        <p class="vastu-disclaimer">Indicative only, based on commonly followed Vastu Shastra guidance — not a certified assessment.</p>
+      </div>
+
+      <div class="plot-count" id="plot-count">48 plots · loading…</div>
+    </aside>
+
+    <div class="mp-canvas-area">
+      <canvas id="masterplan-canvas"></canvas>
+
+      <!-- Compass Marker -->
+      <div class="compass" id="compass" title="North, relative to your current view" role="img" aria-label="Compass showing north relative to the current camera angle">
+        <div class="compass-dial" id="compass-dial">
+          <span class="compass-n">N</span>
+        </div>
+      </div>
+
+      <!-- Glassmorphic Toolbar -->
+      <div class="mp-toolbar">
+        <div class="tool-group">
+          <div class="env-select-group">
+            <button class="env-btn active" id="btn-env-day" title="Day light">☀️ Day</button>
+            <button class="env-btn" id="btn-env-sunset" title="Sunset">🌅 Sunset</button>
+            <button class="env-btn" id="btn-env-night" title="Night">🌙 Night</button>
+            <button class="env-btn" id="btn-env-satellite" title="Top-down illustrative layout, not satellite imagery">🗺️ Top view</button>
+          </div>
+        </div>
+        <div class="tool-group">
+          <button class="tool-btn" id="btn-drone-tour" title="Open 360 Aerial Drone Tour">🚁 360° Drone Tour</button>
+          <button class="tool-btn" id="btn-walk" title="Street View / FPV Walk Mode">🚶 Walk</button>
+          <button class="tool-btn active" id="btn-activity" title="Show moving people and vehicles">✨ Life</button>
+          <button class="tool-btn active" id="btn-labels" title="Toggle 3D Plot Badges">🏷️ #</button>
+          <button class="tool-btn" id="btn-vastu" title="Toggle Vastu View">🧭 Vastu</button>
+        </div>
+        <div class="tool-group vr-tool-group">
+          <button class="tool-btn" id="btn-vr" title="Open stereoscopic headset view">🥽 VR View</button>
+        </div>
+        <div class="tool-group">
+          <button class="tool-btn" id="btn-layers" title="Show/hide roads, utilities & buildings" aria-haspopup="true" aria-expanded="false">🧱 Layers</button>
+          <button class="tool-btn" id="btn-measure" title="Measure distance &amp; area (illustrative scene units)">📏 Measure</button>
+        </div>
+        <div class="tool-group">
+          <button class="tool-btn" id="btn-reset" title="Reset View" aria-label="Reset camera view">⟲</button>
+          <button class="tool-btn" id="btn-fullscreen" title="Fullscreen" aria-label="Toggle fullscreen">⛶</button>
+        </div>
+      </div>
+
+      <!-- Layer visibility popover -->
+      <div class="layers-panel" id="layers-panel" role="group" aria-label="Layer visibility">
+        <label><input type="checkbox" data-layer="roads" checked> Roads &amp; paths</label>
+        <label><input type="checkbox" data-layer="utilities" checked> Utilities (streetlights)</label>
+        <label><input type="checkbox" data-layer="buildings" checked> Proposed buildings</label>
+      </div>
+
+      <!-- Measurement tool readout -->
+      <div class="measure-panel" id="measure-panel">
+        <div id="measure-readout">Click points on the layout to measure a distance, or 3+ to close a shape and see its area.</div>
+        <div class="measure-panel-actions">
+          <button class="btn btn-small btn-outline" id="btn-measure-clear">Clear points</button>
+          <span class="measure-disclaimer">Illustrative scene units — this model is not architecturally to scale.</span>
+        </div>
+      </div>
+
+      <!-- FPV Walk Mode Overlay Instructions -->
+      <div class="walk-overlay is-hidden" id="walk-overlay">
+        <span>🚶 Street Walkthrough Active: Use <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or Arrow Keys to walk down the roads. Click and drag to look around.</span>
+        <button class="btn btn-small btn-primary" id="btn-exit-walk" style="padding:4px 10px; font-size:0.75rem;">Exit Walk</button>
+      </div>
+
+      <!-- Hover Tooltip overlay -->
+      <div class="mp-hover-tooltip" id="mp-hover-tooltip">
+        <div class="tt-title" id="tt-title">Plot 000</div>
+        <div class="tt-meta">
+          <span id="tt-area">1800 sqft</span> ·
+          <span id="tt-facing">East Facing</span>
+        </div>
+        <div class="tt-price" id="tt-price">₹0</div>
+      </div>
+
+      <div class="mp-hint" id="mp-hint">Drag to orbit 3D view · scroll to zoom · click a plot to view details</div>
+      <div class="vr-hint" aria-live="polite">🥽 VR-style view active · rotate your phone or use a headset viewer · tap VR View again to exit</div>
+    </div>
+  </div>
+
+  <section id="plot-showcase" class="plot-showcase" aria-label="Premium plot showcase" hidden>
+    <div class="showcase-head">
+      <div>
+        <span class="land-eyebrow">BROWSE BY CARD</span>
+        <h2>Plot showcase</h2>
+        <p>48 of the project's 302 plots, illustrated as cards — filter, flip a card for specs, then compare or jump straight into the 3D view.</p>
+      </div>
+      <div class="showcase-filter-bar">
+        <select id="sc-filter-status" class="finder-select">
+          <option value="all">All statuses</option>
+          <option value="available">Available</option>
+          <option value="hold">On Hold</option>
+          <option value="reserved">Reserved</option>
+          <option value="sold">Sold</option>
+        </select>
+        <select id="sc-filter-facing" class="finder-select">
+          <option value="all">All facings</option>
+          <option value="East">East</option>
+          <option value="West">West</option>
+          <option value="North">North</option>
+          <option value="South">South</option>
+        </select>
+        <select id="sc-filter-size" class="finder-select">
+          <option value="all">All sizes</option>
+          <option value="1800">1,800 sqft</option>
+          <option value="2000">2,000 sqft</option>
+          <option value="2100">2,100 sqft</option>
+          <option value="2400">2,400 sqft</option>
+          <option value="3000">3,000 sqft</option>
+        </select>
+        <select id="sc-filter-price" class="finder-select">
+          <option value="8000000">Any price</option>
+          <option value="4500000">Under ₹45 Lakhs</option>
+          <option value="6000000">Under ₹60 Lakhs</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="showcase-count" id="sc-count">Loading plots…</p>
+
+    <div class="showcase-grid" id="sc-grid" aria-live="polite"></div>
+
+    <button class="btn btn-outline showcase-more" id="sc-load-more" hidden>Show more plots</button>
+
+    <div class="compare-tray" id="sc-compare-tray" hidden>
+      <span id="sc-compare-tray-label">Select up to 2 plots to compare</span>
+      <div class="compare-tray-chips" id="sc-compare-chips"></div>
+      <button class="btn btn-primary btn-small" id="sc-compare-open" disabled>Compare selected</button>
+      <button class="btn btn-ghost btn-small" id="sc-compare-clear">Clear</button>
+    </div>
+  </section>
+</section>
+
+<!-- Plot Showcase Comparison Modal (self-contained — independent of the 3D-view compare modal) -->
+<div class="compare-modal" id="sc-compare-modal">
+  <div class="compare-content">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="font-size:1.3rem;">Side-by-Side Plot Comparison</h3>
+      <button class="drawer-close" id="sc-compare-close" aria-label="Close comparison">×</button>
+    </div>
+    <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;">Comparing the two plots you selected from the showcase cards.</p>
+    <table class="compare-table" id="sc-compare-table">
+      <thead>
+        <tr><th>Attribute</th><th id="sc-th-p1">Plot 1</th><th id="sc-th-p2">Plot 2</th></tr>
+      </thead>
+      <tbody id="sc-compare-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+  <section id="land-explorer" class="land-explorer" aria-label="Satellite land explorer" hidden>
+    <div class="land-map-heading">
+      <div><span class="land-eyebrow">EXPLORE THE LOCATION</span><h2>Land &amp; surroundings</h2><p>Khammam region · Exact project location not yet verified</p></div>
+      <a id="land-external" href="https://www.google.com/maps/@17.24767,80.14368,13z/data=!3m1!1e3" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+    </div>
+    <div class="land-map-stage" id="land-map-stage">
+      <div id="land-map" role="region" aria-label="Interactive satellite map"></div>
+      <div class="land-map-tools" role="group" aria-label="Map display">
+        <button id="land-flat" class="active" aria-pressed="true">2D map</button>
+        <button id="land-tilt" aria-pressed="false">3D aerial</button>
+        <button id="land-labels" class="active" aria-pressed="true">Road labels</button>
+        <button id="land-reset">Reset region</button>
+      </div>
+      <div class="land-map-status" id="land-map-status" role="status" aria-live="polite">Loading satellite imagery…</div>
+      <div class="land-map-caption">SATELLITE IMAGERY <span>Not live footage or surveyed boundaries</span></div>
+    </div>
+    <div class="land-map-footer">
+      <form id="land-coordinate-form">
+        <label for="land-coordinates">Have the site GPS pin?</label>
+        <div class="land-coordinate-input"><input id="land-coordinates" placeholder="Latitude, longitude" aria-describedby="land-location-note" required><button type="submit">Go to pin ↗</button></div>
+      </form>
+      <div><strong id="land-center">17.24767° N, 80.14368° E</strong><p id="land-location-note">Regional view only. Enter site coordinates to inspect your land. Plot boundaries require a verified survey.</p></div>
+    </div>
+  </section>
+
+<section class="wrap">
+  <div class="section-head">
+    <div><h2>What's included at Stambadri Enclave</h2></div>
+  </div>
+  <div class="doc-grid" id="amenities-grid"></div>
+</section>
+
+<!-- Plot Detail Drawer -->
+<div class="overlay-scrim" id="scrim"></div>
+<aside class="plot-drawer" id="plot-drawer">
+  <div class="drawer-head">
+    <div>
+      <span class="eyebrow" id="drawer-block">BLOCK A</span>
+      <h3 id="drawer-title">Plot 000</h3>
+    </div>
+    <button class="drawer-close" id="drawer-close" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body">
+    <span class="status-pill" id="drawer-status">Available</span>
+    <div class="plot-price" id="drawer-price">₹0</div>
+    <div class="plot-price-note" id="drawer-updated">Last updated —</div>
+
+    <div class="spec-grid">
+      <div class="spec-item"><div class="k">Area</div><div class="v" id="spec-area">—</div></div>
+      <div class="spec-item"><div class="k">Facing</div><div class="v" id="spec-facing">—</div></div>
+      <div class="spec-item"><div class="k">Road width</div><div class="v" id="spec-road">—</div></div>
+      <div class="spec-item"><div class="k">Corner plot</div><div class="v" id="spec-corner">—</div></div>
+      <div class="spec-item"><div class="k">Park facing</div><div class="v" id="spec-park">—</div></div>
+      <div class="spec-item"><div class="k">Booking amount</div><div class="v" id="spec-booking">—</div></div>
+    </div>
+
+    <!-- Mortgage / EMI Estimator Widget -->
+    <div class="emi-calc-box">
+      <div class="emi-title">🏦 Estimated Loan EMI</div>
+      <div class="emi-row">
+        <span>Down Payment (20%):</span>
+        <strong id="emi-dp-val">₹0</strong>
+      </div>
+      <div class="emi-row">
+        <span>Loan Amount:</span>
+        <strong id="emi-loan-val">₹0</strong>
+      </div>
+      <div class="emi-row" style="margin-top:8px;">
+        <span>Tenure:</span>
+        <span>
+          <select id="emi-tenure-select" style="padding:2px 6px; font-size:0.8rem;">
+            <option value="10">10 Years</option>
+            <option value="15">15 Years</option>
+            <option value="20" selected>20 Years</option>
+            <option value="25">25 Years</option>
+          </select>
+        </span>
+      </div>
+      <div class="emi-result">
+        <div style="font-size:0.75rem; color:#065F46;">Est. Monthly Payment (at 8.5% p.a.)</div>
+        <div class="emi-result-amount" id="emi-monthly-val">₹0 / mo</div>
+      </div>
+    </div>
+
+    <div class="vastu-box">
+      <div class="vastu-box-head">
+        <span class="dot" id="vastu-dot"></span>
+        <span id="vastu-grade">Vastu grade</span>
+      </div>
+      <p id="vastu-note"></p>
+      <p class="vastu-disclaimer" id="vastu-disclaimer"></p>
+    </div>
+
+    <div class="drawer-ctas">
+      <a href="#" id="cta-call" class="btn btn-call">Call Sales Now</a>
+      <a href="#" id="cta-whatsapp" class="btn btn-whatsapp" target="_blank" rel="noopener">WhatsApp About This Plot</a>
+      <button class="btn btn-outline" id="cta-compare">⚡ Compare With Another Plot</button>
+      <button class="btn btn-ghost" id="cta-visit">Book a Site Visit</button>
+      <button class="btn btn-ghost" id="cta-save">Save Plot</button>
+    </div>
+  </div>
+</aside>
+
+<!-- Plot Comparison Modal Overlay -->
+<div class="compare-modal" id="compare-modal">
+  <div class="compare-content">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="font-size:1.3rem;">Side-by-Side Plot Comparison</h3>
+      <button class="drawer-close" id="compare-close" aria-label="Close comparison">×</button>
+    </div>
+    <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;">Compare Plot <span id="comp-p1-num">--</span> against another selected plot.</p>
+
+    <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+      <label style="font-size:0.85rem; font-weight:600;">Select 2nd Plot:</label>
+      <select id="comp-select-p2" style="padding:8px 12px; border-radius:var(--radius-s); border:1px solid var(--stone-line); font-family:inherit;">
+        <option value="">Choose a plot...</option>
+      </select>
+    </div>
+
+    <table class="compare-table" id="compare-table">
+      <thead>
+        <tr>
+          <th>Attribute</th>
+          <th id="th-p1">Plot 1</th>
+          <th id="th-p2">Plot 2</th>
+        </tr>
+      </thead>
+      <tbody id="compare-tbody">
+        <tr><td colspan="3" style="text-align:center; color:var(--ink-soft);">Select a second plot above to compare.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Location & Distance Matrix Section -->
+<section class="wrap" id="location-matrix">
+  <div class="section-head">
+    <div>
+      <h2>Real-World Connectivity &amp; Proximity</h2>
+      <p style="color:var(--ink-soft); margin-top:4px;">Gurralapadu Village, Khammam Municipal Corporation, Telangana</p>
+    </div>
+  </div>
+  <div class="location-grid">
+    <div class="location-card">
+      <div class="dist">Direct</div>
+      <div class="place">Khammam–Kodada National Highway</div>
+      <div class="time">Highway-facing venture</div>
+    </div>
+    <div class="location-card">
+      <div class="dist">~10 Mins</div>
+      <div class="place">Khammam Bus Stand &amp; Railway Station</div>
+      <div class="time">Old &amp; new bus stand access</div>
+    </div>
+    <div class="location-card">
+      <div class="dist">Nearby</div>
+      <div class="place">Kodhada X-Road &amp; Suryapet–Khammam Rd</div>
+      <div class="time">Hyderabad–Suryapet highway junction</div>
+    </div>
+    <div class="location-card">
+      <div class="dist">Close By</div>
+      <div class="place">Monfort &amp; St. Joseph's High Schools</div>
+      <div class="time">Along with Srinivasa Nagar Colony</div>
+    </div>
+  </div>
+  <div class="transport-access-grid" aria-label="Nearby transport options">
+    <div class="transport-access-card"><span class="transport-icon">🛣️</span><div><strong>Road access</strong><p>Direct frontage on the Khammam–Kodada national highway for private cars, cabs, and site-visit pickups.</p></div></div>
+    <div class="transport-access-card"><span class="transport-icon">🚌</span><div><strong>Public transport</strong><p>Khammam's old &amp; new bus stands and railway station are roughly 10 minutes away. Confirm current stops and timings before departure.</p></div></div>
+    <div class="transport-access-card"><span class="transport-icon">✈️</span><div><strong>City route</strong><p>Reached via the Khammam–Warangal Highway and Suryapet–Khammam Road; the sales team can share the recommended route for your visit.</p></div></div>
+  </div>
+</section>
+
+<!-- 360° Drone Tour Fullscreen Modal -->
+<div class="drone-modal" id="drone-modal">
+  <div class="drone-modal-head">
+    <h3>
+      <span>🚁 360° Aerial Drone View</span>
+      <span class="drone-badge">LIVE SITE MEDIA</span>
+    </h3>
+    <button class="drawer-close" id="drone-close" style="color:#fff;" aria-label="Close 360° tour">×</button>
+  </div>
+  <div class="drone-pano-viewport" id="drone-viewport">
+    <img src="img/drone-tour-360.jpg" alt="360 Drone Aerial Tour" class="drone-pano-img" id="drone-pano-img">
+
+    <!-- Interactive Hotspot Pins -->
+    <div class="drone-hotspot" style="top: 55%; left: 32%;" title="Click to view plot layout">
+      <span class="drone-hotspot-dot"></span>
+      <span>📍 Preview Plot Layout</span>
+    </div>
+    <div class="drone-hotspot" style="top: 58%; left: 52%;" title="Click to view open-space park">
+      <span class="drone-hotspot-dot"></span>
+      <span>📍 Open-Space Park</span>
+    </div>
+    <div class="drone-hotspot" style="top: 48%; left: 72%;" title="Click to view second park">
+      <span class="drone-hotspot-dot"></span>
+      <span>📍 Second Open-Space Park</span>
+    </div>
+    <div class="drone-hotspot" style="top: 38%; left: 45%;" title="Click to view highway access">
+      <span class="drone-hotspot-dot"></span>
+      <span>📍 Khammam–Kodada Highway Link</span>
+    </div>
+
+    <div class="drone-instructions">
+      ↔️ Drag mouse or touch left/right to pan 360° aerial view · Click hotspots to inspect locations (illustrative demo panorama)
+    </div>
+  </div>
+</div>
+
+<div class="mobile-cta-bar">
+  <a href="tel:+919000000000" class="btn btn-call">Call</a>
+  <a href="https://wa.me/919000000000" target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
+  <a href="index.html" class="btn btn-outline">Home</a>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script src="js/data.js"></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script type="module" src="js/land-map.js?v=layout1"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

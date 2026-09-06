@@ -1,0 +1,308 @@
+/* ============================================================
+   Satellite land explorer — real imagery view + 2D/3D controls.
+   Loaded only by project.html, alongside css/style.css.
+   ============================================================ */
+
+/* ---- View switch (satellite map vs illustrative 3D layout) ---- */
+.land-view-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 26px 0 14px;
+}
+
+.land-view-switch button {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink-body);
+  background: var(--surface-soft);
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-full);
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.land-view-switch button:hover { border-color: var(--brand-green-light); color: var(--brand-green); }
+
+.land-view-switch button.active {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: #fff;
+}
+
+.land-view-switch > span {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-left: auto;
+}
+
+/* ---- Explorer shell ---- */
+.land-explorer {
+  /* Overrides the global `section { padding: 76px 0 }` in style.css — this card
+     supplies its own internal padding, so the inherited band just added a
+     stripe of dead space inside the border. */
+  padding: 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.land-map-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.land-eyebrow {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-emerald);
+  margin-bottom: 6px;
+}
+
+.land-map-heading h2 { font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); }
+
+/* Deliberately muted: this line states what is NOT verified. */
+.land-map-heading p { font-size: 0.84rem; color: var(--ink-soft); margin-top: 4px; }
+
+#land-external {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brand-green);
+  text-decoration: none;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-full);
+  padding: 8px 15px;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+#land-external:hover { background: var(--surface-soft); border-color: var(--brand-green-light); }
+
+/* ---- Map stage ---- */
+.land-map-stage { position: relative; background: var(--surface-strong); }
+
+#land-map {
+  width: 100%;
+  height: clamp(360px, 58vh, 620px);
+}
+
+/* Keep MapLibre's own canvas from inheriting the page's rounded corners. */
+#land-map .maplibregl-canvas { outline: none; }
+
+.land-map-tools {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: calc(100% - 28px);
+}
+
+.land-map-tools button {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-body);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: var(--radius-full);
+  padding: 7px 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.land-map-tools button:hover { background: #fff; color: var(--brand-green); }
+
+.land-map-tools button.active {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: #fff;
+}
+
+.land-map-status {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 2;
+  max-width: min(46ch, calc(100% - 28px));
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ink-body);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-s);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-1);
+}
+
+.land-map-status:empty { display: none; }
+
+/* Persistent honesty label over the imagery. */
+.land-map-caption {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(15, 23, 42, 0.72);
+  border-radius: var(--radius-s);
+  padding: 8px 12px;
+}
+
+.land-map-caption span {
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ---- Footer: coordinate entry + what the centre point actually is ---- */
+.land-map-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px 28px;
+  align-items: start;
+  padding: 20px 24px 22px;
+  border-top: 1px solid var(--hairline-soft);
+  background: var(--surface-soft);
+}
+
+.land-map-footer label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.land-coordinate-input { display: flex; gap: 8px; }
+
+.land-coordinate-input input {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-s);
+  padding: 10px 13px;
+}
+
+.land-coordinate-input input:focus-visible {
+  outline: 2px solid var(--brand-green-light);
+  outline-offset: 1px;
+  border-color: var(--brand-green-light);
+}
+
+.land-coordinate-input button {
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--brand-green);
+  border: 1px solid var(--brand-green);
+  border-radius: var(--radius-s);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.land-coordinate-input button:hover { background: var(--brand-green-light); }
+
+.land-map-footer strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+#land-location-note { font-size: 0.8rem; line-height: 1.5; color: var(--ink-soft); }
+
+/* ---- Lazy-load notice for the 3D layout ---- */
+#layout-loading {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  background: var(--surface-soft);
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-s);
+  padding: 14px 18px;
+  margin-top: 18px;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 860px) {
+  .land-map-heading { padding: 18px 16px 15px; }
+  #land-map { height: clamp(300px, 52vh, 440px); }
+  .land-map-footer { grid-template-columns: 1fr; padding: 18px 16px 20px; }
+
+  /* Column-stacked and width-capped so the toolbar can never reach the
+     caption in the opposite corner. */
+  .land-map-tools {
+    top: 10px;
+    left: 10px;
+    gap: 5px;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 50%;
+  }
+
+  /* Touch targets: keep these at ~40px rather than shrinking with the font. */
+  .land-map-tools button { font-size: 0.76rem; padding: 9px 13px; min-height: 40px; }
+
+  /* Anchored to the top, not the bottom: once the status box below becomes part
+     of the stage, `bottom` would place this over it instead of the imagery. */
+  .land-map-caption { top: 10px; bottom: auto; right: 10px; max-width: 44%; padding: 6px 9px; }
+
+  /* Overlaying the status box collided with the caption at every width below
+     this breakpoint, so on small screens it becomes a normal block under the
+     imagery instead — the disclosure stays readable and nothing is covered. */
+  .land-map-status {
+    position: static;
+    max-width: none;
+    font-size: 0.76rem;
+    border: none;
+    border-top: 1px solid var(--hairline-soft);
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--bg-raised);
+    padding: 11px 16px;
+    backdrop-filter: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .land-view-switch > span { margin-left: 0; flex-basis: 100%; }
+  .land-coordinate-input { flex-wrap: wrap; }
+  .land-coordinate-input button { width: 100%; }
+  .land-map-caption span { display: none; }
+}

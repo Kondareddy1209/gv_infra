@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects | GV Infra Projects</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
+      <span class="brand-badge">DTCP Approved</span>
+    </a>
+    <div class="nav-links">
+      <a href="projects.html" style="color:var(--brand-green);">Projects</a>
+      <a href="project.html">3D Masterplan</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="admin.html" style="font-size:0.82rem; color:var(--ink-soft);">Admin ↗</a>
+    </div>
+    <a href="tel:+919000000000" class="btn btn-primary btn-small">Call Sales</a>
+  </div>
+</nav>
+
+<header style="padding: 44px 0 24px;">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--brand-green); font-weight:700;">Land Developments</span>
+    <h1 style="font-size: clamp(2.2rem, 3.4vw, 2.8rem);">Our Projects</h1>
+    <p class="lede" style="margin-top: 10px; color:var(--ink-soft);">Stambadri Enclave is fully mapped in 3D today. Explore GV Infra's other marketed developments across Telangana below.</p>
+  </div>
+</header>
+
+<section class="wrap" style="padding-top: 8px;">
+  <div class="doc-grid" style="grid-template-columns: repeat(3, 1fr);">
+    <article class="project-card">
+      <div class="thumb" style="background-image:url('img/real/gurralapadu.png'); background-position: top center;"></div>
+      <div class="body">
+        <span class="tag">Live in 3D</span>
+        <div class="loc">Gurralapadu, Khammam–Kodada Highway</div>
+        <h3>Stambadri Enclave</h3>
+        <div class="project-meta">
+          <span><strong>302</strong> total plots</span>
+        </div>
+        <a href="project.html" class="btn btn-primary btn-small">View masterplan</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="section-head">
+    <div>
+      <h2>Other GV Infra Marketed Developments</h2>
+      <p>Real projects marketed by GV Infra Projects and partner developers — not yet modeled in 3D.</p>
+    </div>
+  </div>
+  <div class="doc-grid" id="other-projects-grid" style="grid-template-columns: repeat(3, 1fr);"></div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© 2026 GV Infra Projects. Demo platform.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-cta-bar">
+  <a href="tel:+919000000000" class="btn btn-call">Call</a>
+  <a href="https://wa.me/919000000000" target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
+  <a href="project.html" class="btn btn-outline">3D Masterplan</a>
+</div>
+
+<script src="js/data.js"></script>
+<script>
+  const otherProjectsGrid = document.getElementById("other-projects-grid");
+  GV_DATA.otherProjects.forEach((p) => {
+    const card = document.createElement("article");
+    card.className = "project-card";
+    card.innerHTML = `
+      <div class="thumb" style="background-image:url('${p.image}'); background-position: top center;"></div>
+      <div class="body">
+        <span class="tag" style="background:var(--surface-strong); color:var(--ink-soft);">${p.developer !== "—" ? p.developer : "GV Infra Projects"}</span>
+        <div class="loc">📍 ${p.location}</div>
+        <h3>${p.name}</h3>
+        <p style="font-size:0.86rem; color:var(--ink-soft); margin-bottom:10px;">${p.blurb}</p>
+        <div class="project-meta" style="margin-bottom:16px;"><span>${p.approval}</span></div>
+        <a href="index.html#contact" class="btn btn-ghost btn-small">Ask Sales</a>
+      </div>
+    `;
+    otherProjectsGrid.appendChild(card);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GV Infra Projects — DTCP-Approved Open Plots in Khammam</title>
+<meta name="description" content="GV Infra Projects markets Stambadri Enclave, a DTCP-approved open-plot layout in Gurralapadu on the Khammam–Kodada Highway — with an interactive 3D preview layout, street view, and 360° drone tours.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.2.6/swiper-bundle.min.css">
+</head>
+<body>
+
+<!-- Announcement Top Bar -->
+<div class="announcement-bar">
+  <span>🟢 <strong>LIVE UPDATE:</strong> Stambadri Enclave, Gurralapadu (Khammam) — <span data-live-count="available">28</span> Available Plots · DTCP Approved · 🏦 Bank Loan Assistance Available</span>
+  <a href="project.html">Explore 3D Masterplan &rarr;</a>
+</div>
+
+<!-- Navigation -->
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
+      <span class="brand-badge">DTCP Approved</span>
+    </a>
+    <div class="nav-links">
+      <a href="projects.html">Projects</a>
+      <a href="project.html">3D Masterplan</a>
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#contact">Contact</a>
+      <a href="admin.html" style="font-size:0.82rem; color:var(--ink-soft);">Admin ↗</a>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <a href="https://wa.me/919000000000?text=Hi%20GV%20Infra%2C%20I%27d%20like%20to%20know%20more%20about%20Stambadri%20Enclave." target="_blank" rel="noopener" class="btn btn-whatsapp btn-small btn-pill">WhatsApp</a>
+      <a href="tel:+919000000000" class="btn btn-primary btn-small">Call Sales</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="hero">
+  <div class="hero-video-bg-wrap" aria-hidden="true">
+    <video class="hero-bg-video" autoplay loop muted playsinline poster="img/drone-tour-360.jpg">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-residential-suburb-41556-large.mp4" type="video/mp4">
+      <source src="https://cdn.coverr.co/videos/mp4/coverr-drone-shot-of-a-suburb-5494/1080p.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+  </div>
+
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow" style="color:var(--brand-green); font-weight:700;">📍 DTCP-Approved Open Plots · Gurralapadu, Khammam–Kodada Highway</span>
+      <h1>Land, laid out for how you'll <span class="gold-text">actually live on it.</span></h1>
+      <p class="lede">Stambadri Enclave is a DTCP-approved, 302-plot open-plot layout by GV Infra Projects in Gurralapadu village, facing the Khammam–Kodada national highway. 50ft, 40ft &amp; 30ft roads, two open-space parks, and a dedicated social-infrastructure plot. Walk an illustrative preview layout in 3D before your site visit.</p>
+      
+      <div class="hero-ctas">
+        <a href="project.html" class="btn btn-primary btn-pill">Explore 3D Masterplan &amp; Street View</a>
+        <a href="#" class="btn btn-outline btn-pill trigger-drone-tour">🚁 360° Drone Tour</a>
+        <a href="https://wa.me/919000000000?text=Hi%20GV%20Infra%2C%20I%27d%20like%20to%20know%20more%20about%20your%20projects." class="btn btn-whatsapp btn-pill" target="_blank" rel="noopener">WhatsApp Us</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="item"><div class="stat-num" style="color:var(--brand-green);" data-countup="302">0</div><div class="stat-label">Total Plots · Stambadri Enclave</div></div>
+        <div class="item"><div class="stat-num" style="color:var(--brand-green);">50/30ft</div><div class="stat-label">Wide Internal BT Roads</div></div>
+        <div class="item"><div class="stat-num" style="color:var(--brand-green);">3D</div><div class="stat-label">Interactive Preview Layout</div></div>
+      </div>
+
+      <div class="bank-badges-strip" style="margin-top:20px;">
+        <span class="bank-badge">🏦 Bank Loan Assistance</span>
+        <span class="bank-badge">📄 Spot Registration</span>
+        <span class="bank-badge">✅ DTCP &amp; RERA Approved</span>
+      </div>
+    </div>
+
+    <div class="hero-visual" style="border:1px solid var(--stone-line); box-shadow:var(--shadow-luxury);">
+      <div class="hero-scene-title">
+        <span class="hero-scene-kicker"><i></i> LIVE 3D SITE MODEL</span>
+        <strong>Stambadri Enclave</strong>
+        <span>Gurralapadu · Khammam</span>
+      </div>
+      <div class="hero-mode-tabs">
+        <button id="hero-tab-3d" class="hero-mode-tab active">🧊 3D Layout</button>
+        <button id="hero-tab-video" class="hero-mode-tab">🎥 Drone Video</button>
+      </div>
+
+      <canvas id="hero-canvas"></canvas>
+      <video class="hero-visual-video" autoplay loop muted playsinline poster="img/drone-tour-360.jpg">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-residential-suburb-41556-large.mp4" type="video/mp4">
+        <source src="https://cdn.coverr.co/videos/mp4/coverr-drone-shot-of-a-suburb-5494/1080p.mp4" type="video/mp4">
+      </video>
+      <button id="hero-video-playpause" class="hero-video-playpause" aria-label="Pause promotional video" title="Play/pause">⏸</button>
+
+      <div style="position:absolute; bottom:14px; right:14px; z-index:10;" class="ticker-item">
+        <span class="live-dot-pulse"></span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--ink); background:rgba(255,255,255,0.92); backdrop-filter:blur(8px); padding:4px 12px; border-radius:var(--radius-full); border:1px solid var(--stone-line);"><span data-live-count="available">28</span> Available · <span data-live-count="reserved">12</span> Reserved · <span data-live-count="sold">8</span> Sold</span>
+      </div>
+      <span class="hint" style="background:rgba(255,255,255,0.92); border:1px solid var(--stone-line); color:var(--ink-body);">Drag to rotate — illustrative preview layout (48 of 302 plots)</span>
+      <div class="hero-scene-features" aria-label="Key site amenities">
+        <span>40 ft BT roads</span><span>Central greens</span><span>Gated entry</span>
+      </div>
+    </div>
+
+    <div class="hero-trust-row" style="grid-column: 1 / -1;">
+      <span class="hero-trust-chip">✅ DTCP &amp; RERA Approved</span>
+      <span class="hero-trust-chip">⭐ 4.8/5 Developer Rating*</span>
+      <span class="hero-trust-chip">🏠 500+ Happy Families*</span>
+      <span class="hero-trust-note">*Illustrative demo figures for this prototype, not published/verified ratings — ask sales for references.</span>
+    </div>
+  </div>
+</header>
+
+<!-- Floating pulsating "Book Now" CTA (desktop) -->
+<a href="#contact" class="floating-book-cta">
+  📅 Book a Site Visit <span class="fbc-count"><span data-live-count="available">28</span> plots open</span>
+</a>
+
+<!-- Homepage Quick Plot Finder Widget -->
+<section class="wrap hp-finder-container" style="padding:0;">
+  <div class="hp-finder-bar">
+    <div class="finder-field">
+      <label for="hp-finder-facing">Plot Facing</label>
+      <select id="hp-finder-facing" class="finder-select">
+        <option value="all">All Facings</option>
+        <option value="East">East Facing</option>
+        <option value="West">West Facing</option>
+        <option value="North">North Facing</option>
+      </select>
+    </div>
+
+    <div class="finder-field">
+      <label for="hp-finder-size">Plot Area (Sq.ft)</label>
+      <select id="hp-finder-size" class="finder-select">
+        <option value="all">All Sizes</option>
+        <option value="1800">1,800 sqft (200 sq.yds)</option>
+        <option value="2100">2,100 sqft (233 sq.yds)</option>
+        <option value="2400">2,400 sqft (267 sq.yds)</option>
+        <option value="3000">3,000 sqft (333 sq.yds)</option>
+      </select>
+    </div>
+
+    <div class="finder-field">
+      <label for="hp-finder-status">Plot Status</label>
+      <select id="hp-finder-status" class="finder-select">
+        <option value="available">Available Plots Only</option>
+        <option value="all">All Plots (Inc. Reserved)</option>
+      </select>
+    </div>
+
+    <div class="finder-field">
+      <label for="hp-finder-price">Max Budget</label>
+      <select id="hp-finder-price" class="finder-select">
+        <option value="8000000">Any Price</option>
+        <option value="4500000">Under ₹45 Lakhs</option>
+        <option value="6000000">Under ₹60 Lakhs</option>
+      </select>
+    </div>
+
+    <button id="hp-finder-btn" class="btn btn-primary finder-match-btn">Explore Matching Plots in 3D ↗</button>
+  </div>
+</section>
+
+<!-- Trust & Metrics Strip -->
+<section class="trust-strip" style="margin-top:40px;">
+  <div class="wrap trust-grid">
+    <div class="item" data-aos="fade-up"><div class="num" style="color:var(--brand-green);">100% DTCP</div><div class="label">Approved title deeds &amp; records</div></div>
+    <div class="item" data-aos="fade-up" data-aos-delay="80"><div class="num" style="color:var(--brand-green);">Interactive 3D</div><div class="label">Walk street view &amp; inspect plots</div></div>
+    <div class="item" data-aos="fade-up" data-aos-delay="160"><div class="num" style="color:var(--brand-green);">Real-Time</div><div class="label">Live plot availability &amp; prices</div></div>
+    <div class="item" data-aos="fade-up" data-aos-delay="240"><div class="num" style="color:var(--brand-green);">Loan Assistance</div><div class="label">Home loan guidance for eligible buyers</div></div>
+  </div>
+</section>
+
+<!-- Architectural & Infrastructure Features Grid -->
+<section id="infrastructure" class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>Engineered for High Quality Living &amp; Growth</h2>
+      <p>Every detail in Stambadri Enclave is designed for long-term appreciation, structural longevity, and peaceful residential living in Gurralapadu, Khammam.</p>
+    </div>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="feature-icon-box">📜</div>
+      <h3>100% DTCP Approved &amp; RERA Registered</h3>
+      <p>100% clear legal title deeds, spot registration capability, and verified municipal survey records for complete buyer peace of mind.</p>
+      <span class="feature-tag">Spot Registration Ready</span>
+    </div>
+
+    <div class="feature-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="feature-icon-box">🛣️</div>
+      <h3>50ft, 40ft &amp; 30ft Blacktop Roads</h3>
+      <p>A wide internal road grid with heavy-duty asphalt paving — the widest roads front the Khammam–Kodada highway frontage plots.</p>
+      <span class="feature-tag">Wide Internal Grid</span>
+    </div>
+
+    <div class="feature-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="feature-icon-box">🌳</div>
+      <h3>Two Open-Space Parks (10,000+ sq.yds)</h3>
+      <p>A 7,278.61 sq.yd park and a 2,787.37 sq.yd park, each with avenue plantation and green space woven through the layout.</p>
+      <span class="feature-tag">Eco-Lush Environment</span>
+    </div>
+
+    <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="feature-icon-box">⚡</div>
+      <h3>Underground Utilities &amp; Water Grid</h3>
+      <p>Underground electrical cabling, street lighting, an overhead water tank, and water-harvesting pits across the layout.</p>
+      <span class="feature-tag">Zero Overhead Wires</span>
+    </div>
+
+    <div class="feature-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="feature-icon-box">🛡️</div>
+      <h3>Grand Entrance Arch &amp; Compound Wall</h3>
+      <p>Monumental architectural entrance gate, a reinforced precast compound wall around the layout, and a drainage system throughout.</p>
+      <span class="feature-tag">Gated Community</span>
+    </div>
+
+    <div class="feature-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="feature-icon-box">🏛️</div>
+      <h3>Dedicated Social-Infrastructure Plot</h3>
+      <p>A 3,369.41 sq.yd plot reserved within the layout for future community/social-infrastructure use.</p>
+      <span class="feature-tag">Community Ready</span>
+    </div>
+  </div>
+</section>
+
+<!-- 360° Drone Tour Spotlight Section -->
+<section class="wrap">
+  <div class="drone-spotlight-card" data-aos="fade-up">
+    <div>
+      <span style="background:rgba(255,255,255,0.15); color:#86EFAC; font-size:0.75rem; font-weight:700; padding:4px 12px; border-radius:var(--radius-full); text-transform:uppercase; letter-spacing:0.06em;">Interactive Aerial Experience</span>
+      <h2 style="margin-top:14px;">Experience Stambadri Enclave from 300 Feet in the Air</h2>
+      <p>Take an interactive 360° aerial tour to get a feel for the layout, road connectivity, and surrounding greenery before visiting in person.</p>
+      <button class="btn btn-primary btn-pill trigger-drone-tour" style="background:#FFFFFF; color:var(--brand-green); font-weight:700;">🚁 Launch Interactive 360° Aerial Tour</button>
+      <p style="color:rgba(255,255,255,0.6); font-size:0.72rem; margin-top:10px;">Illustrative demo panorama — not aerial footage of the actual site.</p>
+    </div>
+
+    <div class="drone-preview-box trigger-drone-tour" style="background-image:url('img/drone-tour-360.jpg');">
+      <div class="drone-play-btn">▶</div>
+      <div style="position:absolute; bottom:12px; left:12px; right:12px; display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.8); backdrop-filter:blur(8px); padding:8px 14px; border-radius:var(--radius-s); font-size:0.78rem;">
+        <span style="color:#fff; font-weight:600;">🚁 360° Panoramic View</span>
+        <span style="color:#86EFAC; font-weight:700;">Click to Open</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Showcase Section -->
+<section id="about" class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>GV Infra Flagship Developments</h2>
+      <p>Explore our active open plot layouts in Telangana with full 3D interactive mapping and real-time inventory tracking.</p>
+    </div>
+  </div>
+
+  <div class="swiper project-swiper" data-aos="fade-up">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <article class="project-card">
+          <div class="thumb" style="background-image:url('img/real/gurralapadu.png'); background-position: top center;">
+            <span style="position:absolute; top:12px; left:12px; background:#16A34A; color:#fff; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:var(--radius-full);">Live in 3D</span>
+          </div>
+          <div class="body">
+            <div class="loc">📍 Gurralapadu, Khammam–Kodada Highway · DTCP Approved</div>
+            <h3>Stambadri Enclave</h3>
+            <p style="font-size:0.86rem; color:var(--ink-soft); margin-bottom:14px;">302-plot open-plot layout facing the Khammam–Kodada highway, with 50/40/30ft roads &amp; two open-space parks.</p>
+            <div class="project-meta" style="margin-bottom:16px;">
+              <span><strong>302</strong> Total Plots</span>
+              <span><strong data-live-count="available">28</strong> Avail. (3D preview)</span>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <a href="project.html" class="btn btn-primary btn-small">View 3D Masterplan</a>
+              <a href="#" class="btn btn-outline btn-small trigger-drone-tour">🚁 360° Drone</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="swiper-slide">
+        <article class="project-card">
+          <div class="thumb" style="background-image:url('img/real/peacock-valley-layout.jpg'); background-position: top center;"></div>
+          <div class="body">
+            <span class="tag" style="background:var(--surface-strong); color:var(--ink-soft);">DTCP &amp; RERA Approved</span>
+            <div class="loc">📍 Kadthal, Hyderabad Growth Corridor</div>
+            <h3>Peacock Valley</h3>
+            <p style="font-size:0.86rem; color:var(--ink-soft); margin-bottom:14px;">14-acre, 212-plot layout by Arising Developers, priced at ₹13,999/sq.yd, with a 2-acre farm resort.</p>
+            <div class="project-meta" style="margin-bottom:16px;"><span>TLP No. 239/2023/H · RERA P02400007625</span></div>
+            <a href="projects.html" class="btn btn-ghost btn-small">View Project Details</a>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+    <button class="swiper-button-prev" aria-label="Previous project"></button>
+    <button class="swiper-button-next" aria-label="Next project"></button>
+  </div>
+</section>
+
+<!-- Location Distance & Connectivity Matrix -->
+<section id="location" class="wrap">
+  <div class="section-head">
+    <div>
+      <h2>Strategic Growth Location in Gurralapadu, Khammam</h2>
+      <p>Stambadri Enclave faces the Khammam–Kodada national highway, close to Khammam Corporation and the Khammam bus stand &amp; railway station.</p>
+    </div>
+  </div>
+
+  <div class="location-grid">
+    <div class="location-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="dist">Direct</div>
+      <div class="place">Khammam–Kodada National Highway</div>
+      <div class="time">Highway-facing venture</div>
+    </div>
+    <div class="location-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="dist">~10 Mins</div>
+      <div class="place">Khammam Bus Stand &amp; Railway Station</div>
+      <div class="time">Old &amp; new bus stand access</div>
+    </div>
+    <div class="location-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="dist">Nearby</div>
+      <div class="place">Kodhada X-Road &amp; Suryapet–Khammam Rd</div>
+      <div class="time">Hyderabad–Suryapet highway junction</div>
+    </div>
+    <div class="location-card" data-aos="fade-up" data-aos-delay="240">
+      <div class="dist">Close By</div>
+      <div class="place">Monfort &amp; St. Joseph's High Schools</div>
+      <div class="time">Along with Srinivasa Nagar Colony</div>
+    </div>
+  </div>
+</section>
+
+<!-- Interactive Investment & EMI Calculator -->
+<section id="calculator" class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>Plot Investment &amp; EMI Estimator</h2>
+      <p>Calculate your total plot investment, eligible bank loan sanction, and affordable monthly EMI options.</p>
+    </div>
+  </div>
+
+  <div class="calc-widget-grid" data-aos="fade-up">
+    <div class="calc-field-group">
+      <div class="calc-slider-box">
+        <div class="calc-slider-head">
+          <span>Select Plot Size (Sq. Yards)</span>
+          <span id="hp-calc-size-val" class="calc-slider-val">200 Sq. Yds</span>
+        </div>
+        <input id="hp-calc-size" type="range" min="150" max="500" step="10" value="200" style="accent-color:var(--brand-green); width:100%;">
+      </div>
+
+      <div class="calc-slider-box">
+        <div class="calc-slider-head">
+          <span>Rate per Sq. Yard (illustrative)</span>
+          <span id="hp-calc-rate-val" class="calc-slider-val">₹9,000</span>
+        </div>
+        <input id="hp-calc-rate" type="range" min="5000" max="18000" step="500" value="9000" style="accent-color:var(--brand-green); width:100%;">
+      </div>
+
+      <div style="background:var(--surface-soft); padding:16px; border-radius:var(--radius-s); border:1px solid var(--stone-line); font-size:0.82rem; color:var(--ink-soft);">
+        💡 <strong>Fixed Rates:</strong> Stambadri Enclave is sold at fixed, non-negotiable rates — contact sales for the current price. The slider above and EMI below are illustrative only, at a typical 8.5% home-loan rate over 15 years.
+      </div>
+    </div>
+
+    <div class="calc-result-box">
+      <div>
+        <div style="font-size:0.8rem; font-weight:700; color:var(--ink-soft); text-transform:uppercase;">Total Estimated Plot Investment</div>
+        <div id="hp-total-price" class="calc-result-num">₹36.00 Lakhs</div>
+      </div>
+
+      <div>
+        <div class="calc-sub-row">
+          <span class="k">Eligible Bank Loan (80%)</span>
+          <span id="hp-loan-amt" class="v">₹28.80 Lakhs</span>
+        </div>
+        <div class="calc-sub-row">
+          <span class="k">Est. Monthly EMI (15 Yrs @ 8.5%)</span>
+          <span id="hp-est-emi" class="v" style="color:var(--brand-green);">₹28,360/mo</span>
+        </div>
+      </div>
+
+      <a href="project.html" class="btn btn-primary" style="justify-content:center; margin-top:16px;">Select Your Plot in 3D Masterplan ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- Verified Approval Documents Section -->
+<section id="approvals" class="wrap">
+  <div class="section-head">
+    <div>
+      <h2>Transparent Legal Approvals &amp; Documentation</h2>
+      <p>We believe in absolute transparency. View layout approval numbers and verified project records.</p>
+    </div>
+  </div>
+
+  <div class="doc-grid">
+    <div class="doc-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="status-row"><h4>DTCP Approval</h4><span class="badge-verified">Verified</span></div>
+      <div class="num">TLP No. 3147/Khammam municip/2020/0378</div>
+      <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;">Layout Plan approved for open-plot residential development in Gurralapadu, Khammam Municipal Corporation.</p>
+      <a href="#contact" class="btn btn-ghost btn-small">Request Copy</a>
+      <div class="doc-card-detail">Approved 2020 · Khammam Municipal Corporation · covers all 302 plots in this layout.</div>
+    </div>
+
+    <div class="doc-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="status-row"><h4>Regulatory Authority</h4><span class="badge-verified">Verified</span></div>
+      <div class="num">Stambhadri Urban Dev. Authority (SUDA)</div>
+      <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;">Layout falls under SUDA jurisdiction, Khammam District — no separate RERA number is published for this project.</p>
+      <a href="#contact" class="btn btn-ghost btn-small">Ask Sales</a>
+      <div class="doc-card-detail">SUDA governs layout approvals region-wide; ask sales for the jurisdiction notification if you need it for a loan file.</div>
+    </div>
+
+    <div class="doc-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="status-row"><h4>Numbered Layout Plan</h4><span class="badge-verified">Available</span></div>
+      <img src="img/real/gurralapadu-layout.png" alt="Stambadri Enclave real numbered layout plan showing all 302 plots" style="border-radius:var(--radius-s); margin-bottom:10px; border:1px solid var(--stone-line);">
+      <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;">The actual plot-by-plot layout plan — every plot number and area (in sq. yards), from GV Infra Projects.</p>
+      <a href="#contact" class="btn btn-ghost btn-small">Request Full Brochure</a>
+      <div class="doc-card-detail">Sourced directly from GV Infra Projects — this is the real survey plan, not the illustrative 3D preview grid.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Project Timeline -->
+<section class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>Project Timeline</h2>
+      <p>Where Stambadri Enclave stands today — approval through to registration &amp; possession as plots sell.</p>
+    </div>
+  </div>
+  <div class="project-timeline" data-aos="fade-up">
+    <div class="timeline-step is-done">
+      <span class="timeline-dot"></span>
+      <h5>DTCP Approval</h5>
+      <p>Layout Plan TLP No. 3147/2020/0378 approved by Khammam Municipal Corporation.</p>
+      <span class="timeline-tag">2020</span>
+    </div>
+    <div class="timeline-step is-done">
+      <span class="timeline-dot"></span>
+      <h5>Roads &amp; Utilities</h5>
+      <p>Blacktop roads, underground electricity, drainage and the entrance arch laid out across the site.</p>
+    </div>
+    <div class="timeline-step is-done">
+      <span class="timeline-dot"></span>
+      <h5>Sales Launch</h5>
+      <p>Plots opened for booking with spot registration and bank loan assistance.</p>
+    </div>
+    <div class="timeline-step is-active">
+      <span class="timeline-dot"></span>
+      <h5>Active Sales</h5>
+      <p>Ongoing — site visits, bookings and registrations in progress right now.</p>
+      <span class="timeline-tag">Current stage</span>
+    </div>
+    <div class="timeline-step">
+      <span class="timeline-dot"></span>
+      <h5>Registration &amp; Possession</h5>
+      <p>Individual plot registration and handover as each sale completes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Developer Profile -->
+<section class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>Meet the Developer</h2>
+      <p>Stambadri Enclave is marketed and developed by GV Infra Projects.</p>
+    </div>
+  </div>
+  <div class="developer-card" data-aos="fade-up">
+    <div class="developer-avatar">GST</div>
+    <div>
+      <h3>G. Surya Teja</h3>
+      <div class="role">Managing Director, GV Infra Projects</div>
+      <p>GV Infra Projects (DTCP Open Plots &amp; Constructions) is headquartered in Hyderabad with a dedicated Khammam office for this project, marketing DTCP &amp; RERA-approved open-plot layouts across Telangana.</p>
+      <div class="developer-credentials">
+        <div class="item"><strong>302</strong><span>Plots at Stambadri Enclave</span></div>
+        <div class="item"><strong>2</strong><span>Offices — Hyderabad &amp; Khammam</span></div>
+        <div class="item"><strong>100%</strong><span>DTCP-approved title on this layout</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Media Coverage -->
+<section class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>In the News</h2>
+      <p>Press mentions and media coverage of Stambadri Enclave &amp; GV Infra Projects.</p>
+    </div>
+  </div>
+  <div class="media-coverage-empty" data-aos="fade-up">
+    <strong>No verified press coverage yet</strong>
+    No news articles or press mentions of this project have been independently verified for this demo — we'd rather show nothing than a fabricated press logo. Ask sales directly for any coverage they can share, or check back as this section fills in.
+  </div>
+</section>
+
+<!-- Verified Buyer Testimonials -->
+<section class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>What Plot Owners Say About GV Infra</h2>
+      <p>Representative sample feedback for this demo — not verified customer reviews.</p>
+    </div>
+  </div>
+
+  <div class="swiper testimonial-swiper" data-aos="fade-up">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"The 3D masterplan allowed me to inspect exact road widths and plot facings before visiting from Hyderabad. The DTCP title was 100% clean and our bank loan was approved quickly."</p>
+          <div class="testimonial-author-row">
+            <span class="testimonial-avatar">VK</span>
+            <div>
+              <div class="testimonial-author">Venkateswara Rao K.</div>
+              <div class="testimonial-role">Plot #14 Owner · IT Manager</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-slide">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"Stambadri Enclave's underground drainage and open-space parks are far superior to standard layouts I'd seen near Khammam. Excellent appreciation potential and genuine customer service."</p>
+          <div class="testimonial-author-row">
+            <span class="testimonial-avatar">SN</span>
+            <div>
+              <div class="testimonial-author">Dr. Sravanthi N.</div>
+              <div class="testimonial-role">Plot #08 Owner · Healthcare Professional</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-slide">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"Being able to do a 360° drone walkthrough from home made our decision effortless. Spot registration was smooth and transparent."</p>
+          <div class="testimonial-author-row">
+            <span class="testimonial-avatar">RM</span>
+            <div>
+              <div class="testimonial-author">Ramesh Babu M.</div>
+              <div class="testimonial-role">Plot #22 Owner · Business Owner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+</section>
+
+<!-- Direct Sales Contact Section -->
+<section id="contact" class="wrap">
+  <div class="section-head" data-aos="fade-up">
+    <div>
+      <h2>Talk to Sales Directly</h2>
+      <p>No gatekeeping forms — call us directly, message on WhatsApp, or request an instant callback from our sales manager.</p>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 40px;" class="contact-grid" data-aos="fade-up">
+    <div>
+      <p style="margin-bottom:8px;"><strong>Khammam Office</strong></p>
+      <p style="color:var(--ink-soft); margin-bottom:16px;">Star Complex, 5th Floor #501, Opp. HP Petrol Bunk, Raparthi Nagar, Khammam – 507002<br>Mon–Sat, 9:30 AM – 6:30 PM</p>
+
+      <p style="margin-bottom:8px;"><strong>Hyderabad Head Office</strong></p>
+      <p style="color:var(--ink-soft); margin-bottom:20px;">#5-5-140/1, 1st Floor, Nustar Bhavan, Opp. Mangalya Shopping Mall, Vanastalipuram, Hyderabad – 500070</p>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px;">
+        <a href="tel:+919000000000" class="btn btn-call">📞 Call Sales</a>
+        <a href="https://wa.me/919000000000?text=Hi%20GV%20Infra%2C%20I%27d%20like%20to%20know%20more%20about%20your%20projects." target="_blank" rel="noopener" class="btn btn-whatsapp">💬 WhatsApp Us</a>
+      </div>
+
+      <div style="background:var(--surface-soft); padding:18px; border-radius:var(--radius-m); border:1px solid var(--stone-line); font-size:0.86rem;">
+        🟢 <strong>Free Site Visit Available:</strong> We provide complimentary pickup and drop for site visits to Stambadri Enclave.
+      </div>
+    </div>
+
+    <form id="callback-form" style="display:flex; flex-direction:column; gap:14px; background:#FFF; border:1px solid var(--stone-line); padding:28px; border-radius:var(--radius-m); box-shadow:var(--shadow-1);">
+      <h4 style="font-size:1.1rem; margin-bottom:4px;">Request an Instant Callback</h4>
+      <p style="font-size:0.84rem; color:var(--ink-soft); margin-bottom:8px;">Our sales team will call you back within 15 minutes with complete pricing &amp; plot availability.</p>
+
+      <input required name="name" placeholder="Your Full Name" class="mp-search" style="margin:0;">
+      <input required name="phone" placeholder="Mobile Number (e.g. 9876543210)" class="mp-search" style="margin:0;" type="tel">
+      <button class="btn btn-primary" type="submit" style="justify-content:center;">Request Free Callback &rarr;</button>
+      <p id="callback-confirm" style="display:none; color:var(--forest); font-size:0.88rem; text-align:center; font-weight:600;">Thanks — someone from our sales team will call you shortly!</p>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo" style="margin-bottom:14px;">
+        <p style="max-width:36ch; font-size:0.86rem;">DTCP &amp; RERA-approved open-plot developments across Telangana, marketed by GV Infra Projects from offices in Hyderabad &amp; Khammam.</p>
+      </div>
+
+      <div>
+        <h5>Explore</h5>
+        <a href="projects.html">All Projects</a>
+        <a href="project.html">3D Masterplan</a>
+        <a href="#" class="trigger-drone-tour">360° Drone Tour</a>
+        <a href="admin.html">Admin Portal</a>
+      </div>
+
+      <div>
+        <h5>Company</h5>
+        <a href="#infrastructure">Infrastructure</a>
+        <a href="#location">Location Matrix</a>
+        <a href="#approvals">Approvals</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div>
+        <h5>Contact Sales</h5>
+        <a href="tel:+919000000000">Call Sales</a>
+        <a href="https://wa.me/919000000000">WhatsApp Chat</a>
+        <a href="mailto:info@gvinfraprojects.com">info@gvinfraprojects.com</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 GV Infra Projects. Demo platform — sales phone number and per-plot pricing are placeholders/illustrative (Stambadri Enclave is sold at fixed, unpublished rates); all other company &amp; project facts are sourced from gvinfraprojects.com.</span>
+      <span>Hyderabad &amp; Khammam, Telangana, India</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Bottom CTA Bar -->
+<div class="mobile-cta-bar">
+  <a href="tel:+919000000000" class="btn btn-call">Call Sales</a>
+  <a href="https://wa.me/919000000000" target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
+  <a href="project.html" class="btn btn-outline">3D Masterplan</a>
+</div>
+
+<!-- 360° Aerial Drone Tour Viewer Modal -->
+<div id="drone-modal" class="drone-modal">
+  <div class="drone-modal-head">
+    <h3>🚁 Stambadri Enclave — 360° Aerial Drone View <span class="drone-badge">LIVE 360°</span></h3>
+    <button id="drone-close" class="drawer-close" style="color:#fff;" aria-label="Close 360° tour">&times;</button>
+  </div>
+  <div id="drone-viewport" class="drone-pano-viewport">
+    <img id="drone-pano-img" src="img/drone-tour-360.jpg" alt="360 Drone Panorama" class="drone-pano-img">
+    <div class="drone-hotspot" style="top:42%; left:38%;">
+      <span class="drone-hotspot-dot"></span> Entrance Arch &amp; 40ft Main Road
+    </div>
+    <div class="drone-hotspot" style="top:52%; left:56%;">
+      <span class="drone-hotspot-dot"></span> Central Landscaped Park
+    </div>
+    <div class="drone-hotspot" style="top:60%; left:72%;">
+      <span class="drone-hotspot-dot"></span> Second Open-Space Park
+    </div>
+    <div class="drone-instructions">
+      👈 Drag mouse or swipe to view 360° layout 👉
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.2.6/swiper-bundle.min.js"></script>
+<script src="js/data.js"></script>
+<script type="module" src="js/hero-scene.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
