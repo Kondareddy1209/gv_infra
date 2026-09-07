@@ -27,8 +27,8 @@ const GV_DATA = (() => {
     name: "GV Infra Projects",
     tagline: "DTCP Open Plots & Constructions",
     md: "G. Surya Teja — Managing Director",
-    phone: "+91 90000 00000", // placeholder — not published as plain text on the real site
-    whatsapp: "919000000000", // digits only, country code, no + or spaces — used in wa.me links
+    phone: "+91 9392887268",
+    whatsapp: "919392887268", // normalized digits only (country code 91 + 10 digits)
     email: "info@gvinfraprojects.com",
     hqAddress: "#5-5-140/1, 1st Floor, Nustar Bhavan, Opp. Mangalya Shopping Mall, Vanastalipuram, Hyderabad – 500070",
     khammamOffice: "Star Complex, 5th Floor #501, Opp. HP Petrol Bunk, Raparthi Nagar, Khammam – 507002",
@@ -188,10 +188,37 @@ const GV_DATA = (() => {
 
   const STORAGE_KEY = "gv_infra_plots_v1";
 
+  function sanitizePlotPrices(plots) {
+    // Guard against corrupted price values (e.g., INR-formatted strings, NaN, Infinity)
+    // If a price is invalid we re-derive it from area * pricePerSqft from original build
+    return plots.map(p => {
+      let price = typeof p.price === 'string'
+        ? Number(String(p.price).replace(/[^0-9.-]/g, ''))
+        : Number(p.price);
+      if (!isFinite(price) || price <= 0 || price > 999999999) {
+        // Re-derive from the same deterministic formula used in buildPlots
+        const seed = (p.row !== undefined && p.col !== undefined) ? (p.row * 8 + p.col + 1) : p.plotNumber;
+        const pps = p.pricePerSqft && p.pricePerSqft > 0 ? Math.round(p.pricePerSqft) : (950 + Math.floor(Math.abs(Math.sin(seed * 9973.13) * 10000) % 300));
+        price = Math.round((p.area || 2000) * pps);
+      }
+      return { ...p, price: Math.round(price) };
+    });
+  }
+
   function loadPlots() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { /* fall through to regenerate */ }
+      try {
+        const parsed = JSON.parse(saved);
+        const sanitized = sanitizePlotPrices(parsed);
+        // If any prices were corrupted and fixed, re-save the clean data
+        const hadCorruption = parsed.some((p, i) => p.price !== sanitized[i].price);
+        if (hadCorruption) {
+          savePlots(sanitized);
+          console.info('[GV_DATA] Detected and fixed corrupted plot prices in localStorage.');
+        }
+        return sanitized;
+      } catch (e) { /* fall through to regenerate */ }
     }
     const fresh = buildPlots();
     savePlots(fresh);
@@ -246,7 +273,13 @@ const GV_DATA = (() => {
     updatePlotPrice(id, price) {
       const plot = plotCache.find(p => p.id === id);
       if (plot) {
-        plot.price = price;
+        // Always enforce clean integer storage — reject strings, NaN, Infinity, or out-of-range values
+        const cleanPrice = Math.round(Number(price));
+        if (!isFinite(cleanPrice) || cleanPrice <= 0 || cleanPrice > 999999999) {
+          console.warn('[GV_DATA] Rejected invalid price update:', price);
+          return plot;
+        }
+        plot.price = cleanPrice;
         plot.lastUpdated = new Date().toISOString().slice(0, 10);
         savePlots(plotCache);
       }
@@ -272,6 +305,17 @@ const GV_DATA = (() => {
     getLeads() {
       const raw = localStorage.getItem(this.LEADS_KEY);
       return raw ? JSON.parse(raw) : [];
+    },
+
+    updateLeadStatus(id, status) {
+      const leads = this.getLeads();
+      const lead = leads.find(l => (l.id && l.id === id) || (l.createdAt && l.createdAt === id));
+      if (lead) {
+        lead.status = status;
+        lead.updatedAt = new Date().toISOString();
+        localStorage.setItem(this.LEADS_KEY, JSON.stringify(leads));
+      }
+      return lead;
     },
 
     // --- Helpers ---
@@ -334,12 +378,46 @@ const GV_DATA = (() => {
       return "₹" + Math.round(amount).toLocaleString("en-IN");
     },
 
-    waLink(message) {
-      return `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(message)}`;
+    normalizePhone(phone, defaultCountry = "91") {
+      if (!phone) return "";
+      let digits = String(phone).replace(/\D/g, "");
+      if (!digits) return "";
+      // Remove leading zeroes
+      digits = digits.replace(/^0+/, "");
+      // Remove duplicated country code (e.g. 91919392887268 -> 919392887268)
+      if (digits.length === 14 && digits.startsWith(defaultCountry + defaultCountry)) {
+        digits = digits.slice(defaultCountry.length);
+      }
+      // If exactly 10 digits (standard Indian mobile number without country code)
+      if (digits.length === 10) {
+        digits = defaultCountry + digits;
+      }
+      return digits;
     },
 
-    telLink() {
-      return `tel:${COMPANY.phone.replace(/\s+/g, "")}`;
+    buildWhatsAppUrl(phone, message) {
+      const targetPhone = this.normalizePhone(phone || COMPANY.whatsapp || "919392887268");
+      if (!targetPhone) return "#";
+      if (message && String(message).trim()) {
+        return `https://wa.me/${targetPhone}?text=${encodeURIComponent(String(message).trim())}`;
+      }
+      return `https://wa.me/${targetPhone}`;
+    },
+
+    waLink(message, phone) {
+      return this.buildWhatsAppUrl(phone || COMPANY.whatsapp, message);
+    },
+
+    telLink(phone) {
+      const digits = this.normalizePhone(phone || COMPANY.phone || "919392887268");
+      return `tel:+${digits}`;
     },
   };
 })();
+
+// Globally expose centralized WhatsApp utilities
+if (typeof window !== "undefined") {
+  window.normalizeWhatsAppPhone = (phone, country) => GV_DATA.normalizePhone(phone, country);
+  window.buildWhatsAppUrl = (phone, msg) => GV_DATA.buildWhatsAppUrl(phone, msg);
+}
+
