@@ -51,27 +51,21 @@ function cardHTML(plot) {
         </div>
       </div>
       <div class="sc-card-face sc-card-back">
-        <div class="sc-back-header">
-          <div class="sc-plot-no">Plot ${plot.plotNumber} · Block ${plot.block}</div>
-          <div class="sc-back-header-right">
-            <span class="sc-status-badge-back" style="background:${statusColor}">${statusLabel}</span>
-            <button class="sc-flip-btn" data-flip="${plot.id}" aria-label="Show plot ${plot.plotNumber} card front" title="Flip back">⇄</button>
-          </div>
-        </div>
+        <button class="sc-flip-btn" data-flip="${plot.id}" aria-label="Show plot ${plot.plotNumber} card front" title="Flip back">⇄</button>
         <div class="sc-back-body">
+          <div class="sc-plot-no">Plot ${plot.plotNumber} · Block ${plot.block}</div>
           <dl class="sc-spec-list">
             <div><dt>Facing</dt><dd>${plot.facing}</dd></div>
             <div><dt>Road width</dt><dd>${plot.roadWidthFt} ft</dd></div>
             <div><dt>Corner plot</dt><dd>${plot.isCorner ? 'Yes' : 'No'}</dd></div>
             <div><dt>Park facing</dt><dd>${plot.isParkFacing ? 'Yes' : 'No'}</dd></div>
             <div><dt>Booking amount</dt><dd>${GV_DATA.formatINR(plot.bookingAmount)}</dd></div>
-            <div><dt>Price</dt><dd class="sc-spec-price">${GV_DATA.formatINR(plot.price)}</dd></div>
           </dl>
           <div class="sc-back-actions">
             <button class="btn btn-primary btn-small sc-view-3d" data-plot-id="${plot.id}">View in 3D ↗</button>
             <label class="sc-compare-check ${disableCompare ? 'disabled' : ''}">
               <input type="checkbox" data-compare-id="${plot.id}" ${checked} ${disableCompare ? 'disabled' : ''}>
-              Add to comparison
+              Add to compare
             </label>
           </div>
         </div>
@@ -89,32 +83,16 @@ function render() {
   countEl.textContent = `${matching.length} of ${plots.length} shown plots match your filters — illustrative demo grid (48 of the project's ${GV_DATA.project.totalPlots} total plots). Prices are illustrative: ${GV_DATA.project.priceNote}`;
   loadMoreBtn.hidden = visibleCount >= matching.length;
 
-  grid.querySelectorAll('.sc-card').forEach((card) => {
-    card.addEventListener('click', (e) => {
-      // If clicking inside back actions, don't toggle card flip
-      if (e.target.closest('.sc-view-3d') || e.target.closest('.sc-compare-check')) {
-        return;
-      }
-      // If user clicked the flip button on either face OR clicked anywhere on the front card face OR back header
-      if (e.target.closest('.sc-flip-btn') || e.target.closest('.sc-card-front') || e.target.closest('.sc-back-header')) {
-        const isFlipped = card.classList.toggle('flipped');
-        card.classList.toggle('selected', isFlipped);
-      }
+  grid.querySelectorAll('.sc-flip-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      btn.closest('.sc-card').classList.toggle('flipped');
     });
   });
-
   grid.querySelectorAll('.sc-view-3d').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      viewInModel(btn.dataset.plotId);
-    });
+    btn.addEventListener('click', () => viewInModel(btn.dataset.plotId));
   });
-
   grid.querySelectorAll('[data-compare-id]').forEach((box) => {
-    box.addEventListener('change', (e) => {
-      e.stopPropagation();
-      toggleCompare(box.dataset.compareId, box.checked);
-    });
+    box.addEventListener('change', () => toggleCompare(box.dataset.compareId, box.checked));
   });
 }
 

@@ -3,586 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operations Console — GV Infra Projects</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css">
+<title>Admin — GV Infra Projects</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { padding-bottom: 40px; }
+  .admin-shell { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 76px); }
+  .admin-nav { border-right: 1px solid var(--stone-line); padding: 24px 16px; }
+  .admin-nav a { display:block; padding: 10px 12px; border-radius: var(--radius-s); font-size: 0.9rem; color: var(--ink-soft); margin-bottom:4px; }
+  .admin-nav a.active { background: var(--forest); color: #fff; }
+  .admin-main { padding: 32px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--stone-line); }
+  th { color: var(--ink-soft); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.02em; }
+  select, input[type=number] { padding: 6px 8px; border: 1px solid var(--stone-line); border-radius: var(--radius-xs); font-family: inherit; }
+  .kpi-row { display:flex; gap:16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .kpi { flex: 1; min-width: 140px; border: 1px solid var(--stone-line); border-radius: var(--radius-m); padding: 16px 18px; background:#fff; box-shadow: var(--shadow-1); }
+  .kpi .num { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; color: var(--forest); }
+  .kpi .label { font-size: 0.78rem; color: var(--ink-soft); margin-top: 2px; }
+  .note-box { background: var(--surface-soft); border: 1px solid var(--stone-line); padding: 14px 18px; border-radius: var(--radius-m); font-size: 0.85rem; margin-bottom: 24px; }
+  .tab-section { display:none; }
+  .tab-section.active { display:block; }
+</style>
 </head>
-<body class="admin-body">
+<body>
 
-<!-- ================= Top Command Header ================= -->
-<header class="admin-topbar">
-  <div class="admin-topbar-left">
-    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-    </button>
-    <a href="admin.html" class="admin-brand">
-      <div class="admin-brand-mark">GV</div>
-      <div>
-        <div class="admin-brand-name">GV Infra</div>
-      </div>
-      <span class="admin-brand-sub">Property Operations Console</span>
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      GV Infra <span>Admin</span>
+      <span class="brand-badge">Demo Portal</span>
     </a>
-    <span class="project-pill">Stambadri Enclave</span>
-  </div>
-
-  <div class="admin-topbar-right">
-    <div class="sync-badge" id="sync-status" title="Cross-tab localStorage sync is running">
-      <span class="sync-dot"></span>
-      <span>State Synced</span>
+    <div class="nav-links">
+      <a href="index.html">← Back to website</a>
     </div>
-
-    <button class="topbar-btn" id="btn-refresh-data" title="Reload local state">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-      <span>Refresh</span>
-    </button>
-
-    <a href="project.html" class="topbar-btn" target="_blank" rel="noopener">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-      <span>3D Masterplan</span>
-    </a>
-
-    <a href="index.html" class="topbar-btn">
-      <span>Public Site</span>
-    </a>
   </div>
-</header>
+</nav>
 
-<!-- ================= Main Application Shell ================= -->
 <div class="admin-shell">
-
-  <!-- Sidebar Navigation -->
-  <aside class="admin-sidebar" id="admin-sidebar">
-    <div class="sidebar-heading">Property Operations</div>
-    <ul class="nav-menu" role="tablist">
-      <li class="nav-item">
-        <button class="nav-btn active" data-view="overview" role="tab" aria-selected="true">
-          <div class="nav-btn-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            <span>Overview</span>
-          </div>
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-btn" data-view="inventory" role="tab" aria-selected="false">
-          <div class="nav-btn-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-            <span>Plot Inventory</span>
-          </div>
-          <span class="nav-badge" id="nav-badge-plots">48</span>
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-btn" data-view="leads" role="tab" aria-selected="false">
-          <div class="nav-btn-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            <span>Inbound Leads</span>
-          </div>
-          <span class="nav-badge" id="nav-badge-leads">0</span>
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-btn" data-view="pricing" role="tab" aria-selected="false">
-          <div class="nav-btn-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            <span>Pricing Schedule</span>
-          </div>
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-btn" data-view="settings" role="tab" aria-selected="false">
-          <div class="nav-btn-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <span>System &amp; Settings</span>
-          </div>
-        </button>
-      </li>
-    </ul>
-
-    <div class="sidebar-status-box">
-      <div class="sidebar-status-header">
-        <span class="sidebar-status-title">System Status</span>
-        <span class="sync-dot"></span>
-      </div>
-      <p class="sidebar-status-desc">
-        Local store active: <code>gv_infra_plots_v1</code>. Modifications broadcast in real time across browser tabs.
-      </p>
-    </div>
+  <aside class="admin-nav">
+    <a href="#" class="tab-link active" data-tab="dashboard">Dashboard</a>
+    <a href="#" class="tab-link" data-tab="plots">Plots &amp; Pricing</a>
+    <a href="#" class="tab-link" data-tab="leads">Leads</a>
   </aside>
 
-  <!-- Main Workspace -->
-  <main class="admin-workspace">
+  <main class="admin-main">
 
-    <!-- ================= VIEW 1: OVERVIEW ================= -->
-    <section id="view-overview" class="view-section active">
-      <div class="view-header">
-        <div class="view-title-group">
-          <h1>Operations Overview</h1>
-          <p class="view-subtitle">Live inventory health, status distribution, and inbound enquiries for Stambadri Enclave.</p>
-        </div>
-        <div class="view-actions">
-          <button class="btn-op btn-op-primary" id="overview-btn-inventory">View Inventory</button>
-        </div>
-      </div>
+    <div class="note-box">
+      This is a demo admin panel backed by <code>localStorage</code> so you can show the "live update" flow with no real backend:
+      change a plot's status or price below, then open <a href="project.html" target="_blank" style="text-decoration:underline;">the public masterplan in a new tab</a> — it updates automatically because both pages read from the same mock data layer (<code>js/data.js</code>). Swap that file for real Supabase calls in production.
+    </div>
 
-      <!-- Metrics Strip -->
-      <div class="metrics-strip" id="overview-metrics-strip">
-        <!-- Dynamically rendered -->
-      </div>
-
-      <!-- Inventory Status Distribution Bar -->
-      <div class="dist-bar-wrapper">
-        <div class="dist-bar-head">
-          <span class="dist-bar-title">Inventory Allocation Breakdown</span>
-          <div class="dist-bar-legend" id="dist-bar-legend">
-            <!-- Legend dots dynamically updated -->
-          </div>
-        </div>
-        <div class="dist-bar" id="dist-bar-track">
-          <!-- Segment bars dynamically updated -->
-        </div>
-      </div>
-
-      <!-- Operations Split Grid -->
-      <div class="op-card">
-        <div class="op-card-head">
-          <div class="op-card-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            <span>Recent Inbound Leads</span>
-          </div>
-          <button class="btn-op btn-op-default" id="overview-btn-all-leads">All Leads &rarr;</button>
-        </div>
-        <div class="table-responsive">
-          <table class="op-table">
-            <thead>
-              <tr>
-                <th>Client Name</th>
-                <th>Phone Contact</th>
-                <th>Plot Interest</th>
-                <th>Source</th>
-                <th>Pipeline Stage</th>
-                <th>Received</th>
-                <th style="text-align: right;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="overview-recent-leads">
-              <!-- Rendered via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <section id="tab-dashboard" class="tab-section active">
+      <h2 style="margin-bottom:20px;">Dashboard</h2>
+      <div class="kpi-row" id="kpi-row"></div>
+      <h3 style="font-size:1.05rem; margin-bottom:12px;">Plot status breakdown</h3>
+      <table>
+        <thead><tr><th>Status</th><th>Count</th></tr></thead>
+        <tbody id="status-breakdown"></tbody>
+      </table>
     </section>
 
-
-    <!-- ================= VIEW 2: INVENTORY ================= -->
-    <section id="view-inventory" class="view-section">
-      <div class="view-header">
-        <div class="view-title-group">
-          <h1>Plot Inventory Management</h1>
-          <p class="view-subtitle">Real-time status controls, plot specifications, and validated inline price editing.</p>
-        </div>
-        <div class="view-actions">
-          <button class="btn-op btn-op-default" id="btn-export-inventory">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Export CSV</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Controls & Filter Toolbar -->
-      <div class="toolbar-wrap">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="inventory-search" class="search-input" placeholder="Search plot #, facing, or area...">
-          </div>
-
-          <select id="filter-status" class="filter-select">
-            <option value="">All Statuses</option>
-            <option value="available">Available</option>
-            <option value="reserved">Reserved</option>
-            <option value="hold">On Hold</option>
-            <option value="sold">Sold</option>
-            <option value="blocked">Blocked</option>
-          </select>
-
-          <select id="filter-block" class="filter-select">
-            <option value="">All Blocks</option>
-            <option value="A">Block A</option>
-            <option value="B">Block B</option>
-          </select>
-
-          <select id="filter-facing" class="filter-select">
-            <option value="">All Facings</option>
-            <option value="East">East</option>
-            <option value="West">West</option>
-            <option value="North">North</option>
-            <option value="South">South</option>
-          </select>
-
-          <select id="sort-plots" class="filter-select">
-            <option value="plotNumber-asc">Sort: Plot # (Asc)</option>
-            <option value="plotNumber-desc">Sort: Plot # (Desc)</option>
-            <option value="price-asc">Sort: Price (Low → High)</option>
-            <option value="price-desc">Sort: Price (High → Low)</option>
-            <option value="area-asc">Sort: Area (Small → Large)</option>
-            <option value="area-desc">Sort: Area (Large → Small)</option>
-          </select>
-
-          <button id="btn-reset-filters" class="btn-op btn-op-default" title="Clear all active filters">Reset</button>
-        </div>
-
-        <div class="count-indicator" id="inventory-count-indicator">
-          Showing 48 of 48 units
-        </div>
-      </div>
-
-      <!-- Inventory Data Table -->
-      <div class="table-responsive">
-        <table class="op-table" id="inventory-data-table">
-          <thead>
-            <tr>
-              <th class="sortable" data-sort="plotNumber">Plot # <span class="sort-icon">↕</span></th>
-              <th>Block</th>
-              <th class="th-num sortable" data-sort="area">Area (Sq.Ft) <span class="sort-icon">↕</span></th>
-              <th>Facing</th>
-              <th>Road Width</th>
-              <th>Status</th>
-              <th class="th-num sortable" data-sort="price">Price (₹) <span class="sort-icon">↕</span></th>
-              <th>Last Updated</th>
-              <th style="text-align: right;">Action</th>
-            </tr>
-          </thead>
-          <tbody id="inventory-table-body">
-            <!-- Rendered via JS -->
-          </tbody>
-        </table>
-      </div>
-      <div id="inventory-empty" class="empty-state" style="display: none;">
-        <div class="empty-state-title">NO MATCHING INVENTORY</div>
-        <p class="empty-state-desc">No plots match your active filters or search term. Reset your filters to view all units.</p>
-        <button class="btn-op btn-op-default" id="btn-empty-reset">Reset All Filters</button>
-      </div>
+    <section id="tab-plots" class="tab-section">
+      <h2 style="margin-bottom:8px;">Plots — Stambadri Enclave</h2>
+      <p style="color:var(--ink-soft); font-size:0.88rem; margin-bottom:20px;">Change status or price, then check the public 3D masterplan in another tab.</p>
+      <table>
+        <thead>
+          <tr><th>Plot</th><th>Block</th><th>Size</th><th>Facing</th><th>Status</th><th>Price (₹)</th><th>Updated</th></tr>
+        </thead>
+        <tbody id="plots-table"></tbody>
+      </table>
+      <button class="btn btn-ghost btn-small mt-24" id="reset-demo">Reset demo data</button>
     </section>
 
-
-    <!-- ================= VIEW 3: LEADS ================= -->
-    <section id="view-leads" class="view-section">
-      <div class="view-header">
-        <div class="view-title-group">
-          <h1>Inbound Buyer Enquiries</h1>
-          <p class="view-subtitle">Captured customer leads from homepage callback forms, site-visit requests, and 3D masterplan interactions.</p>
-        </div>
-        <div class="view-actions">
-          <button class="btn-op btn-op-default" id="btn-export-leads">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Export Leads JSON</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Leads Filter Toolbar -->
-      <div class="toolbar-wrap">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="leads-search" class="search-input" placeholder="Search by name, phone, or plot...">
-          </div>
-
-          <select id="filter-lead-status" class="filter-select">
-            <option value="">All Pipeline Stages</option>
-            <option value="new">New Enquiry</option>
-            <option value="contacted">Contacted</option>
-            <option value="site_visit_booked">Site Visit Booked</option>
-            <option value="qualified">Qualified</option>
-            <option value="closed">Closed</option>
-          </select>
-
-          <select id="sort-leads" class="filter-select">
-            <option value="newest">Sort: Newest First</option>
-            <option value="oldest">Sort: Oldest First</option>
-          </select>
-
-          <button id="btn-reset-leads-filters" class="btn-op btn-op-default">Reset</button>
-        </div>
-
-        <div class="count-indicator" id="leads-count-indicator">
-          Showing 0 enquiries
-        </div>
-      </div>
-
-      <!-- Leads Data Table -->
-      <div class="table-responsive">
-        <table class="op-table">
-          <thead>
-            <tr>
-              <th>Client Name</th>
-              <th>Phone Contact</th>
-              <th>Project</th>
-              <th>Plot Interest</th>
-              <th>Channel / Source</th>
-              <th>Pipeline Stage</th>
-              <th>Date Received</th>
-              <th style="text-align: right;">Operational Actions</th>
-            </tr>
-          </thead>
-          <tbody id="leads-table-body">
-            <!-- Rendered via JS -->
-          </tbody>
-        </table>
-      </div>
-      <div id="leads-empty" class="empty-state" style="display: none;">
-        <div class="empty-state-title">NO INBOUND LEADS FOUND</div>
-        <p class="empty-state-desc">No buyer enquiries match the search criteria. Try the callback form or "Book a Site Visit" on the masterplan page.</p>
-      </div>
-    </section>
-
-
-    <!-- ================= VIEW 4: PRICING ================= -->
-    <section id="view-pricing" class="view-section">
-      <div class="view-header">
-        <div class="view-title-group">
-          <h1>Pricing &amp; Valuation Schedule</h1>
-          <p class="view-subtitle">Rate analysis across blocks, average per-square-foot metrics, and inventory portfolio value.</p>
-        </div>
-      </div>
-
-      <!-- Pricing Metrics Strip -->
-      <div class="metrics-strip" id="pricing-metrics-strip">
-        <!-- Rendered via JS -->
-      </div>
-
-      <!-- Block Pricing Breakdown Card -->
-      <div class="op-card">
-        <div class="op-card-head">
-          <div class="op-card-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-            <span>Block-Level Valuation Summary</span>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table class="op-table">
-            <thead>
-              <tr>
-                <th>Block Identifier</th>
-                <th class="th-num">Total Plots</th>
-                <th class="th-num">Total Area (Sq.Ft)</th>
-                <th class="th-num">Avg Rate / Sq.Ft</th>
-                <th class="th-num">Min Price</th>
-                <th class="th-num">Max Price</th>
-                <th class="th-num">Total Valuation (₹)</th>
-              </tr>
-            </thead>
-            <tbody id="pricing-block-breakdown">
-              <!-- Rendered via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ================= VIEW 5: SETTINGS ================= -->
-    <section id="view-settings" class="view-section">
-      <div class="view-header">
-        <div class="view-title-group">
-          <h1>System Diagnostics &amp; Settings</h1>
-          <p class="view-subtitle">Monitor browser storage allocation, cross-tab event listeners, and manage local data persistence.</p>
-        </div>
-      </div>
-
-      <div class="settings-grid">
-        <!-- Storage Diagnostics Card -->
-        <div class="op-card">
-          <div class="op-card-head">
-            <div class="op-card-title">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-              <span>Local Storage Allocation</span>
-            </div>
-          </div>
-          <div class="op-card-body">
-            <div class="info-row">
-              <span class="info-label">Plot Key:</span>
-              <span class="info-val"><code>gv_infra_plots_v1</code></span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Leads Key:</span>
-              <span class="info-val"><code>gv_infra_leads_v1</code></span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Active Plot Count:</span>
-              <span class="info-val" id="diag-plots-count">48 units</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Captured Leads:</span>
-              <span class="info-val" id="diag-leads-count">0 records</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Storage Footprint:</span>
-              <span class="info-val" id="diag-storage-size">~18 KB</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sync Diagnostics Card -->
-        <div class="op-card">
-          <div class="op-card-head">
-            <div class="op-card-title">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
-              <span>Cross-Tab Synchronization</span>
-            </div>
-          </div>
-          <div class="op-card-body">
-            <div class="info-row">
-              <span class="info-label">Listener Status:</span>
-              <span class="info-val" style="color:#15803D;">● Active (window.storage)</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Target Page Sync:</span>
-              <span class="info-val"><code>project.html</code> (3D Masterplan)</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Card Showcase Sync:</span>
-              <span class="info-val"><code>index.html</code> (Plot Cards)</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Last Sync Broadcast:</span>
-              <span class="info-val" id="diag-last-sync">Just now</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Backup & Danger Zone -->
-      <div class="op-card" style="margin-top: 20px;">
-        <div class="op-card-head">
-          <div class="op-card-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span>Operations Data Maintenance</span>
-          </div>
-        </div>
-        <div class="op-card-body">
-          <p style="font-size: 0.83rem; color: var(--admin-ink-secondary); margin-bottom: 16px;">
-            Export complete snapshot of inventory and customer leads, or restore original demo plot configurations.
-          </p>
-          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <button class="btn-op btn-op-default" id="btn-export-full-json">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span>Download Complete Backup (JSON)</span>
-            </button>
-            <button class="btn-op btn-op-default" id="btn-sanitize-prices" title="Detect and fix any corrupted price values in localStorage">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              <span>Verify &amp; Fix Prices</span>
-            </button>
-            <button class="btn-op btn-op-danger" id="btn-open-reset-modal">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
-              <span>Reset Demo Inventory to Default</span>
-            </button>
-          </div>
-        </div>
-      </div>
+    <section id="tab-leads" class="tab-section">
+      <h2 style="margin-bottom:8px;">Leads</h2>
+      <p style="color:var(--ink-soft); font-size:0.88rem; margin-bottom:20px;">Captured from the callback form, site-visit requests, and plot enquiries on the public site.</p>
+      <table>
+        <thead><tr><th>Name</th><th>Phone</th><th>Project</th><th>Plot</th><th>Source</th><th>Status</th><th>Received</th></tr></thead>
+        <tbody id="leads-table"></tbody>
+      </table>
     </section>
 
   </main>
 </div>
-
-<!-- ================= Slide-out Lead Detail Drawer ================= -->
-<div class="drawer-backdrop" id="drawer-backdrop">
-  <div class="lead-drawer" id="lead-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-lead-name">
-    <div class="drawer-head">
-      <div class="drawer-title-group">
-        <h3 id="drawer-lead-name">Lead Details</h3>
-        <span id="drawer-lead-id">LEAD-0000</span>
-      </div>
-      <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close detail drawer">&times;</button>
-    </div>
-
-    <div class="drawer-body">
-      <div class="drawer-field">
-        <span class="drawer-field-label">Mobile Contact</span>
-        <span class="drawer-field-val" id="drawer-lead-phone">—</span>
-      </div>
-
-      <div class="drawer-field">
-        <span class="drawer-field-label">Plot Interest</span>
-        <span class="drawer-field-val" id="drawer-lead-plot">—</span>
-      </div>
-
-      <div class="drawer-field">
-        <span class="drawer-field-label">Project / Development</span>
-        <span class="drawer-field-val" id="drawer-lead-project">Stambadri Enclave</span>
-      </div>
-
-      <div class="drawer-field">
-        <span class="drawer-field-label">Channel Source</span>
-        <span class="drawer-field-val" id="drawer-lead-source">—</span>
-      </div>
-
-      <div class="drawer-field">
-        <span class="drawer-field-label">Submission Date &amp; Time</span>
-        <span class="drawer-field-val" id="drawer-lead-date">—</span>
-      </div>
-
-      <div class="drawer-field">
-        <span class="drawer-field-label">Update Pipeline Stage</span>
-        <select id="drawer-lead-status-select" class="filter-select" style="width: 100%; margin-top: 4px;">
-          <option value="new">New Enquiry</option>
-          <option value="contacted">Contacted</option>
-          <option value="site_visit_booked">Site Visit Booked</option>
-          <option value="qualified">Qualified</option>
-          <option value="closed">Closed</option>
-        </select>
-        <div class="pipeline-track" id="drawer-pipeline-track" style="margin-top: 8px;">
-          <div class="pipeline-step active"></div>
-          <div class="pipeline-step"></div>
-          <div class="pipeline-step"></div>
-          <div class="pipeline-step"></div>
-          <div class="pipeline-step"></div>
-        </div>
-      </div>
-
-      <div class="drawer-field" style="margin-top: 8px;">
-        <span class="drawer-field-label">Direct Contact Actions</span>
-        <div class="drawer-action-row">
-          <a href="#" id="drawer-btn-whatsapp" class="btn-drawer-action btn-drawer-whatsapp" target="_blank" rel="noopener">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-            <span>WhatsApp Client</span>
-          </a>
-          <a href="#" id="drawer-btn-call" class="btn-drawer-action btn-drawer-call">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            <span>Call Phone</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ================= Confirmation Modal ================= -->
-<div class="modal-overlay" id="reset-modal">
-  <div class="modal-card" role="dialog" aria-labelledby="reset-modal-title">
-    <div class="modal-card-head">
-      <h3 class="modal-card-title" id="reset-modal-title">Confirm Inventory Reset</h3>
-      <button class="drawer-close-btn" id="reset-modal-close">&times;</button>
-    </div>
-    <div class="modal-card-body">
-      <p>
-        Are you sure you want to restore the demo inventory to its original default state? All custom plot prices and manual status updates will be regenerated.
-      </p>
-      <p style="margin-top: 10px; font-size: 0.78rem; color: #DC2626; font-weight: 600;">
-        This action updates localStorage (<code>gv_infra_plots_v1</code>) and propagates across all open tabs.
-      </p>
-    </div>
-    <div class="modal-card-foot">
-      <button class="btn-op btn-op-default" id="reset-modal-cancel">Cancel</button>
-      <button class="btn-op btn-op-danger" id="reset-modal-confirm">Reset to Default</button>
-    </div>
-  </div>
-</div>
-
-<!-- ================= Toast Feedback Container ================= -->
-<div class="toast-container" id="toast-container"></div>
 
 <script src="js/data.js"></script>
 <script src="js/admin.js"></script>

@@ -1,6 +1,7 @@
 /* ============================================================
-   Architectural Plot Showcase — card grid, flip cards, comparison tray.
-   Loaded only by project.html, alongside css/style.css.
+   Premium Plot Showcase — card grid, flip cards, comparison tray.
+   Loaded only by project.html, alongside css/style.css (reuses its
+   .compare-modal / .compare-table / .finder-select / .btn-* rules).
    ============================================================ */
 
 .plot-showcase { margin-top: 32px; }
@@ -27,7 +28,6 @@
   color: var(--ink-soft);
   margin-bottom: 16px;
   line-height: 1.5;
-  font-weight: 500;
 }
 
 .showcase-grid {
@@ -42,128 +42,44 @@
   color: var(--ink-soft);
   padding: 40px 20px;
   background: var(--surface-soft);
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-m);
   border: 1px dashed var(--stone-line);
 }
 
 /* ---- Flip card ---- */
-.sc-card {
-  perspective: 1200px;
-  -webkit-perspective: 1200px;
-  min-height: 356px;
-  height: 356px;
-  cursor: pointer;
-  position: relative;
-}
-
+.sc-card { perspective: 1200px; height: 240px; }
 .sc-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.45s cubic-bezier(.4, .2, .2, 1), box-shadow 0.25s ease;
+  transition: transform 0.5s cubic-bezier(.4, .2, .2, 1);
   transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-m);
   box-shadow: var(--shadow-1);
 }
+.sc-card.flipped .sc-card-inner { transform: rotateY(180deg); }
 
-.sc-card:hover .sc-card-inner {
-  box-shadow: var(--shadow-3);
-  transform: translateY(-3px);
-}
-
-.sc-card.flipped .sc-card-inner,
-.sc-card.selected .sc-card-inner {
-  transform: rotateY(180deg);
-}
-
-.sc-card.flipped:hover .sc-card-inner,
-.sc-card.selected:hover .sc-card-inner {
-  transform: rotateY(180deg) translateY(-3px);
+/* Hover-to-flip on devices that actually have a pointer — touch keeps the explicit button instead. */
+@media (hover: hover) and (pointer: fine) {
+  .sc-card:hover .sc-card-inner { transform: rotateY(180deg); }
 }
 
 .sc-card-face {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-m);
   border: 1px solid var(--stone-line);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: var(--bg-raised, #ffffff);
-  box-sizing: border-box;
 }
 
-.sc-card-front {
-  justify-content: flex-end;
-  transform: rotateY(0deg);
-  -webkit-transform: rotateY(0deg);
-  z-index: 2;
-  border-radius: var(--radius-s);
-  overflow: hidden;
-}
-
+.sc-card-front { justify-content: flex-end; }
 .sc-card-back {
   transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  background: var(--bg-raised, #ffffff);
-  padding: 14px 16px;
-  z-index: 1;
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: var(--radius-s);
-}
-
-/* Selected state card accent border and shadow */
-.sc-card.selected .sc-card-back,
-.sc-card.flipped .sc-card-back {
-  border-color: var(--brand-green, #15803D);
-  box-shadow: 0 4px 16px rgba(21, 128, 61, 0.12);
-}
-
-/* Strict layer isolation:
-   - When NOT selected/flipped: front is visible and on top, back is hidden.
-   - When selected/flipped: back is visible and on top, front is completely hidden.
-   - The visibility transition with 0.22s delay guarantees that during the 0.45s 3D flip,
-     the departing face disappears at 90deg rotation without any bleed-through or overlay collision.
-*/
-.sc-card:not(.flipped):not(.selected) .sc-card-front {
-  opacity: 1;
-  visibility: visible;
-  z-index: 2;
-  pointer-events: auto;
-  transition: opacity 0.2s ease;
-}
-
-.sc-card:not(.flipped):not(.selected) .sc-card-back {
-  opacity: 0;
-  visibility: hidden;
-  z-index: 1;
-  pointer-events: none;
-  transition: visibility 0s 0.22s, opacity 0.2s ease;
-}
-
-.sc-card.flipped .sc-card-front,
-.sc-card.selected .sc-card-front {
-  opacity: 0;
-  visibility: hidden;
-  z-index: 1;
-  pointer-events: none;
-  transition: visibility 0s 0.22s, opacity 0.2s ease;
-}
-
-.sc-card.flipped .sc-card-back,
-.sc-card.selected .sc-card-back {
-  opacity: 1;
-  visibility: visible;
-  z-index: 2;
-  pointer-events: auto;
-  transition: opacity 0.2s ease;
+  background: var(--bg-raised);
+  padding: 16px;
 }
 
 .sc-status-badge {
@@ -174,11 +90,9 @@
   color: #fff;
   font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 3px 8px;
-  border-radius: var(--radius-xs);
-  text-transform: uppercase;
-  line-height: 1.2;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
 }
 
 .sc-flip-btn {
@@ -186,174 +100,53 @@
   top: 8px;
   right: 8px;
   z-index: 2;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-xs);
-  border: 1px solid rgba(13, 21, 28, 0.12);
-  background: rgba(255, 255, 255, 0.92);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.9);
   color: var(--ink);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
 }
-.sc-flip-btn:hover { background: #fff; border-color: var(--brand-green); color: var(--brand-green); }
+.sc-flip-btn:hover { background: #fff; }
+.sc-card-back .sc-flip-btn { background: var(--surface-soft); }
 
 .sc-front-body {
   position: relative;
   z-index: 1;
   padding: 12px 14px 14px;
-  background: linear-gradient(0deg, rgba(13, 21, 28, 0.88), rgba(13, 21, 28, 0.05) 90%);
+  background: linear-gradient(0deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.05) 90%);
   color: #fff;
-  border-bottom-left-radius: calc(var(--radius-s) - 1px);
-  border-bottom-right-radius: calc(var(--radius-s) - 1px);
 }
 .sc-plot-no { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; }
 .sc-plot-block { font-size: 0.72rem; opacity: 0.85; margin-top: 1px; }
 .sc-plot-dims { font-size: 0.78rem; opacity: 0.9; margin-top: 6px; }
 .sc-plot-price { font-size: 1rem; font-weight: 700; color: #86EFAC; margin-top: 2px; }
 
-/* Back face layout & header */
-.sc-back-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--stone-line, #E2E8F0);
-  margin-bottom: 8px;
-  cursor: pointer;
-}
+.sc-card-back .sc-plot-no { font-size: 0.95rem; color: var(--ink); margin-bottom: 10px; }
 
-.sc-card-back .sc-plot-no {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--ink, #0D151C);
-  margin: 0;
-  line-height: 1.25;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.sc-spec-list { display: grid; gap: 6px; font-size: 0.78rem; }
+.sc-spec-list > div { display: flex; justify-content: space-between; gap: 8px; }
+.sc-spec-list dt { color: var(--ink-soft); }
+.sc-spec-list dd { color: var(--ink); font-weight: 600; }
 
-.sc-back-header-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.sc-status-badge-back {
-  position: static;
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 2px 7px;
-  border-radius: var(--radius-xs, 4px);
-  text-transform: uppercase;
-  line-height: 1.2;
-}
-
-.sc-card-back .sc-flip-btn {
-  position: static;
-  width: 26px;
-  height: 26px;
-  font-size: 0.8rem;
-  background: var(--surface-soft, #F1F5F9);
-  border-radius: var(--radius-xs);
-}
-
-.sc-back-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: space-between;
-  min-height: 0;
-}
-
-.sc-spec-list {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  font-size: 0.8rem;
-  margin: 0;
-  padding: 0;
-}
-.sc-spec-list > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 8px;
-}
-.sc-spec-list dt {
-  color: var(--ink-soft, #64748B);
-  font-weight: 500;
-  white-space: nowrap;
-  font-size: 0.8rem;
-  line-height: 1.35;
-}
-.sc-spec-list dd {
-  color: var(--ink, #0D151C);
-  font-weight: 600;
-  margin: 0;
-  text-align: right;
-  white-space: nowrap;
-  font-size: 0.82rem;
-  line-height: 1.35;
-}
-.sc-spec-list dd.sc-spec-price {
-  color: var(--brand-green, #15803D);
-  font-weight: 700;
-  font-size: 0.92rem;
-  letter-spacing: -0.01em;
-}
-
-.sc-back-actions {
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px solid var(--stone-line, #E2E8F0);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.sc-back-actions .btn {
-  justify-content: center;
-  width: 100%;
-  height: 36px;
-  padding: 0 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  box-sizing: border-box;
-}
+.sc-back-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.sc-back-actions .btn { justify-content: center; }
 
 .sc-compare-check {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 7px;
   font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--ink-body, #334155);
-  cursor: pointer;
-  user-select: none;
-  padding: 2px 0;
-  height: 22px;
-}
-.sc-compare-check input {
-  accent-color: var(--brand-green, #15803D);
-  width: 15px;
-  height: 15px;
-  margin: 0;
+  color: var(--ink-body);
   cursor: pointer;
 }
-.sc-compare-check.disabled { opacity: 0.45; cursor: not-allowed; }
+.sc-compare-check input { accent-color: var(--brand-green); width: 15px; height: 15px; }
+.sc-compare-check.disabled { opacity: 0.5; cursor: not-allowed; }
 
 .showcase-more { margin: 24px auto 0; display: flex; }
 
@@ -366,50 +159,27 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 14px;
-  background: rgba(13, 21, 28, 0.95);
+  background: rgba(15, 23, 42, 0.94);
   backdrop-filter: blur(12px);
   color: #fff;
-  padding: 10px 18px;
-  border-radius: var(--radius-s);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  padding: 12px 18px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
   font-size: 0.84rem;
 }
 .compare-tray-chips { display: flex; gap: 6px; flex-wrap: wrap; }
 .compare-tray-chip {
   background: rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-xs);
-  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  padding: 3px 11px;
   font-size: 0.76rem;
   font-weight: 600;
 }
-.compare-tray .btn-ghost { color: #fff; border-color: rgba(255, 255, 255, 0.25); }
-.compare-tray .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); border-color: #fff; }
+.compare-tray .btn-ghost { color: #fff; }
+.compare-tray .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); }
 
 @media (max-width: 640px) {
-  .showcase-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 14px;
-  }
-  .sc-card {
-    min-height: 356px;
-    height: 356px;
-  }
-  .compare-tray {
-    flex-direction: column;
-    align-items: stretch;
-    border-radius: var(--radius-s);
-    bottom: 8px;
-  }
-}
-
-@media (max-width: 380px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .sc-card {
-    min-height: 356px;
-    height: 356px;
-  }
+  .showcase-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .sc-card { height: 210px; }
+  .compare-tray { flex-direction: column; align-items: stretch; border-radius: var(--radius-m); bottom: 8px; }
 }

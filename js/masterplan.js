@@ -1,8 +1,7 @@
 /* ============================================================
-   MASTERPLAN 3D ENGINE (Three.js)
-   Renders Stambadri Enclave as a realistic 3D land environment:
-   - Ground terrain with road network and plot boundaries
-   - Dynamic lighting (Day / Sunset / Night / Satellite)
+   3D MASTERPLAN — Three.js (Real Land & Neighborhood View)
+   Renders Peacock Valley as a realistic 3D land environment:
+   - Procedural grass terrain & paved asphalt roads with lane stripes
    - 3D Entrance Arch & Gated boundary
    - 3D Clubhouse & Swimming Pool
    - Landscaped Central Park (multiple tree species, benches, flowerbeds)
@@ -936,8 +935,7 @@ export function initMasterplan({ canvas, onSelectPlot, onHoverPlot, onHeadingCha
       m.scale.set(1, 1, 1);
       m.material.emissive.setHex(0x000000);
     });
-    selectedId = id || null;
-    if (!id) return;
+    selectedId = id;
     const mesh = plotMeshes.get(id);
     if (!mesh) return;
 
@@ -949,7 +947,7 @@ export function initMasterplan({ canvas, onSelectPlot, onHoverPlot, onHeadingCha
       mesh.getWorldPosition(worldPos);
       animateCameraTo(worldPos);
     }
-    if (onSelectPlot) onSelectPlot(GV_DATA.getPlot(id));
+    onSelectPlot(GV_DATA.getPlot(id));
   }
 
   // ---------- Camera Fly-To Animation ----------
