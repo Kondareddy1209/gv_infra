@@ -163,6 +163,231 @@ h1, h2, h3, h4 {
   background: rgba(27, 54, 43, 0.05);
 }
 
+/* Advanced Real Estate Map UI */
+.map-view-switcher {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+  display: flex;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 8px;
+  border-radius: var(--radius-m);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.view-btn {
+  padding: 8px 14px;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-s);
+  background: #fff;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-btn.active {
+  background: var(--brand-green);
+  color: #fff;
+  border-color: var(--brand-green);
+}
+
+.view-btn:hover {
+  border-color: var(--brand-green);
+  color: var(--brand-green);
+}
+
+/* Virtual Tour Panel */
+.virtual-tour-panel {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 14px 16px;
+  border-radius: var(--radius-m);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  max-width: 300px;
+  z-index: 20;
+}
+
+.tour-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.tour-stops {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.tour-stop {
+  font-size: 0.75rem;
+  background: var(--surface-soft);
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  color: var(--ink-soft);
+}
+
+.tour-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.tour-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-xs);
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tour-btn:hover {
+  background: var(--surface-soft);
+  border-color: var(--brand-green);
+}
+
+/* Vastu Direction Legend */
+.vastu-legend {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 12px 14px;
+  border-radius: var(--radius-m);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 200px;
+  z-index: 19;
+}
+
+.vastu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  margin-bottom: 6px;
+  padding: 6px;
+  border-radius: var(--radius-xs);
+}
+
+.vastu-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.vastu-item-text {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* POI Popup */
+.poi-popup {
+  padding: 12px;
+  font-size: 0.85rem;
+  max-width: 220px;
+}
+
+.poi-popup h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.poi-popup p {
+  margin: 4px 0;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+/* Live Location Tracker */
+.live-location-badge {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--brand-green);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(27, 54, 43, 0.3);
+  z-index: 100;
+}
+
+.live-indicator {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Route Information Panel */
+.route-info-panel {
+  background: #fff;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-m);
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.route-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid var(--stone-line);
+}
+
+.route-item:last-child {
+  border-bottom: none;
+}
+
+.route-icon {
+  font-size: 1.3rem;
+}
+
+.route-details h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.route-details p {
+  margin: 2px 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.route-details .distance {
+  color: var(--brand-green);
+  font-weight: 600;
+}
+
 /* Clean Modern Buttons */
 .btn {
   display: inline-flex;
