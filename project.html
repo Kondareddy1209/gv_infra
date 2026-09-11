@@ -7,8 +7,21 @@
 <meta name="description" content="Explore Stambadri Enclave's plot layout in realistic 3D — rotate, walk the street view, select a plot, and see illustrative availability, price and Vastu facing.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="css/land-map.css">
 <link rel="stylesheet" href="css/plot-showcase.css">
+<style>
+  #leaflet-map {
+    width: 100%;
+    height: 600px;
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-luxury);
+    margin: 20px 0;
+  }
+  .leaflet-control-attribution {
+    display: none;
+  }
+</style>
 <script src="js/language.js"></script>
 </head>
 <body>
@@ -262,8 +275,18 @@
       <button class="btn btn-primary btn-small" id="sc-compare-open" disabled>Compare selected</button>
       <button class="btn btn-ghost btn-small" id="sc-compare-clear">Clear</button>
     </div>
+
+    <!-- INTERACTIVE SATELLITE MAP WITH LEAFLET -->
+    <div style="margin-top: 40px;">
+      <div class="section-head">
+        <div>
+          <h2>Property Location on Satellite Map</h2>
+          <p>View the exact location of Stambadri Enclave with nearby infrastructure and amenities</p>
+        </div>
+      </div>
+      <div id="leaflet-map"></div>
+    </div>
   </section>
-</section>
 
 <!-- Plot Showcase Comparison Modal (self-contained — independent of the 3D-view compare modal) -->
 <div class="compare-modal" id="sc-compare-modal">
@@ -505,7 +528,133 @@
 </script>
 <script src="js/data.js"></script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script type="module" src="js/land-map.js?v=layout1"></script>
 <script src="js/main.js"></script>
+
+<!-- LEAFLET INTERACTIVE MAP INITIALIZATION -->
+<script>
+  if (document.getElementById('leaflet-map')) {
+    const map = L.map('leaflet-map').setView([17.24767, 80.14368], 15);
+
+    // Satellite imagery layer (Esri World Imagery)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Esri, DigitalGlobe, Earthstar Geographics',
+      maxZoom: 19,
+      minZoom: 10
+    }).addTo(map);
+
+    // Project boundary rectangle (GREEN)
+    const bounds = [
+      [17.2510, 80.1403],
+      [17.2510, 80.1470],
+      [17.2443, 80.1470],
+      [17.2443, 80.1403]
+    ];
+
+    L.rectangle(bounds, {
+      color: '#15803D',
+      weight: 3,
+      fill: true,
+      fillColor: '#15803D',
+      fillOpacity: 0.15,
+      dashArray: '5, 5'
+    }).addTo(map).bindPopup('<strong>STAMBADRI ENCLAVE</strong><br>302 Plots · Gurralapadu, Khammam', { offset: [0, -10] });
+
+    // Infrastructure markers (colored dots)
+    const infrastructure = [
+      { name: '🏥 Khammam Hospital', lat: 17.3668, lng: 80.1398, color: '#EF4444', distance: '~15 km' },
+      { name: '🚂 Railway Station', lat: 17.3695, lng: 80.1489, color: '#3B82F6', distance: '~16 km' },
+      { name: '🚌 Bus Stand (Old)', lat: 17.3720, lng: 80.1461, color: '#8B5CF6', distance: '~17 km' },
+      { name: '🏬 Shopping Complex', lat: 17.2600, lng: 80.1300, color: '#F59E0B', distance: 'Nearby' }
+    ];
+
+    infrastructure.forEach(item => {
+      L.circleMarker([item.lat, item.lng], {
+        radius: 10,
+        fillColor: item.color,
+        color: '#fff',
+        weight: 2.5,
+        opacity: 0.9,
+        fillOpacity: 0.8
+      })
+      .bindPopup(`<strong>${item.name}</strong><br><small>${item.distance} from project</small>`)
+      .addTo(map);
+    });
+
+    // Walking routes (orange polyline)
+    L.polyline([
+      [17.2490, 80.1450],
+      [17.2485, 80.1440],
+      [17.2475, 80.1438],
+      [17.2468, 80.1435]
+    ], {
+      color: '#FF6B35',
+      weight: 3,
+      opacity: 0.8,
+      dashArray: '8, 4'
+    }).addTo(map).bindPopup('📍 Walking Path - Virtual Tour Route');
+
+    // Central park marker
+    L.circleMarker([17.2485, 80.1440], {
+      radius: 12,
+      fillColor: '#4ADE80',
+      color: '#fff',
+      weight: 2.5,
+      opacity: 1,
+      fillOpacity: 0.85
+    }).bindPopup('🌳 Central Open-Space Park').addTo(map);
+
+    // Water treatment marker
+    L.circleMarker([17.2460, 80.1430], {
+      radius: 10,
+      fillColor: '#3B82F6',
+      color: '#fff',
+      weight: 2.5,
+      opacity: 1,
+      fillOpacity: 0.8
+    }).bindPopup('💧 Water Treatment Plant').addTo(map);
+
+    // Power distribution marker
+    L.circleMarker([17.2470, 80.1438], {
+      radius: 9,
+      fillColor: '#FBBF24',
+      color: '#fff',
+      weight: 2.5,
+      opacity: 1,
+      fillOpacity: 0.8
+    }).bindPopup('⚡ Power Distribution Center').addTo(map);
+
+    // Community hall marker
+    L.circleMarker([17.2475, 80.1445], {
+      radius: 11,
+      fillColor: '#A78BFA',
+      color: '#fff',
+      weight: 2.5,
+      opacity: 1,
+      fillOpacity: 0.85
+    }).bindPopup('🏛️ Community Hall & Recreation').addTo(map);
+
+    // Zoom to fit project bounds
+    map.fitBounds(bounds, { padding: [50, 50] });
+
+    // Add a legend control
+    const legend = L.control({ position: 'bottomleft' });
+    legend.onAdd = function(map) {
+      const div = L.DomUtil.create('div', 'info' );
+      div.innerHTML = `
+        <div style="background:white; padding:12px 14px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.1); font-size:0.8rem; max-width:180px;">
+          <strong style="display:block; margin-bottom:6px;">Project Legend</strong>
+          <div style="margin-bottom:4px;"><span style="display:inline-block; width:10px; height:10px; background:#15803D; border-radius:2px; margin-right:6px;"></span>Project Boundary</div>
+          <div style="margin-bottom:4px;"><span style="display:inline-block; width:8px; height:8px; background:#4ADE80; border-radius:50%; margin-right:6px;"></span>Parks & Green Space</div>
+          <div style="margin-bottom:4px;"><span style="display:inline-block; width:8px; height:8px; background:#3B82F6; border-radius:50%; margin-right:6px;"></span>Utilities</div>
+          <div><span style="display:inline-block; width:8px; height:8px; background:#FF6B35; border-radius:50%; margin-right:6px;"></span>Walking Routes</div>
+        </div>
+      `;
+      return div;
+    };
+    legend.addTo(map);
+  }
+</script>
 </body>
 </html>

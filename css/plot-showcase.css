@@ -148,6 +148,71 @@
 .sc-compare-check input { accent-color: var(--brand-green); width: 15px; height: 15px; }
 .sc-compare-check.disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* Premium card animations */
+.sc-card-inner {
+  transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.sc-card {
+  animation: fadeInUp 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.sc-card:nth-child(1) { animation-delay: 0.05s; }
+.sc-card:nth-child(2) { animation-delay: 0.1s; }
+.sc-card:nth-child(3) { animation-delay: 0.15s; }
+.sc-card:nth-child(4) { animation-delay: 0.2s; }
+.sc-card:nth-child(5) { animation-delay: 0.25s; }
+.sc-card:nth-child(6) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sc-card-inner:hover {
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
+}
+
+.sc-flip-btn {
+  transition: all 0.2s ease;
+}
+
+.sc-flip-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+}
+
+.sc-card-front {
+  background: linear-gradient(135deg, rgba(27, 54, 43, 0.8), rgba(27, 54, 43, 0.95));
+  transition: all 0.3s ease;
+}
+
+.sc-card:hover .sc-card-front {
+  background: linear-gradient(135deg, rgba(27, 54, 43, 0.9), rgba(27, 54, 43, 1));
+}
+
+.showcase-more {
+  animation: fadeInUp 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.showcase-more:hover {
+  transform: translateY(-2px);
+}
+
+/* Mobile optimizations */
+@media (max-width: 600px) {
+  .sc-card { height: 220px; }
+  .showcase-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+}
+
 .showcase-more { margin: 24px auto 0; display: flex; }
 
 /* ---- Comparison tray ---- */
