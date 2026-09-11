@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Infrastructure Map | Khammam Region</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <style>
+    #local-map {
+      width: 100%;
+      height: 600px;
+      border-radius: var(--radius-l);
+      box-shadow: var(--shadow-luxury);
+      margin: 20px 0;
+    }
+
+    .infrastructure-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .infra-card {
+      background: #fff;
+      border: 1px solid var(--stone-line);
+      border-radius: var(--radius-m);
+      padding: 16px;
+      box-shadow: var(--shadow-1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .infra-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-luxury);
+      border-color: var(--brand-green);
+    }
+
+    .infra-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .infra-name {
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .infra-type {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .infra-distance {
+      font-size: 0.75rem;
+      background: var(--surface-soft);
+      padding: 4px 8px;
+      border-radius: var(--radius-xs);
+      display: inline-block;
+      color: var(--brand-green);
+      font-weight: 600;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .category-tab {
+      padding: 8px 16px;
+      border: 1px solid var(--stone-line);
+      border-radius: var(--radius-full);
+      background: #fff;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .category-tab:hover {
+      border-color: var(--brand-green);
+      color: var(--brand-green);
+    }
+
+    .category-tab.active {
+      background: var(--brand-green);
+      color: #fff;
+      border-color: var(--brand-green);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .summary-item {
+      background: var(--surface-soft);
+      padding: 16px;
+      border-radius: var(--radius-m);
+      text-align: center;
+      border: 1px solid var(--stone-line);
+    }
+
+    .summary-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--brand-green);
+    }
+
+    .summary-label {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      margin-top: 4px;
+    }
+
+    .loader {
+      text-align: center;
+      padding: 40px;
+      color: var(--ink-soft);
+    }
+
+    .loader::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--stone-line);
+      border-top-color: var(--brand-green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 16px;
+      border-radius: var(--radius-m);
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      #local-map { height: 400px; }
+      .infrastructure-panel {
+        grid-template-columns: 1fr;
+      }
+      .category-tabs {
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
+      <span class="brand-badge">Local Map</span>
+    </a>
+    <div class="nav-links">
+      <a href="projects.html" data-i18n="projects">Projects</a>
+      <a href="project.html" data-i18n="masterplan">3D Masterplan</a>
+      <a href="local-map.html" style="color:var(--brand-green);">Local Map</a>
+      <a href="index.html#contact" data-i18n="contact">Contact</a>
+      <button id="lang-toggle" title="Switch language">తెలుగు</button>
+    </div>
+    <a href="tel:+919000000000" class="btn btn-primary btn-small" data-i18n="call_sales">Call Sales</a>
+  </div>
+</nav>
+
+<header style="padding: 44px 0 24px;">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--brand-green); font-weight:700;">Offline Infrastructure Data</span>
+    <h1>Local Map — Khammam Region</h1>
+    <p class="lede" style="margin-top: 10px; color:var(--ink-soft); max-width: 60ch;">
+      Explore nearby amenities, healthcare, education, transport, and services in the Khammam region using OpenStreetMap data. This map works offline with real geographic data from the area.
+    </p>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="summary-grid" id="summary">
+    <div class="summary-item">
+      <div class="summary-number" id="total-amenities">—</div>
+      <div class="summary-label">Amenities Found</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-number" id="total-roads">—</div>
+      <div class="summary-label">Roads Mapped</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-number" id="total-categories">—</div>
+      <div class="summary-label">Categories</div>
+    </div>
+  </div>
+
+  <div class="category-tabs" id="category-tabs"></div>
+
+  <div id="local-map"></div>
+
+  <h2 style="margin-top: 32px;">Nearby Amenities</h2>
+  <div class="infrastructure-panel" id="amenities-list"></div>
+
+  <div id="error-message"></div>
+</section>
+
+<div class="mobile-cta-bar">
+  <a href="tel:+919000000000" class="btn btn-call">Call</a>
+  <a href="https://wa.me/919000000000" target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
+  <a href="project.html" class="btn btn-outline">3D Masterplan</a>
+</div>
+
+<script src="js/language.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="js/osm-parser.js"></script>
+<script>
+  const parser = new OSMParser();
+  let map = null;
+  let markers = [];
+  let currentCategory = 'all';
+
+  async function initLocalMap() {
+    try {
+      // Load OSM data
+      const summary = await parser.loadOSMFile('data/khammam-map.osm');
+      console.log('[LocalMap] OSM Data Loaded:', summary);
+
+      // Update summary
+      const summaryData = parser.getSummary();
+      document.getElementById('total-amenities').textContent = summaryData.total;
+      document.getElementById('total-roads').textContent = summaryData.roads;
+      document.getElementById('total-categories').textContent = Object.keys(summaryData.byCategory).length;
+
+      // Initialize Leaflet map
+      const bbox = summaryData.area;
+      if (!bbox) throw new Error('No geographic data found');
+
+      map = L.map('local-map').fitBounds(bbox.bounds);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+
+      // Plot amenities
+      plotAmenities(parser.amenities);
+
+      // Setup category tabs
+      setupCategoryTabs(summaryData.byCategory);
+
+      // Show initial amenities
+      displayAmenities(parser.amenities);
+
+    } catch (error) {
+      console.error('[LocalMap] Error:', error);
+      showError('Could not load local map: ' + error.message);
+    }
+  }
+
+  function plotAmenities(amenities) {
+    amenities.forEach(amenity => {
+      const marker = L.marker([amenity.lat, amenity.lon], {
+        title: amenity.name
+      })
+        .bindPopup(`
+          <strong>${amenity.icon} ${amenity.name}</strong><br>
+          <small>${amenity.type}</small>
+        `)
+        .addTo(map);
+
+      markers.push({ marker, amenity });
+    });
+  }
+
+  function setupCategoryTabs(categories) {
+    const container = document.getElementById('category-tabs');
+    const tab = document.createElement('button');
+    tab.className = 'category-tab active';
+    tab.textContent = `All (${Object.values(categories).reduce((a, b) => a + b, 0)})`;
+    tab.addEventListener('click', () => filterByCategory('all'));
+    container.appendChild(tab);
+
+    for (const [category, count] of Object.entries(categories)) {
+      const tab = document.createElement('button');
+      tab.className = 'category-tab';
+      tab.textContent = `${capitalize(category)} (${count})`;
+      tab.addEventListener('click', () => filterByCategory(category));
+      container.appendChild(tab);
+    }
+  }
+
+  function filterByCategory(category) {
+    currentCategory = category;
+
+    // Update tab states
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    // Filter and display
+    const filtered = category === 'all'
+      ? parser.amenities
+      : parser.getAmenitiesByCategory(category);
+
+    // Update markers visibility
+    markers.forEach(({ marker, amenity }) => {
+      const shouldShow = category === 'all' || amenity.category === category;
+      if (shouldShow) {
+        marker.addTo(map);
+      } else {
+        map.removeLayer(marker);
+      }
+    });
+
+    displayAmenities(filtered);
+  }
+
+  function displayAmenities(amenities) {
+    const container = document.getElementById('amenities-list');
+    container.innerHTML = '';
+
+    if (amenities.length === 0) {
+      container.innerHTML = '<p style="grid-column: 1/-1; color: var(--ink-soft);">No amenities found in this category.</p>';
+      return;
+    }
+
+    amenities.slice(0, 12).forEach(amenity => {
+      const card = document.createElement('div');
+      card.className = 'infra-card';
+      card.onclick = () => {
+        map.setView([amenity.lat, amenity.lon], 18);
+        markers.find(m => m.amenity.id === amenity.id)?.marker.openPopup();
+      };
+
+      const distFromCenter = parser.calculateDistance(17.2252, 80.0828, amenity.lat, amenity.lon);
+
+      card.innerHTML = `
+        <div class="infra-icon">${amenity.icon}</div>
+        <div class="infra-name">${amenity.name}</div>
+        <div class="infra-type">${capitalize(amenity.type)}</div>
+        <div class="infra-distance">${(distFromCenter * 1000).toFixed(0)}m away</div>
+      `;
+
+      container.appendChild(card);
+    });
+
+    if (amenities.length > 12) {
+      const more = document.createElement('p');
+      more.style.gridColumn = '1/-1';
+      more.style.color = 'var(--ink-soft)';
+      more.textContent = `... and ${amenities.length - 12} more`;
+      container.appendChild(more);
+    }
+  }
+
+  function showError(message) {
+    const container = document.getElementById('error-message');
+    container.className = 'error-message';
+    container.textContent = message;
+  }
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, ' ');
+  }
+
+  // Initialize when page loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLocalMap);
+  } else {
+    initLocalMap();
+  }
+</script>
+</body>
+</html>

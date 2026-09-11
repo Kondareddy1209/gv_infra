@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (244701 spike-07.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <bounds minlat="17.2252910" minlon="80.0810190" maxlat="17.2278320" maxlon="80.0846670"/>
+ <node id="1818655970" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2262915" lon="80.0847463"/>
+ <node id="1818655971" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2366105" lon="80.0856931"/>
+ <node id="1818655972" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2255217" lon="80.0846685"/>
+ <node id="1818655973" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2280682" lon="80.0855899"/>
+ <node id="1818655975" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2282577" lon="80.0856623"/>
+ <node id="1818655979" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2387767" lon="80.0854369"/>
+ <node id="1818655980" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2312848" lon="80.0854691"/>
+ <node id="1818655982" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2317766" lon="80.0854637"/>
+ <node id="1818655983" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2258176" lon="80.0847544"/>
+ <node id="1818655987" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2325554" lon="80.0855281"/>
+ <node id="1818655990" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2373677" lon="80.0855523"/>
+ <node id="1818655991" visible="true" version="1" changeset="12159556" timestamp="2012-07-09T09:26:50Z" user="Chaitanya Kumar CH" uid="180306" lat="17.2270334" lon="80.0848281"/>
+ <node id="1818655992" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2369194" lon="80.0856435"/>
+ <node id="1818655994" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2260174" lon="80.0847825"/>
+ <node id="1818655995" visible="true" version="1" changeset="12159556" timestamp="2012-07-09T09:26:50Z" user="Chaitanya Kumar CH" uid="180306" lat="17.2385820" lon="80.0854611"/>
+ <node id="1818655997" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2355512" lon="80.0859949"/>
+ <node id="1818655998" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2361737" lon="80.0857843"/>
+ <node id="1818655999" visible="true" version="3" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2250887" lon="80.0845157"/>
+ <node id="1818656000" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2284422" lon="80.0856757"/>
+ <node id="1818656001" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2363723" lon="80.0857361"/>
+ <node id="1818656002" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2347763" lon="80.0859936"/>
+ <node id="1818656004" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2392931" lon="80.0853517"/>
+ <node id="1818656005" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2267834" lon="80.0847396"/>
+ <node id="1818656009" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2266694" lon="80.0846994"/>
+ <node id="1818656011" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264503" lon="80.0847021"/>
+ <node id="1818656012" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2287343" lon="80.0856650"/>
+ <node id="1818656013" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2279375" lon="80.0855067"/>
+ <node id="1818656015" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2265528" lon="80.0846833"/>
+ <node id="1818656017" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2274892" lon="80.0851634"/>
+ <node id="1818656018" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2351708" lon="80.0860271"/>
+ <node id="1818656020" visible="true" version="3" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2377674" lon="80.0854906"/>
+ <node id="1818656021" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2331549" lon="80.0856139"/>
+ <node id="1818656022" visible="true" version="3" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2252424" lon="80.0846404"/>
+ <node id="1818656024" visible="true" version="1" changeset="12159556" timestamp="2012-07-09T09:26:51Z" user="Chaitanya Kumar CH" uid="180306" lat="17.2338069" lon="80.0857722"/>
+ <node id="1818656025" visible="true" version="2" changeset="95324639" timestamp="2020-12-05T07:15:35Z" user="VLD264" uid="11631029" lat="17.2303482" lon="80.0855362"/>
+ <node id="1818656026" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2357357" lon="80.0859493"/>
+ <node id="1818656027" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2256600" lon="80.0846994"/>
+ <node id="1818669413" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2252117" lon="80.0814472"/>
+ <node id="1818669455" visible="true" version="2" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2252117" lon="80.0838250"/>
+ <node id="1818669458" visible="true" version="1" changeset="12159556" timestamp="2012-07-09T09:38:36Z" user="Chaitanya Kumar CH" uid="180306" lat="17.2264956" lon="80.0840285">
+  <tag k="name" v="Teldarupalli"/>
+  <tag k="name:te" v="తెల్దారుపల్లి"/>
+  <tag k="place" v="village"/>
+ </node>
+ <node id="4677746225" visible="true" version="1" changeset="45964996" timestamp="2017-02-10T06:41:57Z" user="Chaitanya Kumar CH" uid="180306" lat="17.2261624" lon="80.0832474">
+  <tag k="man_made" v="tower"/>
+  <tag k="tower:construction" v="lattice"/>
+  <tag k="tower:type" v="communication"/>
+ </node>
+ <node id="4677746226" visible="true" version="1" changeset="45964996" timestamp="2017-02-10T06:41:57Z" user="Chaitanya Kumar CH" uid="180306" lat="17.2266618" lon="80.0825018">
+  <tag k="man_made" v="water_tower"/>
+ </node>
+ <node id="6554482249" visible="true" version="4" changeset="151608887" timestamp="2024-05-21T05:16:34Z" user="Pavy_555" uid="13339699" lat="17.2258957" lon="80.0835246">
+  <tag k="addr:district" v="Khammam"/>
+  <tag k="addr:state" v="Telangana"/>
+  <tag k="addr:subdistrict" v="Khammam (Rural)"/>
+  <tag k="amenity" v="health_post"/>
+  <tag k="healthcare" v="yes"/>
+  <tag k="name" v="SubCentre, Theldarupalli"/>
+  <tag k="operational_status" v="operational"/>
+  <tag k="operator:type" v="government"/>
+  <tag k="source" v="OpenDataTelangana"/>
+ </node>
+ <node id="8190695227" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2309028" lon="80.0854923"/>
+ <node id="8190695299" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2383357" lon="80.0854747"/>
+ <node id="8190695326" visible="true" version="3" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2371782" lon="80.0855979"/>
+ <node id="8190700197" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2318004" lon="80.0854657"/>
+ <node id="8190760166" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2291449" lon="80.0835963"/>
+ <node id="8190760178" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2253180" lon="80.0846511"/>
+ <node id="8190760179" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2251745" lon="80.0846042"/>
+ <node id="8190760180" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2251297" lon="80.0845693"/>
+ <node id="8190760190" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254525" lon="80.0838786"/>
+ <node id="8190760191" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254294" lon="80.0840396"/>
+ <node id="8190760192" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2251426" lon="80.0839964"/>
+ <node id="8190760227" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2255370" lon="80.0831276"/>
+ <node id="8190760228" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254243" lon="80.0830847"/>
+ <node id="8190760229" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2253090" lon="80.0830632"/>
+ <node id="8190760230" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2251466" lon="80.0830443"/>
+ <node id="8190760231" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257895" lon="80.0836527"/>
+ <node id="8190760232" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257907" lon="80.0834843"/>
+ <node id="8190760233" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257753" lon="80.0834039"/>
+ <node id="8190760234" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257548" lon="80.0833315"/>
+ <node id="8190760235" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257369" lon="80.0831974"/>
+ <node id="8190760236" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2273175" lon="80.0844580"/>
+ <node id="8190760237" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261775" lon="80.0847691"/>
+ <node id="8190760238" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261890" lon="80.0846417"/>
+ <node id="8190760239" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261954" lon="80.0845680"/>
+ <node id="8190760240" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2262415" lon="80.0843641"/>
+ <node id="8190760241" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257253" lon="80.0847262"/>
+ <node id="8190760242" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2258214" lon="80.0844070"/>
+ <node id="8190760243" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2260399" lon="80.0837181"/>
+ <node id="8190760244" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2259188" lon="80.0840905"/>
+ <node id="8190760245" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264183" lon="80.0841871"/>
+ <node id="8190760246" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2268308" lon="80.0842676"/>
+ <node id="8190760247" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2269742" lon="80.0843051"/>
+ <node id="8190760248" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2270716" lon="80.0843453"/>
+ <node id="8190760249" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2277582" lon="80.0846592"/>
+ <node id="8190760250" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2276071" lon="80.0846001"/>
+ <node id="8190760251" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2274610" lon="80.0845358"/>
+ <node id="8190760252" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2271869" lon="80.0844013"/>
+ <node id="8190760253" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2277812" lon="80.0841415"/>
+ <node id="8190760254" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2277844" lon="80.0838432"/>
+ <node id="8190760255" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2273805" lon="80.0838113"/>
+ <node id="8190760256" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2280630" lon="80.0838652"/>
+ <node id="8190760257" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2280297" lon="80.0828004"/>
+ <node id="8190760258" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2274654" lon="80.0827579"/>
+ <node id="8190760259" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2268471" lon="80.0827058"/>
+ <node id="8190760260" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2256036" lon="80.0818026"/>
+ <node id="8190760261" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2251745" lon="80.0818013"/>
+ <node id="8190760262" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2251502" lon="80.0829262"/>
+ <node id="8190760263" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2253577" lon="80.0829345"/>
+ <node id="8190760264" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254038" lon="80.0829318"/>
+ <node id="8190760265" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254371" lon="80.0829130"/>
+ <node id="8190760266" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254602" lon="80.0828795"/>
+ <node id="8190760267" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254743" lon="80.0828017"/>
+ <node id="8190760268" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254935" lon="80.0827508"/>
+ <node id="8190760269" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2255447" lon="80.0827092"/>
+ <node id="8190760270" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2256036" lon="80.0826824"/>
+ <node id="8190760271" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257344" lon="80.0826722"/>
+ <node id="8190760272" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261400" lon="80.0826130"/>
+ <node id="8190760273" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257524" lon="80.0825536"/>
+ <node id="8190760274" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254499" lon="80.0824624"/>
+ <node id="8190760275" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2251387" lon="80.0824369"/>
+ <node id="8190760276" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2252732" lon="80.0824088"/>
+ <node id="8190760277" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2253270" lon="80.0823739"/>
+ <node id="8190760278" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2253628" lon="80.0823149"/>
+ <node id="8190760279" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2253936" lon="80.0821835"/>
+ <node id="8190760280" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254269" lon="80.0821567"/>
+ <node id="8190760281" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254653" lon="80.0821540"/>
+ <node id="8190760282" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2258118" lon="80.0822051"/>
+ <node id="8190760283" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261754" lon="80.0822610"/>
+ <node id="8190760284" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2265218" lon="80.0823037"/>
+ <node id="8190760285" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2268792" lon="80.0823551"/>
+ <node id="8190760286" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2274865" lon="80.0824032"/>
+ <node id="8190760287" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2279734" lon="80.0824383"/>
+ <node id="8190760288" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2284806" lon="80.0824892"/>
+ <node id="8190760289" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2285447" lon="80.0825053"/>
+ <node id="8190760290" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2285831" lon="80.0825348"/>
+ <node id="8190760291" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2286010" lon="80.0825912"/>
+ <node id="8190760292" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2285217" lon="80.0835481"/>
+ <node id="8190760293" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264721" lon="80.0828004"/>
+ <node id="8190760294" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2265485" lon="80.0820368"/>
+ <node id="8190760295" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2267963" lon="80.0832605"/>
+ <node id="8190760296" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264811" lon="80.0832336"/>
+ <node id="8190760297" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264491" lon="80.0832443"/>
+ <node id="8190760298" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264260" lon="80.0832658"/>
+ <node id="8190760299" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264145" lon="80.0832979"/>
+ <node id="8190760300" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264158" lon="80.0833583"/>
+ <node id="8190760301" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264375" lon="80.0833838"/>
+ <node id="8190760302" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264849" lon="80.0833999"/>
+ <node id="8190760303" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2267823" lon="80.0834191"/>
+ <node id="8190760304" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2274156" lon="80.0834569"/>
+ <node id="8190760305" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2278607" lon="80.0834843"/>
+ <node id="8190760306" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2286676" lon="80.0835621"/>
+ <node id="8190760307" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2291928" lon="80.0835997"/>
+ <node id="8190760308" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2297436" lon="80.0836077"/>
+ <node id="8190760309" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2264747" lon="80.0837901"/>
+ <node id="8190760310" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2262595" lon="80.0837445"/>
+ <node id="8190760311" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261263" lon="80.0837338"/>
+ <node id="8190760312" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2260084" lon="80.0837123"/>
+ <node id="8190760313" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2256344" lon="80.0836104"/>
+ <node id="8190760314" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2254679" lon="80.0835809"/>
+ <node id="8190760315" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2252194" lon="80.0835970"/>
+ <node id="8190760316" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2270793" lon="80.0846994"/>
+ <node id="8190760317" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2271356" lon="80.0845116"/>
+ <node id="8190760318" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2272228" lon="80.0842997"/>
+ <node id="8190760319" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2272894" lon="80.0841281"/>
+ <node id="8190760320" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2273534" lon="80.0839511"/>
+ <node id="8190760321" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2273893" lon="80.0837660"/>
+ <node id="8190760322" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2274448" lon="80.0831146"/>
+ <node id="8190760323" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2274789" lon="80.0825241"/>
+ <node id="8190760324" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2275085" lon="80.0820509"/>
+ <node id="8190760325" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2275178" lon="80.0817985"/>
+ <node id="8190760326" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2279964" lon="80.0831544"/>
+ <node id="8190760327" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2278222" lon="80.0831410"/>
+ <node id="8190760328" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2268137" lon="80.0830704"/>
+ <node id="8190760329" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2265080" lon="80.0830337"/>
+ <node id="8190760330" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257753" lon="80.0829144"/>
+ <node id="8190760331" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257381" lon="80.0828929"/>
+ <node id="8190760332" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257164" lon="80.0828540"/>
+ <node id="8190760333" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257138" lon="80.0828084"/>
+ <node id="8190760334" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2257804" lon="80.0823686"/>
+ <node id="8190760335" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2258854" lon="80.0818267"/>
+ <node id="8190760336" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2259209" lon="80.0815340"/>
+ <node id="8190760337" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261135" lon="80.0829855"/>
+ <node id="8190760338" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2261263" lon="80.0827494"/>
+ <node id="8190760339" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2262311" lon="80.0816251"/>
+ <node id="8190760340" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2269034" lon="80.0820899"/>
+ <node id="8190760341" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2262031" lon="80.0819850"/>
+ <node id="8190760342" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2267462" lon="80.0838947"/>
+ <node id="8190760343" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2267847" lon="80.0833878"/>
+ <node id="8190760344" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2269076" lon="80.0819984"/>
+ <node id="8190760345" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2269143" lon="80.0817406"/>
+ <node id="8190760346" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2272996" lon="80.0820333"/>
+ <node id="8190760347" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2281566" lon="80.0821057"/>
+ <node id="8190760348" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2282072" lon="80.0820983"/>
+ <node id="8190760349" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2282347" lon="80.0820876"/>
+ <node id="8190760350" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2282539" lon="80.0820681"/>
+ <node id="8190760351" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2280938" lon="80.0818616"/>
+ <node id="8190760352" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2271152" lon="80.0817543"/>
+ <node id="8190760353" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2265669" lon="80.0817168"/>
+ <node id="8190760354" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2263927" lon="80.0816899"/>
+ <node id="8190760355" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029" lat="17.2260853" lon="80.0815666"/>
+ <node id="8190771035" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2252629" lon="80.0848546"/>
+ <node id="8190771048" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2224792" lon="80.0852640"/>
+ <node id="8190771049" visible="true" version="2" changeset="95301716" timestamp="2020-12-04T14:52:16Z" user="VLD264" uid="11631029" lat="17.2217249" lon="80.0849569"/>
+ <node id="8190771065" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2238687" lon="80.0858118"/>
+ <node id="8190771098" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2223500" lon="80.0852090"/>
+ <node id="8190771099" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2229418" lon="80.0854611"/>
+ <node id="8190771100" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2236899" lon="80.0857615"/>
+ <node id="8190771101" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2239000" lon="80.0858206"/>
+ <node id="8190771102" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2240434" lon="80.0858313"/>
+ <node id="8190771103" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2241485" lon="80.0858179"/>
+ <node id="8190771104" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2242484" lon="80.0857776"/>
+ <node id="8190771105" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2246967" lon="80.0854075"/>
+ <node id="8190771106" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2250784" lon="80.0851017"/>
+ <node id="8190771107" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2251963" lon="80.0849783"/>
+ <node id="8190771108" visible="true" version="1" changeset="95229281" timestamp="2020-12-03T13:24:39Z" user="VLD264" uid="11631029" lat="17.2253700" lon="80.0846555"/>
+ <node id="8190852918" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2329301" lon="80.0855817"/>
+ <node id="8190852920" visible="true" version="2" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2326758" lon="80.0855453"/>
+ <node id="8190852925" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2277300" lon="80.0848415"/>
+ <node id="8190852926" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2270985" lon="80.0846354"/>
+ <node id="8190852927" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2258800" lon="80.0842165">
+  <tag k="source" v="maxar"/>
+ </node>
+ <node id="8190852928" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2256933" lon="80.0841442"/>
+ <node id="8190852929" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2256523" lon="80.0841147"/>
+ <node id="8190852930" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2256036" lon="80.0840637"/>
+ <node id="8190852931" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2269998" lon="80.0840037"/>
+ <node id="8190852932" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029" lat="17.2270560" lon="80.0834354"/>
+ <node id="8194422912" visible="true" version="1" changeset="95301716" timestamp="2020-12-04T14:52:16Z" user="VLD264" uid="11631029" lat="17.2217595" lon="80.0849609"/>
+ <node id="8194422913" visible="true" version="1" changeset="95301716" timestamp="2020-12-04T14:52:16Z" user="VLD264" uid="11631029" lat="17.2216762" lon="80.0849958"/>
+ <node id="8194422914" visible="true" version="1" changeset="95301716" timestamp="2020-12-04T14:52:16Z" user="VLD264" uid="11631029" lat="17.2216993" lon="80.0849703"/>
+ <node id="8195700696" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2311875" lon="80.0854750"/>
+ <node id="8195700701" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2296607" lon="80.0855641"/>
+ <node id="8195700712" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2322732" lon="80.0855048"/>
+ <node id="8195714124" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2324351" lon="80.0855182"/>
+ <node id="8195714129" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2336038" lon="80.0857097"/>
+ <node id="8195714134" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2334253" lon="80.0856549"/>
+ <node id="8195714148" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2394455" lon="80.0853376"/>
+ <node id="8195714157" visible="true" version="2" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2368285" lon="80.0856526"/>
+ <node id="8195714183" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2282220" lon="80.0856486"/>
+ <node id="8195714192" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2274447" lon="80.0851299"/>
+ <node id="8195714201" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2272970" lon="80.0850186"/>
+ <node id="8195714228" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2271075" lon="80.0848925"/>
+ <node id="8195714247" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2247908" lon="80.0853321"/>
+ <node id="8195714248" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2244937" lon="80.0855751"/>
+ <node id="8195714269" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2277531" lon="80.0853753"/>
+ <node id="8195714288" visible="true" version="1" changeset="95322380" timestamp="2020-12-05T04:16:43Z" user="VLD264" uid="11631029" lat="17.2248917" lon="80.0852513"/>
+ <node id="8195833575" visible="true" version="1" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2353809" lon="80.0860164"/>
+ <node id="8195833576" visible="true" version="1" changeset="95324183" timestamp="2020-12-05T06:43:58Z" user="VLD264" uid="11631029" lat="17.2372404" lon="80.0855848"/>
+ <node id="8195876088" visible="true" version="1" changeset="95324639" timestamp="2020-12-05T07:15:35Z" user="VLD264" uid="11631029" lat="17.2305711" lon="80.0855228"/>
+ <node id="12973581914" visible="true" version="1" changeset="168440534" timestamp="2025-07-03T11:40:34Z" user="sandeepkandru" uid="12428767" lat="17.2396883" lon="80.0852995"/>
+ <way id="170711584" visible="true" version="10" changeset="168440534" timestamp="2025-07-03T11:40:34Z" user="sandeepkandru" uid="12428767">
+  <nd ref="1818655999"/>
+  <nd ref="8190760180"/>
+  <nd ref="8190760179"/>
+  <nd ref="1818656022"/>
+  <nd ref="8190760178"/>
+  <nd ref="8190771108"/>
+  <nd ref="1818655972"/>
+  <nd ref="1818656027"/>
+  <nd ref="8190760241"/>
+  <nd ref="1818655983"/>
+  <nd ref="1818655994"/>
+  <nd ref="8190760237"/>
+  <nd ref="1818655970"/>
+  <nd ref="1818656011"/>
+  <nd ref="1818656015"/>
+  <nd ref="1818656009"/>
+  <nd ref="1818656005"/>
+  <nd ref="1818655991"/>
+  <nd ref="8195714228"/>
+  <nd ref="8195714201"/>
+  <nd ref="8195714192"/>
+  <nd ref="1818656017"/>
+  <nd ref="8195714269"/>
+  <nd ref="1818656013"/>
+  <nd ref="1818655973"/>
+  <nd ref="8195714183"/>
+  <nd ref="1818655975"/>
+  <nd ref="1818656000"/>
+  <nd ref="1818656012"/>
+  <nd ref="8195700701"/>
+  <nd ref="1818656025"/>
+  <nd ref="8195876088"/>
+  <nd ref="8190695227"/>
+  <nd ref="8195700696"/>
+  <nd ref="1818655980"/>
+  <nd ref="1818655982"/>
+  <nd ref="8190700197"/>
+  <nd ref="8195700712"/>
+  <nd ref="8195714124"/>
+  <nd ref="1818655987"/>
+  <nd ref="8190852920"/>
+  <nd ref="8190852918"/>
+  <nd ref="1818656021"/>
+  <nd ref="8195714134"/>
+  <nd ref="8195714129"/>
+  <nd ref="1818656024"/>
+  <nd ref="1818656002"/>
+  <nd ref="1818656018"/>
+  <nd ref="8195833575"/>
+  <nd ref="1818655997"/>
+  <nd ref="1818656026"/>
+  <nd ref="1818655998"/>
+  <nd ref="1818656001"/>
+  <nd ref="1818655971"/>
+  <nd ref="8195714157"/>
+  <nd ref="1818655992"/>
+  <nd ref="8190695326"/>
+  <nd ref="8195833576"/>
+  <nd ref="1818655990"/>
+  <nd ref="1818656020"/>
+  <nd ref="8190695299"/>
+  <nd ref="1818655995"/>
+  <nd ref="1818655979"/>
+  <nd ref="1818656004"/>
+  <nd ref="8195714148"/>
+  <nd ref="12973581914"/>
+  <tag k="highway" v="tertiary"/>
+ </way>
+ <way id="880614426" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760190"/>
+  <nd ref="1818669455"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614427" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760191"/>
+  <nd ref="8190760192"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614435" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760230"/>
+  <nd ref="8190760229"/>
+  <nd ref="8190760228"/>
+  <nd ref="8190760227"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614436" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760235"/>
+  <nd ref="8190760234"/>
+  <nd ref="8190760233"/>
+  <nd ref="8190760232"/>
+  <nd ref="8190760231"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614437" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760240"/>
+  <nd ref="8190760239"/>
+  <nd ref="8190760238"/>
+  <nd ref="8190760237"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614438" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190760243"/>
+  <nd ref="8190760244"/>
+  <nd ref="8190852927"/>
+  <nd ref="8190760242"/>
+  <nd ref="8190760241"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614439" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760244"/>
+  <nd ref="8190760245"/>
+  <nd ref="8190760246"/>
+  <nd ref="8190760247"/>
+  <nd ref="8190760248"/>
+  <nd ref="8190760252"/>
+  <nd ref="8190760236"/>
+  <nd ref="8190760251"/>
+  <nd ref="8190760250"/>
+  <nd ref="8190760249"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614440" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760254"/>
+  <nd ref="8190760253"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614441" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760256"/>
+  <nd ref="8190760254"/>
+  <nd ref="8190760255"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614442" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760259"/>
+  <nd ref="8190760258"/>
+  <nd ref="8190760257"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614443" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760261"/>
+  <nd ref="8190760260"/>
+  <nd ref="8190760335"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614444" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760271"/>
+  <nd ref="8190760270"/>
+  <nd ref="8190760269"/>
+  <nd ref="8190760268"/>
+  <nd ref="8190760267"/>
+  <nd ref="8190760266"/>
+  <nd ref="8190760265"/>
+  <nd ref="8190760264"/>
+  <nd ref="8190760263"/>
+  <nd ref="8190760262"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614445" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760274"/>
+  <nd ref="8190760273"/>
+  <nd ref="8190760272"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614446" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760292"/>
+  <nd ref="8190760291"/>
+  <nd ref="8190760290"/>
+  <nd ref="8190760289"/>
+  <nd ref="8190760288"/>
+  <nd ref="8190760287"/>
+  <nd ref="8190760286"/>
+  <nd ref="8190760285"/>
+  <nd ref="8190760284"/>
+  <nd ref="8190760283"/>
+  <nd ref="8190760282"/>
+  <nd ref="8190760281"/>
+  <nd ref="8190760280"/>
+  <nd ref="8190760279"/>
+  <nd ref="8190760278"/>
+  <nd ref="8190760277"/>
+  <nd ref="8190760276"/>
+  <nd ref="8190760275"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614447" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190760353"/>
+  <nd ref="8190760294"/>
+  <nd ref="8190760284"/>
+  <nd ref="8190760293"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614448" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190760308"/>
+  <nd ref="8190760307"/>
+  <nd ref="8190760166"/>
+  <nd ref="8190760306"/>
+  <nd ref="8190760292"/>
+  <nd ref="8190760305"/>
+  <nd ref="8190760304"/>
+  <nd ref="8190852932"/>
+  <nd ref="8190760303"/>
+  <nd ref="8190760302"/>
+  <nd ref="8190760301"/>
+  <nd ref="8190760300"/>
+  <nd ref="8190760299"/>
+  <nd ref="8190760298"/>
+  <nd ref="8190760297"/>
+  <nd ref="8190760296"/>
+  <nd ref="8190760295"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614449" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190760315"/>
+  <nd ref="8190760314"/>
+  <nd ref="8190760313"/>
+  <nd ref="8190760231"/>
+  <nd ref="8190760312"/>
+  <nd ref="8190760243"/>
+  <nd ref="8190760311"/>
+  <nd ref="8190760310"/>
+  <nd ref="8190760309"/>
+  <nd ref="8190760342"/>
+  <nd ref="8190852931"/>
+  <nd ref="8190760319"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614450" visible="true" version="2" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190760325"/>
+  <nd ref="8190760324"/>
+  <nd ref="8190760286"/>
+  <nd ref="8190760323"/>
+  <nd ref="8190760258"/>
+  <nd ref="8190760322"/>
+  <nd ref="8190760304"/>
+  <nd ref="8190760321"/>
+  <nd ref="8190760255"/>
+  <nd ref="8190760320"/>
+  <nd ref="8190760319"/>
+  <nd ref="8190760318"/>
+  <nd ref="8190760252"/>
+  <nd ref="8190760317"/>
+  <nd ref="8190852926"/>
+  <nd ref="8190760316"/>
+  <nd ref="1818655991"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614451" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760336"/>
+  <nd ref="8190760335"/>
+  <nd ref="8190760282"/>
+  <nd ref="8190760334"/>
+  <nd ref="8190760273"/>
+  <nd ref="8190760271"/>
+  <nd ref="8190760333"/>
+  <nd ref="8190760332"/>
+  <nd ref="8190760331"/>
+  <nd ref="8190760330"/>
+  <nd ref="8190760337"/>
+  <nd ref="8190760329"/>
+  <nd ref="8190760328"/>
+  <nd ref="8190760322"/>
+  <nd ref="8190760327"/>
+  <nd ref="8190760326"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614452" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760339"/>
+  <nd ref="8190760341"/>
+  <nd ref="8190760283"/>
+  <nd ref="8190760272"/>
+  <nd ref="8190760338"/>
+  <nd ref="8190760337"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614453" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760341"/>
+  <nd ref="8190760294"/>
+  <nd ref="8190760340"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614454" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760345"/>
+  <nd ref="8190760344"/>
+  <nd ref="8190760340"/>
+  <nd ref="8190760285"/>
+  <nd ref="8190760259"/>
+  <nd ref="8190760328"/>
+  <nd ref="8190760295"/>
+  <nd ref="8190760343"/>
+  <nd ref="8190760303"/>
+  <nd ref="8190760342"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614455" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="8190760350"/>
+  <nd ref="8190760349"/>
+  <nd ref="8190760348"/>
+  <nd ref="8190760347"/>
+  <nd ref="8190760324"/>
+  <nd ref="8190760346"/>
+  <nd ref="8190760344"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880614456" visible="true" version="1" changeset="95228980" timestamp="2020-12-03T13:18:38Z" user="VLD264" uid="11631029">
+  <nd ref="1818669413"/>
+  <nd ref="8190760336"/>
+  <nd ref="8190760355"/>
+  <nd ref="8190760339"/>
+  <nd ref="8190760354"/>
+  <nd ref="8190760353"/>
+  <nd ref="8190760345"/>
+  <nd ref="8190760352"/>
+  <nd ref="8190760325"/>
+  <nd ref="8190760351"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880629177" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190852926"/>
+  <nd ref="8190852925"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880629178" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190852930"/>
+  <nd ref="8190852929"/>
+  <nd ref="8190852928"/>
+  <nd ref="8190852927"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="880629179" visible="true" version="1" changeset="95230374" timestamp="2020-12-03T13:46:17Z" user="VLD264" uid="11631029">
+  <nd ref="8190852932"/>
+  <nd ref="8190852931"/>
+  <tag k="highway" v="residential"/>
+  <tag k="source" v="maxar"/>
+ </way>
+ <way id="881191448" visible="true" version="1" changeset="95323005" timestamp="2020-12-05T05:14:31Z" user="VLD264" uid="11631029">
+  <nd ref="8190771108"/>
+  <nd ref="8190771035"/>
+  <nd ref="8190771107"/>
+  <nd ref="8190771106"/>
+  <nd ref="8195714288"/>
+  <nd ref="8195714247"/>
+  <nd ref="8190771105"/>
+  <nd ref="8195714248"/>
+  <nd ref="8190771104"/>
+  <nd ref="8190771103"/>
+  <nd ref="8190771102"/>
+  <nd ref="8190771101"/>
+  <nd ref="8190771065"/>
+  <nd ref="8190771100"/>
+  <nd ref="8190771099"/>
+  <nd ref="8190771048"/>
+  <nd ref="8190771098"/>
+  <nd ref="8194422912"/>
+  <nd ref="8190771049"/>
+  <nd ref="8194422914"/>
+  <nd ref="8194422913"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="source" v="maxar"/>
+ </way>
+</osm>
