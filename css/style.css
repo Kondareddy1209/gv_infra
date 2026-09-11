@@ -144,6 +144,25 @@ h1, h2, h3, h4 {
 .nav-links a { color: var(--ink-soft); transition: color 0.15s ease; }
 .nav-links a:hover, .nav-links a:focus-visible { color: var(--brand-green); }
 
+/* Language Toggle */
+#lang-toggle {
+  background: transparent;
+  border: 1px solid var(--stone-line);
+  color: var(--ink-soft);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+#lang-toggle:hover {
+  color: var(--brand-green);
+  border-color: var(--brand-green);
+  background: rgba(27, 54, 43, 0.05);
+}
+
 /* Clean Modern Buttons */
 .btn {
   display: inline-flex;
