@@ -456,6 +456,38 @@ function bindControls() {
       map.panTo(newCenter, { duration: 100 });
     }
   });
+
+  // Wire Telangana Cadastral GIS Search Form
+  const tgForm = $('tg-survey-form');
+  if (tgForm) {
+    tgForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const district = $('tg-district').value || 'Khammam';
+      const mandal = $('tg-mandal').value || 'Khammam Rural';
+      const village = $('tg-village').value || 'Gurralapadu';
+      const surveyNo = $('tg-surveyno').value || '123/2';
+
+      if (window.TelanganaCadastralGIS) {
+        const gisEngine = new window.TelanganaCadastralGIS(map);
+        const result = await gisEngine.searchBySurveyNumber(surveyNo, district, mandal, village);
+        
+        if (result && result.success) {
+          $('tg-parcel-card').style.display = 'block';
+          $('tg-parcel-title').textContent = `Survey No. ${result.surveyNo}`;
+          $('tg-parcel-area').textContent = `${result.areaAcres} Acres (${result.areaSqYards.toLocaleString()} sq yds)`;
+          $('tg-parcel-loc').textContent = `${result.village}, ${result.mandal}, ${result.district}`;
+          $('tg-parcel-coords').textContent = `${result.lat.toFixed(5)}° N, ${result.lng.toFixed(5)}° E`;
+          $('tg-parcel-link').href = result.bhubharatiLink;
+
+          // Pan and highlight on map
+          if (map) {
+            goToCoordinates(result.lat, result.lng);
+            gisEngine.highlightParcelOnMap(map, result);
+          }
+        }
+      }
+    });
+  }
 }
 
 function startup() {

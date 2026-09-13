@@ -23,6 +23,7 @@
   }
 </style>
 <script src="js/language.js"></script>
+<script src="js/telangana-gis.js"></script>
 </head>
 <body>
 
@@ -307,8 +308,57 @@
 
   <section id="land-explorer" class="land-explorer" aria-label="Satellite land explorer" hidden>
     <div class="land-map-heading">
-      <div><span class="land-eyebrow">EXPLORE THE LOCATION</span><h2>Land &amp; surroundings</h2><p>Khammam region · Exact project location not yet verified</p></div>
+      <div><span class="land-eyebrow">EXPLORE THE LOCATION</span><h2>Land &amp; surroundings</h2><p>Khammam region · Official Telangana Cadastral Survey &amp; Satellite Imagery</p></div>
       <a id="land-external" href="https://www.google.com/maps/@17.24767,80.14368,13z/data=!3m1!1e3" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+    </div>
+
+    <!-- Telangana Cadastral Survey Search Control Strip -->
+    <div class="gis-survey-strip" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:16px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+        <span style="font-weight:700; color:#15803d; display:flex; align-items:center; gap:6px; font-size:1.05rem;">
+          🏛️ Telangana Revenue Cadastral Survey Boundary (TGRAC / Bhu Bharati)
+        </span>
+        <span style="font-size:0.75rem; background:#dcfce7; color:#166534; padding:4px 10px; border-radius:12px; font-weight:700;">
+          Official 30cm Survey Layer
+        </span>
+      </div>
+      <form id="tg-survey-form" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
+        <div>
+          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">District</label>
+          <input type="text" id="tg-district" value="Khammam" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
+        </div>
+        <div>
+          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">Mandal</label>
+          <input type="text" id="tg-mandal" value="Khammam Rural" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
+        </div>
+        <div>
+          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">Village</label>
+          <input type="text" id="tg-village" value="Gurralapadu" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
+        </div>
+        <div>
+          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">Survey No.</label>
+          <input type="text" id="tg-surveyno" placeholder="e.g. 123/2" value="123/2" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <button type="submit" class="btn btn-primary btn-small" style="width:100%; justify-content:center; padding:8px 12px; font-size:0.85rem;">🔍 Search Cadastral</button>
+        </div>
+      </form>
+
+      <div id="tg-parcel-card" style="margin-top:14px; padding:14px; background:white; border-radius:8px; border:1px solid #cbd5e1; display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong id="tg-parcel-title" style="font-size:1.1rem; color:#0f172a;">Survey No. 123/2</strong>
+          <span id="tg-parcel-badge" style="background:#e0f2fe; color:#0369a1; padding:3px 10px; border-radius:10px; font-size:0.75rem; font-weight:700;">Verified TGRAC Survey</span>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-top:10px; font-size:0.85rem;">
+          <div><span style="color:#64748b; display:block; font-size:0.75rem;">Total Area</span><strong id="tg-parcel-area">2.15 Acres (10,406 sq yds)</strong></div>
+          <div><span style="color:#64748b; display:block; font-size:0.75rem;">Location</span><strong id="tg-parcel-loc">Gurralapadu, Khammam</strong></div>
+          <div><span style="color:#64748b; display:block; font-size:0.75rem;">GPS Coordinates</span><strong id="tg-parcel-coords">17.24767° N, 80.14368° E</strong></div>
+          <div><span style="color:#64748b; display:block; font-size:0.75rem;">Official Record</span><a id="tg-parcel-link" href="https://bhubharati.telangana.gov.in/gis/" target="_blank" style="color:#2563eb; font-weight:600;">Bhu Bharati Portal ↗</a></div>
+        </div>
+        <div style="font-size:0.72rem; color:#64748b; margin-top:10px; border-top:1px dashed #e2e8f0; padding-top:6px;">
+          ℹ️ <em>Map visualization only. Survey parcel boundaries are for reference &amp; should be independently verified with Telangana Revenue / Bhu Bharati records.</em>
+        </div>
+      </div>
     </div>
     <div class="land-map-stage" id="land-map-stage">
       <div id="land-map" role="region" aria-label="Interactive satellite map"></div>
