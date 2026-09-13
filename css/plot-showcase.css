@@ -1,57 +1,76 @@
 /* ============================================================
-   Architectural Plot Showcase — card grid, flip cards, comparison tray.
-   Loaded only by project.html, alongside css/style.css.
+   GV INFRA PROJECTS — Architectural Plot Showcase & Inventory Sheets
+   Design: Premium Property Inventory Sheets (project.html)
    ============================================================ */
 
-.plot-showcase { margin-top: 32px; }
+.plot-showcase {
+  margin-top: 36px;
+}
 
 .showcase-head {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 18px;
-  margin-bottom: 18px;
+  gap: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--stone-line);
+  padding-bottom: 20px;
 }
-.showcase-head h2 { font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); margin-top: 4px; }
-.showcase-head p { font-size: 0.88rem; color: var(--ink-soft); max-width: 56ch; margin-top: 6px; }
+
+.showcase-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  color: var(--ink);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.showcase-head p {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  max-width: 58ch;
+  margin-top: 6px;
+}
 
 .showcase-filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .showcase-count {
   font-size: 0.8rem;
   color: var(--ink-soft);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   line-height: 1.5;
   font-weight: 500;
 }
 
+/* ---- Plot Grid ---- */
 .showcase-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
 }
 
 .sc-empty {
   grid-column: 1 / -1;
   text-align: center;
   color: var(--ink-soft);
-  padding: 40px 20px;
+  padding: 48px 24px;
   background: var(--surface-soft);
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-xs);
   border: 1px dashed var(--stone-line);
+  font-size: 0.95rem;
 }
 
-/* ---- Flip card ---- */
+/* ---- Architectural Inventory Card ---- */
 .sc-card {
   perspective: 1200px;
   -webkit-perspective: 1200px;
-  min-height: 356px;
-  height: 356px;
+  min-height: 440px;
+  height: 440px;
   cursor: pointer;
   position: relative;
 }
@@ -60,26 +79,25 @@
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.45s cubic-bezier(.4, .2, .2, 1), box-shadow 0.25s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
-  border-radius: var(--radius-s);
-  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-subtle);
 }
 
 .sc-card:hover .sc-card-inner {
-  box-shadow: var(--shadow-3);
-  transform: translateY(-3px);
+  box-shadow: var(--shadow-editorial);
+  transform: translateY(-2px);
 }
 
 .sc-card.flipped .sc-card-inner,
 .sc-card.selected .sc-card-inner {
   transform: rotateY(180deg);
 }
-
 .sc-card.flipped:hover .sc-card-inner,
 .sc-card.selected:hover .sc-card-inner {
-  transform: rotateY(180deg) translateY(-3px);
+  transform: rotateY(180deg) translateY(-2px);
 }
 
 .sc-card-face {
@@ -89,327 +107,230 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-xs);
   border: 1px solid var(--stone-line);
   display: flex;
   flex-direction: column;
-  background: var(--bg-raised, #ffffff);
+  background: #FFFFFF;
   box-sizing: border-box;
 }
 
+/* Front Face: Property Inventory Sheet Summary */
 .sc-card-front {
-  justify-content: flex-end;
   transform: rotateY(0deg);
   -webkit-transform: rotateY(0deg);
   z-index: 2;
-  border-radius: var(--radius-s);
-  overflow: hidden;
-}
-
-.sc-card-back {
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  background: var(--bg-raised, #ffffff);
-  padding: 14px 16px;
-  z-index: 1;
-  cursor: default;
-  display: flex;
-  flex-direction: column;
+  padding: 24px;
   justify-content: space-between;
-  border-radius: var(--radius-s);
 }
 
-/* Selected state card accent border and shadow */
-.sc-card.selected .sc-card-back,
-.sc-card.flipped .sc-card-back {
-  border-color: var(--brand-green, #15803D);
-  box-shadow: 0 4px 16px rgba(21, 128, 61, 0.12);
+.sc-front-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--stone-hairline);
+  padding-bottom: 14px;
 }
 
-/* Strict layer isolation:
-   - When NOT selected/flipped: front is visible and on top, back is hidden.
-   - When selected/flipped: back is visible and on top, front is completely hidden.
-   - The visibility transition with 0.22s delay guarantees that during the 0.45s 3D flip,
-     the departing face disappears at 90deg rotation without any bleed-through or overlay collision.
-*/
-.sc-card:not(.flipped):not(.selected) .sc-card-front {
-  opacity: 1;
-  visibility: visible;
-  z-index: 2;
-  pointer-events: auto;
-  transition: opacity 0.2s ease;
+.sc-plot-no {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
 }
 
-.sc-card:not(.flipped):not(.selected) .sc-card-back {
-  opacity: 0;
-  visibility: hidden;
-  z-index: 1;
-  pointer-events: none;
-  transition: visibility 0s 0.22s, opacity 0.2s ease;
-}
-
-.sc-card.flipped .sc-card-front,
-.sc-card.selected .sc-card-front {
-  opacity: 0;
-  visibility: hidden;
-  z-index: 1;
-  pointer-events: none;
-  transition: visibility 0s 0.22s, opacity 0.2s ease;
-}
-
-.sc-card.flipped .sc-card-back,
-.sc-card.selected .sc-card-back {
-  opacity: 1;
-  visibility: visible;
-  z-index: 2;
-  pointer-events: auto;
-  transition: opacity 0.2s ease;
+.sc-plot-block {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 4px;
 }
 
 .sc-status-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  color: #fff;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 3px 8px;
-  border-radius: var(--radius-xs);
   text-transform: uppercase;
-  line-height: 1.2;
+  padding: 4px 9px;
+  border-radius: var(--radius-xs);
+  color: #FFFFFF;
+}
+
+.sc-front-body {
+  margin: auto 0;
+}
+
+.sc-plot-specs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--stone-hairline);
+}
+.sc-plot-spec-item .k {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+.sc-plot-spec-item .v {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+.sc-plot-price {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--brand-forest);
+  line-height: 1.1;
+}
+.sc-plot-rate {
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.sc-front-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--stone-line);
+  padding-top: 14px;
 }
 
 .sc-flip-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 2;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-xs);
-  border: 1px solid rgba(13, 21, 28, 0.12);
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--ink);
-  font-size: 0.85rem;
-  cursor: pointer;
-  display: flex;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--brand-forest);
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 4px 0;
 }
-.sc-flip-btn:hover { background: #fff; border-color: var(--brand-green); color: var(--brand-green); }
+.sc-flip-btn:hover { color: var(--ink); }
 
-.sc-front-body {
-  position: relative;
+/* Back Face: Specifications Sheet */
+.sc-card-back {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  background: #FFFFFF;
+  padding: 22px;
   z-index: 1;
-  padding: 12px 14px 14px;
-  background: linear-gradient(0deg, rgba(13, 21, 28, 0.88), rgba(13, 21, 28, 0.05) 90%);
-  color: #fff;
-  border-bottom-left-radius: calc(var(--radius-s) - 1px);
-  border-bottom-right-radius: calc(var(--radius-s) - 1px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.sc-plot-no { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; }
-.sc-plot-block { font-size: 0.72rem; opacity: 0.85; margin-top: 1px; }
-.sc-plot-dims { font-size: 0.78rem; opacity: 0.9; margin-top: 6px; }
-.sc-plot-price { font-size: 1rem; font-weight: 700; color: #86EFAC; margin-top: 2px; }
 
-/* Back face layout & header */
+.sc-card.selected .sc-card-back,
+.sc-card.flipped .sc-card-back {
+  border-color: var(--brand-forest);
+}
+
 .sc-back-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--stone-line, #E2E8F0);
-  margin-bottom: 8px;
-  cursor: pointer;
+  align-items: center;
+  border-bottom: 1px solid var(--stone-hairline);
+  padding-bottom: 12px;
 }
-
-.sc-card-back .sc-plot-no {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--ink, #0D151C);
-  margin: 0;
-  line-height: 1.25;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.sc-back-header .sc-plot-no {
+  font-size: 1.25rem;
 }
-
 .sc-back-header-right {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.sc-status-badge-back {
-  position: static;
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 2px 7px;
-  border-radius: var(--radius-xs, 4px);
-  text-transform: uppercase;
-  line-height: 1.2;
-}
-
-.sc-card-back .sc-flip-btn {
-  position: static;
-  width: 26px;
-  height: 26px;
-  font-size: 0.8rem;
-  background: var(--surface-soft, #F1F5F9);
-  border-radius: var(--radius-xs);
-}
-
-.sc-back-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: space-between;
-  min-height: 0;
+  gap: 8px;
 }
 
 .sc-spec-list {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  font-size: 0.8rem;
-  margin: 0;
-  padding: 0;
+  gap: 8px;
+  margin: 14px 0;
+  font-size: 0.82rem;
 }
 .sc-spec-list > div {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid var(--stone-hairline);
+  padding-bottom: 6px;
 }
 .sc-spec-list dt {
-  color: var(--ink-soft, #64748B);
-  font-weight: 500;
-  white-space: nowrap;
-  font-size: 0.8rem;
-  line-height: 1.35;
+  color: var(--ink-soft);
+  font-weight: 400;
 }
 .sc-spec-list dd {
-  color: var(--ink, #0D151C);
   font-weight: 600;
-  margin: 0;
-  text-align: right;
-  white-space: nowrap;
-  font-size: 0.82rem;
-  line-height: 1.35;
+  color: var(--ink);
 }
-.sc-spec-list dd.sc-spec-price {
-  color: var(--brand-green, #15803D);
-  font-weight: 700;
-  font-size: 0.92rem;
-  letter-spacing: -0.01em;
+.sc-spec-price {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--brand-forest);
 }
 
 .sc-back-actions {
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px solid var(--stone-line, #E2E8F0);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.sc-back-actions .btn {
-  justify-content: center;
-  width: 100%;
-  height: 36px;
-  padding: 0 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  box-sizing: border-box;
+  gap: 10px;
+  border-top: 1px solid var(--stone-line);
+  padding-top: 12px;
 }
 
 .sc-compare-check {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 7px;
+  gap: 8px;
   font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--ink-body, #334155);
+  color: var(--ink-body);
   cursor: pointer;
   user-select: none;
-  padding: 2px 0;
-  height: 22px;
 }
 .sc-compare-check input {
-  accent-color: var(--brand-green, #15803D);
-  width: 15px;
-  height: 15px;
-  margin: 0;
-  cursor: pointer;
+  accent-color: var(--brand-forest);
+  width: 14px;
+  height: 14px;
 }
-.sc-compare-check.disabled { opacity: 0.45; cursor: not-allowed; }
+.sc-compare-check.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
-.showcase-more { margin: 24px auto 0; display: flex; }
-
-/* ---- Comparison tray ---- */
+/* Comparison Floating Tray */
 .compare-tray {
-  position: sticky;
-  bottom: 14px;
-  margin-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  background: rgba(13, 21, 28, 0.95);
-  backdrop-filter: blur(12px);
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: var(--radius-s);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-  font-size: 0.84rem;
-}
-.compare-tray-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.compare-tray-chip {
-  background: rgba(255, 255, 255, 0.14);
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--obsidian);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-xs);
-  padding: 3px 9px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  z-index: 160;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+}
+.compare-tray-chips {
+  display: flex;
+  gap: 8px;
+}
+.compare-tray-chip {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
   font-size: 0.76rem;
   font-weight: 600;
-}
-.compare-tray .btn-ghost { color: #fff; border-color: rgba(255, 255, 255, 0.25); }
-.compare-tray .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); border-color: #fff; }
-
-@media (max-width: 640px) {
-  .showcase-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 14px;
-  }
-  .sc-card {
-    min-height: 356px;
-    height: 356px;
-  }
-  .compare-tray {
-    flex-direction: column;
-    align-items: stretch;
-    border-radius: var(--radius-s);
-    bottom: 8px;
-  }
-}
-
-@media (max-width: 380px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .sc-card {
-    min-height: 356px;
-    height: 356px;
-  }
 }

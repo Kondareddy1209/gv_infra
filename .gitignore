@@ -1,0 +1,11 @@
+node_modules/
+playwright-report/
+test-results/
+graphify-out/
+scratch/
+.vscode/
+.DS_Store
+Thumbs.db
+*.corrupt*
+*.repair*
+*.backup*

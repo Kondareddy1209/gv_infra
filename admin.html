@@ -8,8 +8,50 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/account-modal.css">
 </head>
 <body class="admin-body">
+
+<!-- ================= Admin Authentication Gate (Client-Side MVP Guard) ================= -->
+<div id="admin-auth-gate" class="admin-auth-gate" style="display:none;">
+  <div class="admin-gate-card">
+    <div class="admin-gate-head">
+      <div class="admin-gate-mark">GV</div>
+      <div>
+        <h3 class="admin-gate-title">Operations Console</h3>
+        <p class="admin-gate-sub">Administrative Authorization Required</p>
+      </div>
+    </div>
+    <div class="admin-gate-body">
+      <p class="admin-gate-desc">
+        This portal manages live inventory allocations, inbound CRM leads, and plot pricing. Please authenticate with administrator credentials.
+      </p>
+      <form id="admin-gate-form" class="gv-auth-form">
+        <div class="gv-auth-field">
+          <label for="admin-gate-email">Admin Email</label>
+          <input type="email" id="admin-gate-email" required placeholder="admin@gvinfra.com">
+        </div>
+        <div class="gv-auth-field">
+          <label for="admin-gate-pass">Admin Security Key</label>
+          <input type="password" id="admin-gate-pass" required placeholder="••••••••">
+        </div>
+        <div class="gv-auth-error" id="admin-gate-error"></div>
+        <button type="submit" class="btn btn-primary gv-auth-submit-btn" style="width:100%; justify-content:center;">Unlock Operations Console</button>
+        <div class="gv-demo-shortcut" style="margin-top:10px;">
+          <span>Evaluation Shortcut:</span>
+          <button type="button" class="gv-demo-btn" id="admin-gate-quick-btn">Fill Demo Admin</button>
+        </div>
+      </form>
+      <div style="margin-top:16px; text-align:center;">
+        <a href="index.html" style="font-size:0.78rem; color:var(--ink-soft); text-decoration:none;">&larr; Return to Public Website</a>
+      </div>
+    </div>
+    <div class="gv-auth-disclaimer" style="padding:12px 20px;">
+      <span class="gv-auth-badge-demo">Client-Side MVP Authorization Gate</span>
+      <p>Prototype security boundary for static MVP evaluation. Production deployments utilize server-enforced session authorization.</p>
+    </div>
+  </div>
+</div>
 
 <!-- ================= Top Command Header ================= -->
 <header class="admin-topbar">
@@ -28,6 +70,12 @@
   </div>
 
   <div class="admin-topbar-right">
+    <div id="admin-user-badge" class="admin-user-pill" style="display:none;">
+      <span class="admin-role-dot"></span>
+      <span id="admin-user-name">Administrator</span>
+      <button id="admin-logout-btn" class="topbar-btn" style="margin-left:6px; padding:3px 8px; font-size:0.7rem;" title="Sign Out">Sign Out</button>
+    </div>
+
     <div class="sync-badge" id="sync-status" title="Cross-tab localStorage sync is running">
       <span class="sync-dot"></span>
       <span>State Synced</span>
@@ -454,6 +502,55 @@
         </div>
       </div>
 
+      <!-- Homepage Masterplan / Map Demo Configuration -->
+      <div class="op-card" style="margin-top: 20px;">
+        <div class="op-card-head">
+          <div class="op-card-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3V6z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>
+            <span>Masterplan / Map Demo</span>
+          </div>
+        </div>
+        <div class="op-card-body">
+          <p style="font-size: 0.83rem; color: var(--admin-ink-secondary); margin-bottom: 16px;">
+            Configure the homepage presentation only. The map uses regional satellite imagery; the project overlay is conceptual and illustrative.
+          </p>
+          <div class="settings-grid masterplan-demo-fields">
+            <label class="admin-form-field">
+              <span class="info-label">Project display name</span>
+              <input id="masterplan-demo-name" class="search-input" type="text" maxlength="80">
+            </label>
+            <label class="admin-form-field">
+              <span class="info-label">Map starting zoom</span>
+              <input id="masterplan-demo-zoom" class="search-input" type="number" min="12" max="17" step="0.5">
+            </label>
+            <label class="admin-form-field">
+              <span class="info-label">Conceptual overlay scale</span>
+              <input id="masterplan-demo-scale" class="search-input" type="number" min="0.75" max="1.35" step="0.05">
+            </label>
+            <label class="admin-form-field">
+              <span class="info-label">Homepage default mode</span>
+              <select id="masterplan-demo-mode" class="filter-select">
+                <option value="2d">2D regional map</option>
+                <option value="3d">3D masterplan</option>
+              </select>
+            </label>
+          </div>
+          <div class="masterplan-demo-checks">
+            <label><input id="masterplan-demo-overlay" type="checkbox"> Show conceptual overlay</label>
+            <label><input id="masterplan-demo-roads" type="checkbox"> Show demo roads</label>
+            <label><input id="masterplan-demo-open-spaces" type="checkbox"> Show open spaces</label>
+            <label><input id="masterplan-demo-amenities" type="checkbox"> Show amenities</label>
+            <label><input id="masterplan-demo-labels" type="checkbox"> Show map labels</label>
+            <label><input id="masterplan-demo-controls" type="checkbox"> Show map controls</label>
+          </div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; align-items: center;">
+            <button class="btn-op btn-op-primary" id="btn-save-masterplan-demo">Save Demo Presentation</button>
+            <button class="btn-op btn-op-default" id="btn-reset-masterplan-demo">Reset Demo Presentation</button>
+            <span id="masterplan-demo-save-status" class="info-val" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+
       <!-- Backup & Danger Zone -->
       <div class="op-card" style="margin-top: 20px;">
         <div class="op-card-head">
@@ -584,7 +681,8 @@
 <!-- ================= Toast Feedback Container ================= -->
 <div class="toast-container" id="toast-container"></div>
 
-<script src="js/data.js"></script>
-<script src="js/admin.js"></script>
+<script src="js/data.js?v=masterplan-demo"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js?v=masterplan-demo"></script>
 </body>
 </html>

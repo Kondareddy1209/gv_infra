@@ -7,17 +7,41 @@
 const $ = (id) => document.getElementById(id);
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Regional centre around Khammam / Gurralapadu area [lng, lat]
-const REGION = [80.14368, 17.24767];
+// Geospatial state — all location data flows from GV_DATA.project
 let map = null;
 let mapReady = false;
 let marker = null;
 let labelsVisible = true;
 let modelPromise = null;
 let showcasePromise = null;
+let currentPin = null;
+let currentMode = '2d'; // '2d' or '3d'
+let compassDial = null;
 
-const REGION_NOTE = 'Regional imagery around Khammam. The exact project boundary is not marked — enter the site GPS pin below to centre the map on it.';
-const REGION_LINK = `https://www.google.com/maps/@${REGION[1]},${REGION[0]},13z/data=!3m1!1e3`;
+function getLocationConfig() {
+  return window.GV_DATA ? window.GV_DATA.getProjectLocation() : null;
+}
+
+function getLocationCenter() {
+  const config = getLocationConfig();
+  return config ? config.coordinates.center : null;
+}
+
+function getLocationNote() {
+  const config = getLocationConfig();
+  if (!config) return 'Regional imagery around Khammam. The exact project boundary is not marked — enter the site GPS pin below to centre the map on it.';
+  return config.coordinates.verified
+    ? 'Verified project location. Satellite imagery is not a legal survey or proof of ownership.'
+    : 'Regional imagery around Khammam. The exact project boundary is not marked — enter the site GPS pin below to centre the map on it.';
+}
+
+function getExternalMapLink(lng, lat, zoom = 13) {
+  const config = getLocationConfig();
+  if (config && window.GV_DATA && typeof window.GV_DATA.getExternalMapLink === 'function') {
+    return window.GV_DATA.getExternalMapLink(lng, lat, zoom);
+  }
+  return `https://www.google.com/maps/@${lat},${lng},${zoom}z/data=!3m1!1e3`;
+}
 
 /* Esri World Imagery — no API key, attribution required. Place/road labels come
    from a separate transparent overlay so the Road labels button can hide them
@@ -67,10 +91,16 @@ function initMap(retries = 15) {
   }
 
   try {
+    const center = getLocationCenter();
+    if (!center) {
+      const status = getStatusEl();
+      if (status) status.textContent = 'Project location not configured.';
+      return;
+    }
     map = new window.maplibregl.Map({
       container: 'land-map',
       style: SATELLITE_STYLE,
-      center: REGION,
+      center: center,
       zoom: 12,
       maxPitch: 60,
       attributionControl: { compact: true }
@@ -78,10 +108,16 @@ function initMap(retries = 15) {
 
     map.addControl(new window.maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right');
 
-    map.on('load', () => { 
-      mapReady = true; 
+    // Sync compass with map bearing changes
+    map.on('rotate', () => {
+      updateCompass();
+    });
+
+    map.on('load', () => {
+      mapReady = true;
       const status = getStatusEl();
-      if (status) status.textContent = REGION_NOTE; 
+      if (status) status.textContent = getLocationNote();
+      updateCompass();
     });
 
     map.on('error', (event) => {
@@ -152,30 +188,58 @@ async function switchView(view) {
   }
 }
 
-function setPitch(tilted) {
-  map?.easeTo({ pitch: tilted ? 55 : 0, duration: reducedMotion ? 0 : 850 });
-  [['land-flat', !tilted], ['land-tilt', tilted]].forEach(([id, active]) => {
+function setMapMode(mode) {
+  if (!map || !mapReady) return;
+  currentMode = mode;
+  
+  const is3D = mode === '3d';
+  const targetPitch = is3D ? 50 : 0;
+  
+  map.easeTo({ 
+    pitch: targetPitch, 
+    duration: reducedMotion ? 0 : 650 
+  });
+  
+  [['land-2d', !is3D], ['land-3d', is3D]].forEach(([id, active]) => {
     const el = $(id);
     if (el) {
       el.classList.toggle('active', active);
       el.setAttribute('aria-pressed', String(active));
     }
   });
+  
   const status = getStatusEl();
-  if (mapReady && status) {
-    status.textContent = tilted
-      ? 'Tilted aerial view. This angles the satellite image — it is not elevation-modelled terrain, and shows no plot boundaries.'
-      : REGION_NOTE;
+  if (status) {
+    status.textContent = is3D
+      ? 'Elevated 3D aerial perspective. This angles the satellite imagery — not elevation-modelled terrain. No plot boundaries shown.'
+      : getLocationNote();
   }
 }
 
+function updateCompass() {
+  if (!map || !compassDial) return;
+  const bearing = map.getBearing();
+  compassDial.style.transform = `rotate(${bearing}deg)`;
+}
+
+function resetBearing() {
+  if (!map || !mapReady) return;
+  map.easeTo({ bearing: 0, duration: reducedMotion ? 0 : 450 });
+}
+
 function bindControls() {
+  compassDial = $('land-compass-dial');
+  
   if ($('view-land')) $('view-land').addEventListener('click', () => switchView('land'));
   if ($('view-model')) $('view-model').addEventListener('click', () => switchView('model'));
   if ($('view-showcase')) $('view-showcase').addEventListener('click', () => switchView('showcase'));
 
-  if ($('land-flat')) $('land-flat').addEventListener('click', () => setPitch(false));
-  if ($('land-tilt')) $('land-tilt').addEventListener('click', () => setPitch(true));
+  if ($('land-2d')) $('land-2d').addEventListener('click', () => setMapMode('2d'));
+  if ($('land-3d')) $('land-3d').addEventListener('click', () => setMapMode('3d'));
+  
+  if ($('land-compass')) {
+    $('land-compass').addEventListener('click', () => resetBearing());
+  }
 
   if ($('land-labels')) {
     $('land-labels').addEventListener('click', () => {
@@ -192,12 +256,35 @@ function bindControls() {
       marker?.remove();
       marker = null;
       if ($('land-coordinates')) $('land-coordinates').value = '';
-      map?.flyTo({ center: REGION, zoom: 12, pitch: 0, bearing: 0, duration: reducedMotion ? 0 : 1000 });
-      setPitch(false);
-      if ($('land-center')) $('land-center').textContent = '17.24767° N, 80.14368° E';
-      if ($('land-external')) $('land-external').href = REGION_LINK;
+      
+      const center = getLocationCenter();
+      if (map && center) {
+        const targetPitch = currentMode === '3d' ? 50 : 0;
+        map.flyTo({ 
+          center: center, 
+          zoom: 12, 
+          pitch: targetPitch, 
+          bearing: 0, 
+          duration: reducedMotion ? 0 : 1000 
+        });
+      }
+      
+      if ($('land-center') && center) {
+        const [lng, lat] = center;
+        $('land-center').textContent = `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'}, ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'W' : 'E'}`;
+      }
+      if ($('land-external') && center) {
+        $('land-external').href = getExternalMapLink(center[0], center[1]);
+      }
       if ($('land-location-note')) {
-        $('land-location-note').textContent = 'Regional view only. Enter site coordinates to inspect your land. Plot boundaries require a verified survey.';
+        $('land-location-note').textContent = getLocationNote();
+      }
+      
+      const status = getStatusEl();
+      if (status) {
+        status.textContent = currentMode === '3d'
+          ? 'Elevated 3D aerial perspective. This angles the satellite imagery — not elevation-modelled terrain. No plot boundaries shown.'
+          : getLocationNote();
       }
     });
   }
@@ -226,7 +313,7 @@ function bindControls() {
         .addTo(map);
       map.flyTo({ center: [lng, lat], zoom: 17, duration: reducedMotion ? 0 : 1200 });
       if ($('land-center')) $('land-center').textContent = `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'}, ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'W' : 'E'}`;
-      if ($('land-external')) $('land-external').href = `https://www.google.com/maps/@${lat},${lng},17z/data=!3m1!1e3`;
+      if ($('land-external')) $('land-external').href = getExternalMapLink(lng, lat, 17);
       if ($('land-location-note')) {
         $('land-location-note').textContent = 'User-entered pin, not verified by GV Infra. Imagery is not a legal survey or proof of ownership.';
       }
@@ -239,8 +326,25 @@ function bindControls() {
   }
 }
 
+// Initialize land-map UI from centralized location configuration
+function initLandLocation() {
+  const center = getLocationCenter();
+  if (!center) return;
+  const [lng, lat] = center;
+  if ($('land-center')) {
+    $('land-center').textContent = `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'}, ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'W' : 'E'}`;
+  }
+  if ($('land-external')) {
+    $('land-external').href = getExternalMapLink(lng, lat, 13);
+  }
+  if ($('land-location-note')) {
+    $('land-location-note').textContent = getLocationNote();
+  }
+}
+
 // Start when document is ready
 function startup() {
+  initLandLocation();
   bindControls();
   switchView('model');
 }

@@ -3,12 +3,96 @@
  * Controller Script (Pure Vanilla JS, Tabular Operations, Zero Dependencies)
  */
 
+// Expose administrative operations API globally for tests and integrations
+window.GV_ADMIN = {
+  updatePlotStatus(id, status) {
+    if (typeof GV_DATA !== "undefined" && GV_DATA.updatePlotStatus) {
+      const updated = GV_DATA.updatePlotStatus(id, status);
+      window.dispatchEvent(new Event("storage"));
+      return updated;
+    }
+  },
+  updatePlotPrice(id, price) {
+    if (typeof GV_DATA !== "undefined" && GV_DATA.updatePlotPrice) {
+      const updated = GV_DATA.updatePlotPrice(id, price);
+      window.dispatchEvent(new Event("storage"));
+      return updated;
+    }
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   // Check if GV_DATA is present
   if (typeof GV_DATA === "undefined") {
     console.error("GV_DATA is not defined. Ensure js/data.js is loaded prior to admin.js.");
     return;
   }
+
+  // Admin Authentication Guard (Client-Side MVP Authorization Layer)
+  const gate = document.getElementById("admin-auth-gate");
+  const shell = document.querySelector(".admin-shell");
+  const userBadge = document.getElementById("admin-user-badge");
+  const userName = document.getElementById("admin-user-name");
+  const logoutBtn = document.getElementById("admin-logout-btn");
+
+  if (typeof GV_AUTH === "undefined" || !GV_AUTH.isAdmin()) {
+    if (gate) gate.style.display = "flex";
+    if (shell) shell.style.display = "none";
+    if (userBadge) userBadge.style.display = "none";
+
+    const gateForm = document.getElementById("admin-gate-form");
+    const quickBtn = document.getElementById("admin-gate-quick-btn");
+    const errEl = document.getElementById("admin-gate-error");
+
+    if (quickBtn) {
+      quickBtn.onclick = () => {
+        if (typeof GV_AUTH !== "undefined") {
+          const creds = GV_AUTH.getDemoCredentials();
+          document.getElementById("admin-gate-email").value = creds.admin.email;
+          document.getElementById("admin-gate-pass").value = creds.admin.password;
+        }
+      };
+    }
+
+    if (gateForm) {
+      gateForm.onsubmit = (e) => {
+        e.preventDefault();
+        const email = document.getElementById("admin-gate-email").value;
+        const pass = document.getElementById("admin-gate-pass").value;
+        if (typeof GV_AUTH !== "undefined") {
+          const res = GV_AUTH.login(email, pass);
+          if (res.success && GV_AUTH.isAdmin()) {
+            window.location.reload();
+          } else {
+            if (errEl) errEl.textContent = res.message || "Unauthorized: Administrator credentials required.";
+          }
+        }
+      };
+    }
+    // Block further execution of operational console scripts
+    return;
+  } else {
+    if (gate) gate.style.display = "none";
+    if (shell) shell.style.display = "grid";
+    if (userBadge) {
+      userBadge.style.display = "inline-flex";
+      const cur = GV_AUTH.getCurrentUser();
+      if (cur && userName) userName.textContent = cur.name || "Administrator";
+    }
+    if (logoutBtn) {
+      logoutBtn.onclick = () => {
+        if (typeof GV_AUTH !== "undefined") {
+          GV_AUTH.logout();
+          window.location.reload();
+        }
+      };
+    }
+  }
+
+  // Cross-tab synchronization: re-check authorization if auth state changes
+  window.addEventListener("gv-auth-change", () => {
+    enforceAdminAuth();
+  });
 
   // Ensure sample realistic leads exist if localStorage has none yet
   seedInitialLeadsIfEmpty();
@@ -88,6 +172,19 @@ document.addEventListener("DOMContentLoaded", () => {
     diagLeadsCount: document.getElementById("diag-leads-count"),
     diagStorageSize: document.getElementById("diag-storage-size"),
     diagLastSync: document.getElementById("diag-last-sync"),
+    masterplanDemoName: document.getElementById("masterplan-demo-name"),
+    masterplanDemoZoom: document.getElementById("masterplan-demo-zoom"),
+    masterplanDemoScale: document.getElementById("masterplan-demo-scale"),
+    masterplanDemoMode: document.getElementById("masterplan-demo-mode"),
+    masterplanDemoOverlay: document.getElementById("masterplan-demo-overlay"),
+    masterplanDemoRoads: document.getElementById("masterplan-demo-roads"),
+    masterplanDemoOpenSpaces: document.getElementById("masterplan-demo-open-spaces"),
+    masterplanDemoAmenities: document.getElementById("masterplan-demo-amenities"),
+    masterplanDemoLabels: document.getElementById("masterplan-demo-labels"),
+    masterplanDemoControls: document.getElementById("masterplan-demo-controls"),
+    btnSaveMasterplanDemo: document.getElementById("btn-save-masterplan-demo"),
+    btnResetMasterplanDemo: document.getElementById("btn-reset-masterplan-demo"),
+    masterplanDemoSaveStatus: document.getElementById("masterplan-demo-save-status"),
     btnExportFullJson: document.getElementById("btn-export-full-json"),
     btnOpenResetModal: document.getElementById("btn-open-reset-modal"),
 
@@ -849,6 +946,50 @@ document.addEventListener("DOMContentLoaded", () => {
     els.diagStorageSize.textContent = `~${Math.round(totalBytes / 1024)} KB`;
 
     els.diagLastSync.textContent = new Date().toLocaleTimeString("en-IN");
+
+    const demo = GV_DATA.getMasterplanDemo?.();
+    if (!demo) return;
+    if (els.masterplanDemoName) els.masterplanDemoName.value = demo.displayName;
+    if (els.masterplanDemoZoom) els.masterplanDemoZoom.value = demo.mapZoom;
+    if (els.masterplanDemoScale) els.masterplanDemoScale.value = demo.overlayScale;
+    if (els.masterplanDemoMode) els.masterplanDemoMode.value = demo.defaultMode;
+    if (els.masterplanDemoOverlay) els.masterplanDemoOverlay.checked = demo.overlayVisible;
+    if (els.masterplanDemoRoads) els.masterplanDemoRoads.checked = demo.showRoads;
+    if (els.masterplanDemoOpenSpaces) els.masterplanDemoOpenSpaces.checked = demo.showOpenSpaces;
+    if (els.masterplanDemoAmenities) els.masterplanDemoAmenities.checked = demo.showAmenities;
+    if (els.masterplanDemoLabels) els.masterplanDemoLabels.checked = demo.showMapLabels;
+    if (els.masterplanDemoControls) els.masterplanDemoControls.checked = demo.showMapControls;
+  }
+
+  function saveMasterplanDemoSettings() {
+    const demo = GV_DATA.updateMasterplanDemo({
+      displayName: els.masterplanDemoName?.value,
+      mapZoom: els.masterplanDemoZoom?.value,
+      overlayScale: els.masterplanDemoScale?.value,
+      defaultMode: els.masterplanDemoMode?.value,
+      overlayVisible: els.masterplanDemoOverlay?.checked,
+      showRoads: els.masterplanDemoRoads?.checked,
+      showOpenSpaces: els.masterplanDemoOpenSpaces?.checked,
+      showAmenities: els.masterplanDemoAmenities?.checked,
+      showMapLabels: els.masterplanDemoLabels?.checked,
+      showMapControls: els.masterplanDemoControls?.checked
+    });
+    if (els.masterplanDemoSaveStatus) els.masterplanDemoSaveStatus.textContent = `Saved ${demo.displayName} demo settings.`;
+    window.dispatchEvent(new Event("storage"));
+    showToast("Masterplan demo presentation saved.", "success");
+  }
+
+  if (els.btnSaveMasterplanDemo) {
+    els.btnSaveMasterplanDemo.addEventListener("click", saveMasterplanDemoSettings);
+  }
+
+  if (els.btnResetMasterplanDemo) {
+    els.btnResetMasterplanDemo.addEventListener("click", () => {
+      GV_DATA.resetMasterplanDemo();
+      renderSettings();
+      window.dispatchEvent(new Event("storage"));
+      showToast("Masterplan demo presentation reset.", "success");
+    });
   }
 
   // Backup download
@@ -858,6 +999,7 @@ document.addEventListener("DOMContentLoaded", () => {
         exportedAt: new Date().toISOString(),
         system: "GV Infra Property Operations Console",
         project: GV_DATA.project,
+        masterplanDemo: GV_DATA.getMasterplanDemo?.(),
         plots: GV_DATA.getPlots(),
         leads: GV_DATA.getLeads()
       };

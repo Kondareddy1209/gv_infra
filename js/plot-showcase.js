@@ -25,11 +25,8 @@ function matchesFilters(plot) {
   return true;
 }
 
-// A small illustrative swatch stands in for a real photo — this is a demo
-// grid, not a 1:1 render of the actual plots, so it never claims to be one.
 function swatchStyle(plot) {
-  const c = GV_DATA.statusColorHex(plot.status);
-  return `background: linear-gradient(155deg, ${c}33, ${c}14 55%, #ffffff), repeating-linear-gradient(45deg, ${c}22 0 8px, transparent 8px 16px);`;
+  return `background: #FFFFFF; border-top: 3px solid ${GV_DATA.statusColorHex(plot.status)};`;
 }
 
 function cardHTML(plot) {
@@ -41,34 +38,72 @@ function cardHTML(plot) {
   <div class="sc-card" data-plot-id="${plot.id}">
     <div class="sc-card-inner">
       <div class="sc-card-face sc-card-front" style="${swatchStyle(plot)}">
-        <span class="sc-status-badge" style="background:${statusColor}">${statusLabel}</span>
-        <button class="sc-flip-btn" data-flip="${plot.id}" aria-label="Show plot ${plot.plotNumber} details" title="Flip for details">⇄</button>
-        <div class="sc-front-body">
-          <div class="sc-plot-no">Plot ${plot.plotNumber}</div>
-          <div class="sc-plot-block">Block ${plot.block}</div>
-          <div class="sc-plot-dims">${plot.area} sq.ft</div>
-          <div class="sc-plot-price">${GV_DATA.formatINR(plot.price)}</div>
+        <div class="sc-front-head">
+          <div>
+            <div class="sc-plot-no">Plot ${plot.plotNumber}</div>
+            <div class="sc-plot-block">Block ${plot.block} · Phase 1</div>
+          </div>
+          <span class="sc-status-badge" style="background:${statusColor}">${statusLabel}</span>
         </div>
-      </div>
-      <div class="sc-card-face sc-card-back">
-        <div class="sc-back-header">
-          <div class="sc-plot-no">Plot ${plot.plotNumber} · Block ${plot.block}</div>
-          <div class="sc-back-header-right">
-            <span class="sc-status-badge-back" style="background:${statusColor}">${statusLabel}</span>
-            <button class="sc-flip-btn" data-flip="${plot.id}" aria-label="Show plot ${plot.plotNumber} card front" title="Flip back">⇄</button>
+
+        <div class="sc-front-body">
+          <div class="sc-plot-specs-row">
+            <div class="sc-plot-spec-item">
+              <div class="k">Area</div>
+              <div class="v">${plot.area} sqft</div>
+            </div>
+            <div class="sc-plot-spec-item">
+              <div class="k">Facing</div>
+              <div class="v">${plot.facing}</div>
+            </div>
+            <div class="sc-plot-spec-item">
+              <div class="k">Road Width</div>
+              <div class="v">${plot.roadWidthFt} ft</div>
+            </div>
+            <div class="sc-plot-spec-item">
+              <div class="k">Vastu</div>
+              <div class="v" style="color:var(--brand-forest);">${GV_DATA.vastuLabel(GV_DATA.vastuGrade(plot))}</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="sc-plot-price">${GV_DATA.formatINR(plot.price)}</div>
+            <div class="sc-plot-rate">${GV_DATA.formatINR(plot.pricePerSqft)} / sqft · Fixed rate</div>
           </div>
         </div>
+
+        <div class="sc-front-footer">
+          <button class="sc-flip-btn" data-flip="${plot.id}" aria-label="Show plot ${plot.plotNumber} details" title="Flip for specifications">
+            View Details &rarr;
+          </button>
+          <span style="font-size:0.72rem; color:var(--ink-soft); font-weight:500;">Tap to Flip</span>
+        </div>
+      </div>
+
+      <div class="sc-card-face sc-card-back">
+        <div class="sc-back-header">
+          <div>
+            <div class="sc-plot-no">Plot ${plot.plotNumber}</div>
+            <div class="sc-plot-block">Block ${plot.block} · Specifications</div>
+          </div>
+          <div class="sc-back-header-right">
+            <span class="sc-status-badge" style="background:${statusColor}">${statusLabel}</span>
+            <button class="sc-flip-btn" data-flip="${plot.id}" aria-label="Show plot ${plot.plotNumber} front" title="Flip back" style="font-size:1.1rem; padding:0 4px;">&times;</button>
+          </div>
+        </div>
+
         <div class="sc-back-body">
           <dl class="sc-spec-list">
             <div><dt>Facing</dt><dd>${plot.facing}</dd></div>
-            <div><dt>Road width</dt><dd>${plot.roadWidthFt} ft</dd></div>
-            <div><dt>Corner plot</dt><dd>${plot.isCorner ? 'Yes' : 'No'}</dd></div>
-            <div><dt>Park facing</dt><dd>${plot.isParkFacing ? 'Yes' : 'No'}</dd></div>
-            <div><dt>Booking amount</dt><dd>${GV_DATA.formatINR(plot.bookingAmount)}</dd></div>
-            <div><dt>Price</dt><dd class="sc-spec-price">${GV_DATA.formatINR(plot.price)}</dd></div>
+            <div><dt>Carriageway</dt><dd>${plot.roadWidthFt} ft BT Road</dd></div>
+            <div><dt>Corner Plot</dt><dd>${plot.isCorner ? 'Yes' : 'No'}</dd></div>
+            <div><dt>Park Facing</dt><dd>${plot.isParkFacing ? 'Yes' : 'No'}</dd></div>
+            <div><dt>Booking Deposit</dt><dd>${GV_DATA.formatINR(plot.bookingAmount)}</dd></div>
+            <div><dt>Total Value</dt><dd class="sc-spec-price">${GV_DATA.formatINR(plot.price)}</dd></div>
           </dl>
+
           <div class="sc-back-actions">
-            <button class="btn btn-primary btn-small sc-view-3d" data-plot-id="${plot.id}">View in 3D ↗</button>
+            <button class="btn btn-primary btn-small sc-view-3d" data-plot-id="${plot.id}">View in 3D Model ↗</button>
             <label class="sc-compare-check ${disableCompare ? 'disabled' : ''}">
               <input type="checkbox" data-compare-id="${plot.id}" ${checked} ${disableCompare ? 'disabled' : ''}>
               Add to comparison

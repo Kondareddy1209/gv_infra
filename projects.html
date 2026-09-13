@@ -3,142 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Projects Portfolio | GV Infra Projects</title>
-<meta name="description" content="Explore GV Infra Projects' portfolio of DTCP and RERA-approved open-plot layouts across Telangana, led by the flagship 302-plot Stambadri Enclave in Gurralapadu, Khammam.">
+<title>Projects Portfolio — GV Infra Projects</title>
+<meta name="description" content="Explore GV Infra Projects' portfolio of DTCP and RERA-approved plotted developments across Telangana, led by the flagship 302-plot Stambadri Enclave in Gurralapadu, Khammam.">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/chatbot.css">
+<link rel="stylesheet" href="css/account-modal.css">
 </head>
 <body>
 
-<nav class="site-nav">
+<!-- Announcement Top Bar -->
+<div class="announcement-bar">
+  <span><span class="live-dot-pulse" style="margin-right:8px;"></span><strong>PORTFOLIO SCHEDULE:</strong> Stambadri Enclave, Gurralapadu (Khammam) — <span data-live-count="available">28</span> Plots Available · DTCP Sanctioned</span>
+  <a href="project.html">View 3D Masterplan &rarr;</a>
+</div>
+
+<!-- Global Navigation -->
+<nav class="site-nav" id="site-nav">
   <div class="wrap">
     <a href="index.html" class="brand">
       <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
-      <span class="brand-badge">DTCP Approved</span>
+      <span class="brand-badge">Portfolio</span>
     </a>
+
     <div class="nav-links">
-      <a href="projects.html" style="color:var(--brand-green);">Projects</a>
+      <a href="projects.html" class="active">Projects</a>
       <a href="project.html">3D Masterplan</a>
-      <a href="index.html#infrastructure">Infrastructure</a>
+      <a href="index.html#intent">Land Thesis</a>
+      <a href="index.html#infrastructure">Specifications</a>
+      <a href="index.html#location">Connectivity</a>
       <a href="index.html#contact">Contact</a>
-      <a href="admin.html" style="font-size:0.82rem; color:var(--ink-soft);">Admin ↗</a>
+      <a href="admin.html" style="font-size:0.78rem; color:var(--ink-soft); letter-spacing:0.04em;">Console ↗</a>
     </div>
-    <div style="display:flex; gap:10px; align-items:center;">
-      <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra%2C%20I%27d%20like%20to%20know%20more%20about%20your%20projects." target="_blank" rel="noopener" class="btn btn-whatsapp btn-small">WhatsApp</a>
-      <a href="tel:+919392887268" class="btn btn-primary btn-small">Call Sales</a>
+
+    <div class="nav-actions">
+      <a href="index.html#finder" class="nav-search-btn" aria-label="Search plot inventory">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>SEARCH</span>
+      </a>
+      <a href="#account" class="nav-account-btn" id="nav-account-btn" data-gv-action="account" aria-label="Open Account / Sign In"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span class="account-btn-label">ACCOUNT</span></a>
+      <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra%2C%20I%27d%20like%20to%20know%20more%20about%20your%20development%20portfolio." target="_blank" rel="noopener" class="btn-corp btn-corp-wa">WhatsApp</a>
+      <a href="tel:+919392887268" class="btn-corp btn-corp-call">Call Sales</a>
+      <button class="nav-mobile-toggle" id="nav-mobile-toggle" aria-label="Open Navigation Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
     </div>
   </div>
 </nav>
 
-<header style="padding: 56px 0 28px; background:linear-gradient(180deg, #FAF9F6 0%, #F3F1EA 100%); border-bottom:1px solid var(--stone-line);">
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-nav-panel" id="mobile-nav-panel">
+  <div class="mobile-nav-header">
+    <a href="index.html" class="brand">
+      <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
+    </a>
+    <button id="mobile-nav-close" style="font-size:1.8rem; color:var(--ink); padding:4px;" aria-label="Close menu">&times;</button>
+  </div>
+  <div class="mobile-nav-menu">
+    <a href="projects.html" class="mobile-nav-link active">Projects</a>
+    <a href="project.html" class="mobile-nav-link">3D Masterplan</a>
+    <a href="index.html#intent" class="mobile-nav-link">Land Thesis</a>
+    <a href="index.html#infrastructure" class="mobile-nav-link">Specifications</a>
+    <a href="index.html#location" class="mobile-nav-link">Connectivity</a>
+    <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+    <a href="#account" class="mobile-nav-link nav-account-btn" data-gv-action="account"><span class="account-btn-label">Account / Sign In</span></a>
+    <a href="admin.html" class="mobile-nav-link" style="font-size:1.2rem; color:var(--ink-soft);">Operations Console &rarr;</a>
+  </div>
+  <div class="mobile-nav-footer">
+    <p><strong>GV Infra Projects</strong> · Hyderabad &amp; Khammam</p>
+    <p style="margin-top:4px;">Tel: <a href="tel:+919392887268" style="color:var(--brand-forest); font-weight:600;">+91 9392887268</a></p>
+  </div>
+</div>
+
+<!-- Portfolio Hero Header -->
+<header style="padding: 96px 0 64px; background: var(--bg); border-bottom: 1px solid var(--stone-line);">
   <div class="wrap">
-    <span class="eyebrow"><span class="eyebrow-dot"></span> Development Portfolio</span>
-    <h1 style="font-size: clamp(2.2rem, 3.4vw, 3rem); margin-top:6px;">Approved Ventures &amp; Layouts</h1>
-    <p class="lede" style="margin-top: 12px; color:var(--ink-soft); max-width:56ch; font-size:1.02rem;">Stambadri Enclave is our flagship Khammam development, fully interactive in 3D. Explore our other marketed residential ventures across Telangana below.</p>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Available Plots</span>
+    <h1 style="font-size: clamp(3rem, 5vw, 4.4rem); margin-top:12px; line-height:1.08; font-weight:500;">Projects with<br><span class="gold-text">purpose.</span></h1>
+    <p style="margin-top:24px; color:var(--ink-body); max-width:56ch; font-size:1.1rem; line-height:1.7;">A curated portfolio of DTCP and RERA-approved plotted developments across Telangana, led by our flagship 302-plot development at Stambadri Enclave in Gurralapadu, Khammam.</p>
   </div>
 </header>
 
-<section class="wrap" style="padding: 56px 0 32px;">
+<!-- Featured Flagship Development -->
+<section class="wrap" style="padding: 72px 0;">
   <div class="section-head">
     <div>
-      <span class="eyebrow"><span class="eyebrow-dot"></span> Interactive Flagship Layout</span>
+      <span class="eyebrow"><span class="eyebrow-dot"></span> Flagship Development</span>
       <h2>Stambadri Enclave</h2>
       <p>302-plot DTCP-approved open plot layout directly facing the Khammam–Kodada Highway in Gurralapadu.</p>
     </div>
+    <a href="project.html" class="btn btn-primary">Launch 3D Masterplan ↗</a>
   </div>
 
-  <article class="project-card" style="display:grid; grid-template-columns: 1.1fr 1fr; border-radius:var(--radius-m); overflow:hidden; box-shadow:var(--shadow-luxury);">
-    <div class="thumb" style="height:100%; min-height:320px; background-image:url('img/real/gurralapadu.png'); background-position: top center; position:relative;">
-      <span style="position:absolute; top:16px; left:16px; background:var(--brand-green); color:#fff; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:var(--radius-xs); letter-spacing:0.04em;">LIVE IN 3D</span>
+  <div class="portfolio-row" style="border:1px solid var(--stone-line); border-radius:var(--radius-xs); padding:40px; background:#FFFFFF; box-shadow:var(--shadow-editorial);">
+    <div class="portfolio-thumb" style="aspect-ratio: 16/10;">
+      <img src="img/real/gurralapadu.png" alt="Stambadri Enclave Flagship Development in Gurralapadu">
+      <span style="position:absolute; top:16px; left:16px; background:var(--brand-forest); color:#FFFFFF; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; padding:4px 10px; border-radius:var(--radius-xs);">INTERACTIVE 3D AVAILABLE</span>
     </div>
-    <div class="body" style="padding: 36px 32px; display:flex; flex-direction:column; justify-content:center;">
-      <div class="loc" style="font-size:0.86rem; color:var(--ink-soft); margin-bottom:8px; font-weight:600;">Gurralapadu, Khammam–Kodada Highway · DTCP Approved</div>
-      <h3 style="font-size:1.6rem; margin-bottom:12px;">Stambadri Enclave</h3>
-      <p style="font-size:0.92rem; color:var(--ink-soft); line-height:1.6; margin-bottom:20px;">Features 50ft, 40ft &amp; 30ft internal blacktop roads, underground electricity &amp; drainage, avenue plantation, and two dedicated parks spanning over 10,000 sq.yards.</p>
+    <div>
+      <div style="font-size:0.75rem; color:var(--brand-forest); font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;">Gurralapadu, Khammam–Kodada Highway · DTCP Sanctioned</div>
+      <h3 style="font-family:var(--font-display); font-size:2.2rem; color:var(--ink); margin-bottom:14px; font-weight:500;">Stambadri Enclave</h3>
+      <p style="font-size:0.96rem; color:var(--ink-soft); line-height:1.7; margin-bottom:24px;">Features 50ft, 40ft &amp; 30ft internal blacktop carriageways, underground electricity, comprehensive drainage, avenue plantation, and two dedicated parks spanning over 10,000 sq. yards. Freehold title with spot registration ready.</p>
       
-      <div class="project-meta" style="margin-bottom:24px; display:flex; gap:24px;">
-        <div><strong style="display:block; font-size:1.2rem; color:var(--brand-green);">302</strong><span style="font-size:0.78rem; color:var(--ink-soft);">Total Plots</span></div>
-        <div><strong style="display:block; font-size:1.2rem; color:var(--brand-green);"><span data-live-count="available">28</span></strong><span style="font-size:0.78rem; color:var(--ink-soft);">Available Now</span></div>
-        <div><strong style="display:block; font-size:1.2rem; color:var(--brand-green);">50/30ft</strong><span style="font-size:0.78rem; color:var(--ink-soft);">Internal Roads</span></div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-bottom:28px; border-top:1px solid var(--stone-line); border-bottom:1px solid var(--stone-line); padding:18px 0;">
+        <div>
+          <strong style="display:block; font-family:var(--font-display); font-size:1.4rem; color:var(--brand-forest);">302</strong>
+          <span style="font-size:0.72rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em;">Total Plots</span>
+        </div>
+        <div>
+          <strong style="display:block; font-family:var(--font-display); font-size:1.4rem; color:var(--brand-forest);"><span data-live-count="available">28</span></strong>
+          <span style="display:block; font-size:0.72rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em;">Available</span>
+        </div>
+        <div>
+          <strong style="display:block; font-family:var(--font-display); font-size:1.4rem; color:var(--brand-forest);">50/30ft</strong>
+          <span style="display:block; font-size:0.72rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em;">Carriageways</span>
+        </div>
       </div>
       
-      <div style="display:flex; gap:12px; flex-wrap:wrap;">
-        <a href="project.html" class="btn btn-primary">Launch 3D Masterplan</a>
-        <a href="index.html#contact" class="btn btn-outline">Schedule Site Visit</a>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="project.html" class="btn btn-primary">Open 3D Masterplan</a>
+        <a href="index.html#contact" class="btn btn-outline">Schedule Site Inspection</a>
       </div>
     </div>
-  </article>
+  </div>
 </section>
 
-<section class="wrap" style="padding: 32px 0 76px;">
+<!-- Alternating Editorial Portfolio Rows for Partner Developments -->
+<section class="wrap" style="padding: 48px 0 96px;">
   <div class="section-head">
     <div>
-      <span class="eyebrow"><span class="eyebrow-dot"></span> Partner Developments</span>
-      <h2>Other Marketed Developments</h2>
-      <p>Real ventures marketed by GV Infra Projects and verified partner developers across Telangana.</p>
+      <span class="editorial-eyebrow">Marketed Ventures</span>
+      <h2>Marketed residential ventures.</h2>
+      <p>Verified projects marketed by GV Infra Projects and institutional development partners across Telangana.</p>
     </div>
   </div>
-  <div class="doc-grid" id="other-projects-grid" style="grid-template-columns: repeat(3, 1fr);"></div>
+
+  <div id="other-projects-container" style="display:flex; flex-direction:column;">
+    <!-- Rendered dynamically as alternating editorial rows -->
+  </div>
 </section>
 
+<!-- Sophisticated Dark Brand Footer -->
 <footer>
   <div class="wrap">
-    <div class="footer-grid">
+    <div class="footer-hero-statement">
       <div>
-        <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo" style="margin-bottom:14px;">
-        <p style="font-size:0.85rem; color:var(--ink-soft); line-height:1.6; max-width:32ch;">Premium DTCP &amp; RERA-approved open-plot real estate developments across Telangana, headquartered in Hyderabad &amp; Khammam.</p>
+        <h2>Let's build the<br>next landmark.</h2>
       </div>
       <div>
-        <h5>Projects</h5>
-        <a href="project.html">Stambadri Enclave (3D)</a>
-        <a href="projects.html">All Developments</a>
-        <a href="index.html#approvals">Legal Approvals</a>
-      </div>
-      <div>
-        <h5>Key Amenities</h5>
-        <a href="index.html#infrastructure">50/40/30ft BT Roads</a>
-        <a href="index.html#infrastructure">Underground Utilities</a>
-        <a href="index.html#infrastructure">Central Parks</a>
-        <a href="index.html#calculator">EMI Estimator</a>
-      </div>
-      <div>
-        <h5>Offices</h5>
-        <li>Khammam: Star Complex, Raparthi Nagar</li>
-        <li>Hyderabad: Vanastalipuram</li>
-        <a href="tel:+919392887268" style="color:var(--brand-green); font-weight:700; margin-top:8px;">+91 9392887268</a>
+        <p>GV Infra Projects develops DTCP &amp; RERA-sanctioned plotted infrastructure across Telangana. Grounded in structural geometry, legal transparency, and sustained residential appreciation.</p>
       </div>
     </div>
+
+    <div class="footer-grid">
+      <div>
+        <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo" style="margin-bottom:16px;">
+        <p style="max-width:36ch; font-size:0.86rem; color:#8E9EA9; line-height:1.65;">#5-5-140/1, 1st Floor, Nustar Bhavan, Opp. Mangalya Shopping Mall, Vanastalipuram, Hyderabad – 500070</p>
+      </div>
+
+      <div>
+        <h5>Developments</h5>
+        <a href="projects.html">All Projects</a>
+        <a href="project.html">Stambadri Enclave 3D</a>
+        <a href="index.html#infrastructure">Civil Specifications</a>
+        <a href="admin.html">Operations Console</a>
+      </div>
+
+      <div>
+        <h5>Architecture</h5>
+        <a href="index.html#infrastructure">Civil Carriageways</a>
+        <a href="index.html#location">Regional Arterial Axis</a>
+        <a href="index.html#approvals">DTCP Sanctions</a>
+        <a href="index.html#calculator">Loan Amortization</a>
+      </div>
+
+      <div>
+        <h5>Direct Contact</h5>
+        <a href="tel:+919392887268">+91 9392887268</a>
+        <a href="https://wa.me/919392887268">WhatsApp Official</a>
+        <a href="mailto:info@gvinfraprojects.com">info@gvinfraprojects.com</a>
+        <span style="font-size:0.78rem; color:#647582; display:block; margin-top:8px;">Mon–Sat 9:30 AM – 6:30 PM</span>
+      </div>
+    </div>
+
     <div class="footer-bottom">
-      <span>© 2026 GV Infra Projects. All rights reserved. DTCP Approved Layout.</span>
-      <span>Gurralapadu, Khammam–Kodada Highway, Telangana</span>
+      <span>© 2026 GV Infra Projects. All rights reserved. DTCP Sanctioned Layout TLP No. 3147/Khammam municip/2020/0378.</span>
+      <span>Hyderabad &amp; Khammam, Telangana, India</span>
     </div>
   </div>
 </footer>
 
+<!-- Mobile Bottom CTA Bar -->
 <div class="mobile-cta-bar">
-  <a href="tel:+919392887268" class="btn btn-call">Call</a>
+  <a href="tel:+919392887268" class="btn btn-call">Call Sales</a>
   <a href="https://wa.me/919392887268" target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
   <a href="project.html" class="btn btn-outline">3D Masterplan</a>
 </div>
 
 <script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
 <script>
-  const otherProjectsGrid = document.getElementById("other-projects-grid");
-  GV_DATA.otherProjects.forEach((p) => {
-    const card = document.createElement("article");
-    card.className = "project-card";
-    card.innerHTML = `
-      <div class="thumb" style="background-image:url('${p.image}'); background-position: top center;"></div>
-      <div class="body">
-        <span class="tag" style="background:var(--surface-strong); color:var(--ink-soft); border-radius:var(--radius-xs);">${p.developer !== "—" ? p.developer : "GV Infra Projects"}</span>
-        <div class="loc" style="font-size:0.8rem; color:var(--ink-soft); margin-bottom:4px; font-weight:600;">${p.location}</div>
-        <h3 style="font-size:1.2rem; margin-bottom:8px;">${p.name}</h3>
-        <p style="font-size:0.85rem; color:var(--ink-soft); margin-bottom:14px; line-height:1.5;">${p.blurb}</p>
-        <div class="project-meta" style="margin-bottom:16px;"><span style="font-size:0.76rem; font-weight:600;">${p.approval}</span></div>
-        <a href="index.html#contact" class="btn btn-ghost btn-small">Enquire with Sales</a>
-      </div>
-    `;
-    otherProjectsGrid.appendChild(card);
-  });
+  const container = document.getElementById("other-projects-container");
+  if (container && typeof GV_DATA !== "undefined") {
+    GV_DATA.otherProjects.forEach((p, idx) => {
+      const row = document.createElement("article");
+      const isReverse = idx % 2 === 1;
+      row.className = `portfolio-row ${isReverse ? 'reverse' : ''}`;
+      row.innerHTML = `
+        <div class="portfolio-thumb">
+          <img src="${p.image}" alt="${p.name} layout by ${p.developer}">
+          <span style="position:absolute; top:14px; left:14px; background:var(--obsidian); color:#FFFFFF; font-size:0.68rem; font-weight:600; letter-spacing:0.04em; padding:3px 9px; border-radius:var(--radius-xs);">${p.developer !== "—" ? p.developer : "GV Infra Partner"}</span>
+        </div>
+        <div>
+          <span class="eyebrow" style="margin-bottom:6px;">${p.location}</span>
+          <h3 style="font-family:var(--font-display); font-size:1.85rem; color:var(--ink); margin-bottom:12px; font-weight:500;">${p.name}</h3>
+          <p style="font-size:0.94rem; color:var(--ink-soft); line-height:1.65; margin-bottom:18px;">${p.blurb}</p>
+          <div style="font-size:0.78rem; font-weight:600; color:var(--brand-forest); margin-bottom:20px; font-family:monospace; background:var(--surface-soft); padding:8px 12px; border-radius:var(--radius-xs); border:1px solid var(--stone-line); display:inline-block;">
+            ${p.approval}
+          </div>
+          <div>
+            <a href="index.html#contact" class="btn btn-outline">Enquire With Sales Office &rarr;</a>
+          </div>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  }
 </script>
+<script src="js/chatbot.js"></script>
 </body>
 </html>

@@ -36,6 +36,28 @@ const GV_DATA = (() => {
     hours: "Mon–Sat, 9:30 AM – 6:30 PM",
   };
 
+  // ===========================================================
+  // PROJECT LOCATION CONFIGURATION - Single Source of Truth
+  // ===========================================================
+  // Coordinates are [longitude, latitude] in WGS84 decimal degrees
+  // verified: true = independently surveyed/legal boundary
+  // type: "regional" = regional centre estimate, "verified" = survey boundary
+  const PROJECT_LOCATION = {
+    name: "Regional Centre",
+    locality: "Gurralapadu",
+    city: "Khammam",
+    district: "Khammam",
+    state: "Telangana",
+    country: "India",
+    coordinates: {
+      center: [80.14368, 17.24767], // Regional estimate [lng, lat]
+      verified: false,
+      type: "regional",
+      source: "Regional centre around Khammam / Gurralapadu area — not independently verified as exact project location"
+    },
+    boundary: null, // GeoJSON Polygon or MultiPolygon when verified survey available
+  };
+
   const PROJECT = {
     slug: "stambadri-enclave",
     name: "Stambadri Enclave",
@@ -231,10 +253,107 @@ const GV_DATA = (() => {
 
   let plotCache = loadPlots();
 
+  const MASTERPLAN_DEMO_KEY = "gv_infra_masterplan_demo_v1";
+  const DEFAULT_MASTERPLAN_DEMO = {
+    displayName: PROJECT.name,
+    overlayVisible: true,
+    overlayScale: 1,
+    showRoads: true,
+    showOpenSpaces: true,
+    showAmenities: true,
+    mapZoom: 14.5,
+    showMapLabels: true,
+    showMapControls: true,
+    defaultMode: "2d"
+  };
+
+  function readMasterplanDemo() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(MASTERPLAN_DEMO_KEY) || "null");
+      const config = { ...DEFAULT_MASTERPLAN_DEMO, ...(saved && typeof saved === "object" ? saved : {}) };
+      config.displayName = String(config.displayName || DEFAULT_MASTERPLAN_DEMO.displayName).trim().slice(0, 80) || DEFAULT_MASTERPLAN_DEMO.displayName;
+      config.overlayScale = Math.min(1.35, Math.max(0.75, Number(config.overlayScale) || 1));
+      config.mapZoom = Math.min(17, Math.max(12, Number(config.mapZoom) || DEFAULT_MASTERPLAN_DEMO.mapZoom));
+      config.defaultMode = config.defaultMode === "3d" ? "3d" : "2d";
+      ["overlayVisible", "showRoads", "showOpenSpaces", "showAmenities", "showMapLabels", "showMapControls"].forEach((key) => {
+        config[key] = config[key] !== false;
+      });
+      return config;
+    } catch (error) {
+      return { ...DEFAULT_MASTERPLAN_DEMO };
+    }
+  }
+
+  function saveMasterplanDemo(config) {
+    localStorage.setItem(MASTERPLAN_DEMO_KEY, JSON.stringify(config));
+  }
+
+  // Expose location configuration as the single source of truth for project coordinates
+  function getProjectLocation() {
+    return PROJECT_LOCATION;
+  }
+
+  function getProjectCenter() {
+    return PROJECT_LOCATION.coordinates.center;
+  }
+
+  function getExternalMapLink(lng, lat, zoom = 13) {
+    return `https://www.google.com/maps/@${lat},${lng},${zoom}z/data=!3m1!1e3`;
+  }
+
+  function getProjectBoundary() {
+    return PROJECT_LOCATION.boundary;
+  }
+
+  // Check whether verified boundary GeoJSON exists
+  function hasVerifiedBoundary() {
+    const boundary = PROJECT_LOCATION.boundary;
+    return boundary &&
+      typeof boundary.type === 'string' &&
+      (boundary.type === 'Polygon' || boundary.type === 'MultiPolygon') &&
+      Array.isArray(boundary.coordinates) &&
+      boundary.coordinates.length > 0;
+  }
+
+  function isLocationVerified() {
+    return PROJECT_LOCATION.coordinates.verified === true;
+  }
+
   return {
     company: COMPANY,
     project: PROJECT,
     otherProjects: OTHER_PROJECTS,
+
+    // Geospatial helpers — single source of truth for location data
+    getProjectLocation,
+    getProjectCenter,
+    getExternalMapLink,
+    getProjectBoundary,
+    hasVerifiedBoundary,
+    isLocationVerified,
+
+    getMasterplanDemo() {
+      return readMasterplanDemo();
+    },
+
+    updateMasterplanDemo(updates) {
+      const clean = { ...readMasterplanDemo(), ...(updates || {}) };
+      clean.displayName = String(clean.displayName || DEFAULT_MASTERPLAN_DEMO.displayName).trim().slice(0, 80) || DEFAULT_MASTERPLAN_DEMO.displayName;
+      clean.overlayScale = Math.min(1.35, Math.max(0.75, Number(clean.overlayScale) || 1));
+      clean.mapZoom = Math.min(17, Math.max(12, Number(clean.mapZoom) || DEFAULT_MASTERPLAN_DEMO.mapZoom));
+      clean.defaultMode = clean.defaultMode === "3d" ? "3d" : "2d";
+      ["overlayVisible", "showRoads", "showOpenSpaces", "showAmenities", "showMapLabels", "showMapControls"].forEach((key) => {
+        clean[key] = clean[key] !== false;
+      });
+      saveMasterplanDemo(clean);
+      return clean;
+    },
+
+    resetMasterplanDemo() {
+      const clean = { ...DEFAULT_MASTERPLAN_DEMO };
+      saveMasterplanDemo(clean);
+      return clean;
+    },
 
     getPlots() {
       return plotCache;
@@ -415,8 +534,9 @@ const GV_DATA = (() => {
   };
 })();
 
-// Globally expose centralized WhatsApp utilities
+// Globally expose centralized WhatsApp utilities and data layer
 if (typeof window !== "undefined") {
+  window.GV_DATA = GV_DATA;
   window.normalizeWhatsAppPhone = (phone, country) => GV_DATA.normalizePhone(phone, country);
   window.buildWhatsAppUrl = (phone, msg) => GV_DATA.buildWhatsAppUrl(phone, msg);
 }
