@@ -3,92 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stambadri Enclave — 3D Masterplan | GV Infra Projects</title>
-<meta name="description" content="Explore Stambadri Enclave's plot layout in realistic 3D — rotate, walk the street view, select a plot, and see illustrative availability, price and Vastu facing.">
+<title>Stambadri Enclave — 3D Masterplan &amp; Inventory | GV Infra Projects</title>
+<meta name="description" content="Explore Stambadri Enclave's plot layout in realistic 3D — rotate, inspect road carriageways, walk street view, select a plot, and review real-time availability, price and Vastu orientation.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="css/land-map.css">
 <link rel="stylesheet" href="css/plot-showcase.css">
-<style>
-  #leaflet-map {
-    width: 100%;
-    height: 600px;
-    border-radius: var(--radius-l);
-    box-shadow: var(--shadow-luxury);
-    margin: 20px 0;
-  }
-  .leaflet-control-attribution {
-    display: none;
-  }
-</style>
-<script src="js/language.js"></script>
-<script src="js/telangana-gis.js"></script>
+<link rel="stylesheet" href="css/chatbot.css">
+<link rel="stylesheet" href="css/account-modal.css">
 </head>
 <body>
 
-<nav class="site-nav">
+<!-- Announcement Top Bar -->
+<div class="announcement-bar">
+  <span><span class="live-dot-pulse" style="margin-right:8px;"></span><strong>LIVE INVENTORY:</strong> Stambadri Enclave, Gurralapadu (Khammam) — <span data-live-count="available">28</span> Plots Available · DTCP Sanctioned</span>
+  <a href="#layout-explorer">Explore 3D Model &rarr;</a>
+</div>
+
+<!-- Global Navigation -->
+<nav class="site-nav" id="site-nav">
   <div class="wrap">
     <a href="index.html" class="brand">
       <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
-      <span class="brand-badge">Interactive 3D</span>
+      <span class="brand-badge">Stambadri Enclave</span>
     </a>
+
     <div class="nav-links">
-      <a href="projects.html" data-i18n="projects">Projects</a>
-      <a href="project.html" style="color:var(--brand-green);" data-i18n="masterplan">3D Masterplan</a>
-      <a href="index.html#about">About</a>
-      <a href="index.html#contact" data-i18n="contact">Contact</a>
-      <a href="admin.html" style="font-size:0.82rem; color:var(--ink-soft);" data-i18n="admin">Admin ↗</a>
-      <button id="lang-toggle" title="Switch language">తెలుగు</button>
+      <a href="projects.html">Projects</a>
+      <a href="project.html" class="active">3D Masterplan</a>
+      <a href="#overview">Overview</a>
+      <a href="#amenities">Infrastructure</a>
+      <a href="#location-matrix">Connectivity</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="admin.html" style="font-size:0.78rem; color:var(--ink-soft); letter-spacing:0.04em;">Console ↗</a>
     </div>
-    <a href="tel:+919000000000" class="btn btn-primary btn-small" data-i18n="call_sales">Call Sales</a>
+
+    <div class="nav-actions">
+      <a href="index.html#finder" class="nav-search-btn" aria-label="Search plot inventory">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>SEARCH</span>
+      </a>
+      <a href="#account" class="nav-account-btn" id="nav-account-btn" data-gv-action="account" aria-label="Open Account / Sign In"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span class="account-btn-label">ACCOUNT</span></a>
+      <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra%2C%20I%27d%20like%20to%20know%20more%20about%20Stambadri%20Enclave." target="_blank" rel="noopener" class="btn-corp btn-corp-wa">WhatsApp</a>
+      <a href="tel:+919392887268" class="btn-corp btn-corp-call">Call Sales</a>
+      <button class="nav-mobile-toggle" id="nav-mobile-toggle" aria-label="Open Navigation Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
   </div>
 </nav>
 
-<header style="padding: 44px 0 24px;">
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-nav-panel" id="mobile-nav-panel">
+  <div class="mobile-nav-header">
+    <a href="index.html" class="brand">
+      <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo">
+    </a>
+    <button id="mobile-nav-close" style="font-size:1.8rem; color:var(--ink); padding:4px;" aria-label="Close menu">&times;</button>
+  </div>
+  <div class="mobile-nav-menu">
+    <a href="projects.html" class="mobile-nav-link">Projects</a>
+    <a href="project.html" class="mobile-nav-link active">3D Masterplan</a>
+    <a href="#overview" class="mobile-nav-link">Overview</a>
+    <a href="#amenities" class="mobile-nav-link">Infrastructure</a>
+    <a href="#location-matrix" class="mobile-nav-link">Connectivity</a>
+    <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+    <a href="#account" class="mobile-nav-link nav-account-btn" data-gv-action="account"><span class="account-btn-label">Account / Sign In</span></a>
+    <a href="admin.html" class="mobile-nav-link" style="font-size:1.2rem; color:var(--ink-soft);">Operations Console &rarr;</a>
+  </div>
+  <div class="mobile-nav-footer">
+    <p><strong>GV Infra Projects</strong> · Hyderabad &amp; Khammam</p>
+    <p style="margin-top:4px;">Tel: <a href="tel:+919392887268" style="color:var(--brand-forest); font-weight:600;">+91 9392887268</a></p>
+  </div>
+</div>
+
+<!-- Project Hero Header -->
+<header style="padding: 72px 0 36px; background: var(--bg); border-bottom: 1px solid var(--stone-line);">
   <div class="wrap">
-    <span class="eyebrow" style="color:var(--brand-green); font-weight:700; letter-spacing:0.04em;">Gurralapadu, Khammam–Kodada Highway · 302 Plots</span>
-    <h1 style="font-size: clamp(2.2rem, 3.5vw, 3rem); max-width: 22ch; margin-top:6px;">Stambadri Enclave — See the land. Explore the possibilities.</h1>
-    <p class="lede" style="margin-top:14px; color:var(--ink-soft); max-width:54ch; font-size:1.05rem;">Explore real satellite imagery and the surrounding roads, then switch to our illustrative 3D layout to compare plots and walk the proposed streets.</p>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> GURRALAPADU, KHAMMAM–KODADA HIGHWAY · DTCP SANCTIONED</span>
+    <h1 style="font-size: clamp(2.6rem, 4.2vw, 3.8rem); max-width: 24ch; margin-top:8px; font-weight:500; line-height:1.1;">Stambadri Enclave.<br><span class="gold-text">Engineered acreage, masterplanned.</span></h1>
+    <p style="margin-top:16px; color:var(--ink-body); max-width:60ch; font-size:1.05rem; line-height:1.7;">Explore satellite surroundings, then inspect the illustrative 3D layout to compare plots, evaluate Vastu orientation, and walk the internal carriageways.</p>
   </div>
 </header>
 
-<section class="wrap" style="padding-top:0;">
+<!-- Editorial Project Overview Statistics (Typography & Spacing, No Rounded Cards) -->
+<section id="overview" class="wrap" style="padding: 40px 0; border-bottom: 1px solid var(--stone-line);">
+  <div class="spec-ledger-grid" style="grid-template-columns: repeat(5, 1fr);">
+    <div class="spec-ledger-item">
+      <span class="spec-ledger-kicker">Sanction Authority</span>
+      <div class="spec-ledger-value" style="font-size:1.35rem;">DTCP Sanctioned</div>
+      <div class="spec-ledger-note">TLP No. 3147/2020/0378</div>
+    </div>
+    <div class="spec-ledger-item">
+      <span class="spec-ledger-kicker">Masterplan Scale</span>
+      <div class="spec-ledger-value" style="font-size:1.35rem;">302 Plotted Units</div>
+      <div class="spec-ledger-note">1800 – 3000 sq.ft units</div>
+    </div>
+    <div class="spec-ledger-item">
+      <span class="spec-ledger-kicker">Carriageways</span>
+      <div class="spec-ledger-value" style="font-size:1.35rem;">50 / 40 / 30 FT</div>
+      <div class="spec-ledger-note">Internal blacktop roads</div>
+    </div>
+    <div class="spec-ledger-item">
+      <span class="spec-ledger-kicker">Park Reservoirs</span>
+      <div class="spec-ledger-value" style="font-size:1.35rem;">10,065 Sq. Yds</div>
+      <div class="spec-ledger-note">Two dedicated parks</div>
+    </div>
+    <div class="spec-ledger-item">
+      <span class="spec-ledger-kicker">Title Assurance</span>
+      <div class="spec-ledger-value" style="font-size:1.35rem;">100% Freehold</div>
+      <div class="spec-ledger-note">Spot registration ready</div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" style="padding-top: 36px;">
   <!-- Live Plot Inventory Ticker -->
   <div class="live-ticker-strip">
     <div style="display:flex; align-items:center; gap:8px;">
       <span class="live-dot-pulse"></span>
-      <span style="font-weight:700;">Live Layout Inventory</span>
+      <span style="font-weight:700; text-transform:uppercase; letter-spacing:0.04em; font-size:0.78rem;">Live Inventory</span>
     </div>
     <span class="ticker-divider">|</span>
-    <span class="ticker-item"><strong style="color:#16A34A;" data-live-count="available">28</strong> Available</span>
+    <span class="ticker-item"><strong style="color:var(--status-available);" data-live-count="available">28</strong> Available</span>
     <span class="ticker-divider">•</span>
-    <span class="ticker-item"><strong style="color:#EA580C;" data-live-count="reserved">8</strong> Reserved</span>
+    <span class="ticker-item"><strong style="color:var(--status-reserved);" data-live-count="reserved">8</strong> Reserved</span>
     <span class="ticker-divider">•</span>
-    <span class="ticker-item"><strong style="color:#D97706;" data-live-count="hold">4</strong> On Hold</span>
+    <span class="ticker-item"><strong style="color:var(--status-hold);" data-live-count="hold">4</strong> On Hold</span>
     <span class="ticker-divider">•</span>
-    <span class="ticker-item"><strong style="color:#64748B;" data-live-count="sold">8</strong> Sold (3D Villas Built)</span>
+    <span class="ticker-item"><strong style="color:var(--status-sold);" data-live-count="sold">8</strong> Sold (Built)</span>
     <span class="ticker-divider" style="margin-left:auto;">|</span>
     <div class="bank-badges-strip" style="margin-top:0;">
-      <span class="bank-badge">🏦 Loan Assistance</span>
-      <span class="bank-badge">✅ DTCP &amp; RERA Approved</span>
+      <span class="bank-badge"><svg width="12" height="12" viewBox="0 0 20 20" fill="#143628"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Bank Loan Assistance</span>
+      <span class="bank-badge"><svg width="12" height="12" viewBox="0 0 20 20" fill="#143628"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> DTCP Sanctioned</span>
     </div>
   </div>
 
   <div class="land-view-switch" role="group" aria-label="Property viewer">
-    <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer">3D layout preview</button>
-    <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase">Plot showcase</button>
-    <button id="view-land" aria-pressed="false" aria-controls="land-explorer">Satellite land map</button>
-    <span>Illustrative 3D layout · Card browser · Real surroundings</span>
+    <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer">3D Layout Preview</button>
+    <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase">Plot Showcase (Cards)</button>
+    <button id="view-land" aria-pressed="false" aria-controls="land-explorer">Satellite Land Map</button>
+    <span>Interactive architectural tool · Card browser · Satellite survey</span>
   </div>
   <p id="layout-loading" role="status" hidden></p>
+
+  <!-- MASTERPLAN PLANNING TOOL -->
   <div class="masterplan-shell" id="layout-explorer">
     <aside class="mp-sidebar">
-      <h4>Find a plot</h4>
-      <input type="text" id="plot-search" class="mp-search" placeholder="Plot number, e.g. 114">
+      <h4>Plot Directory</h4>
+      <input type="text" id="plot-search" class="mp-search" placeholder="Search plot number, e.g. 114">
 
       <div class="filter-group">
-        <div class="label">Max Price (₹)</div>
+        <div class="label">Maximum Price (₹)</div>
         <div class="price-slider-wrap">
           <div class="price-slider-labels">
             <span>₹30 Lakhs</span>
@@ -99,7 +168,7 @@
       </div>
 
       <div class="filter-group">
-        <div class="label">Status</div>
+        <div class="label">Inventory Status</div>
         <div class="chip-row" id="filter-status">
           <button class="chip active" data-value="all">All</button>
           <button class="chip" data-value="available">Available</button>
@@ -110,7 +179,7 @@
       </div>
 
       <div class="filter-group">
-        <div class="label">Facing</div>
+        <div class="label">Plot Orientation (Facing)</div>
         <div class="chip-row" id="filter-facing">
           <button class="chip active" data-value="all">All</button>
           <button class="chip" data-value="East">East</button>
@@ -121,7 +190,7 @@
       </div>
 
       <div class="filter-group">
-        <div class="label">Size (sq.ft)</div>
+        <div class="label">Unit Area (Sq.ft)</div>
         <div class="chip-row" id="filter-size">
           <button class="chip active" data-value="all">All</button>
           <button class="chip" data-value="1800">1800</button>
@@ -133,10 +202,10 @@
       </div>
 
       <div class="legend" id="legend-status">
-        <div class="legend-item"><span class="dot" style="background:#3E7A4F"></span> Available</div>
-        <div class="legend-item"><span class="dot" style="background:#B98A22"></span> On Hold</div>
-        <div class="legend-item"><span class="dot" style="background:#A85F3A"></span> Reserved</div>
-        <div class="legend-item"><span class="dot" style="background:#837C6D"></span> Sold (3D Houses)</div>
+        <div class="legend-item"><span class="dot" style="background:#2E6E45"></span> Available</div>
+        <div class="legend-item"><span class="dot" style="background:#B58A1C"></span> On Hold</div>
+        <div class="legend-item"><span class="dot" style="background:#A65B2E"></span> Reserved</div>
+        <div class="legend-item"><span class="dot" style="background:#706B61"></span> Sold (Built)</div>
       </div>
 
       <div class="legend is-hidden" id="legend-vastu">
@@ -153,35 +222,39 @@
       <canvas id="masterplan-canvas"></canvas>
 
       <!-- Compass Marker -->
-      <div class="compass" id="compass" title="North, relative to your current view" role="img" aria-label="Compass showing north relative to the current camera angle">
+      <div class="compass" id="compass" title="North, relative to your current view" role="img" aria-label="Compass dial showing north">
         <div class="compass-dial" id="compass-dial">
           <span class="compass-n">N</span>
         </div>
       </div>
 
-      <!-- Glassmorphic Toolbar -->
+      <!-- Architectural Technical Toolbar -->
       <div class="mp-toolbar">
         <div class="tool-group">
           <div class="env-select-group">
-            <button class="env-btn active" id="btn-env-day" title="Day light">☀️ Day</button>
-            <button class="env-btn" id="btn-env-sunset" title="Sunset">🌅 Sunset</button>
-            <button class="env-btn" id="btn-env-night" title="Night">🌙 Night</button>
-            <button class="env-btn" id="btn-env-satellite" title="Top-down illustrative layout, not satellite imagery">🗺️ Top view</button>
+            <button class="env-btn active" id="btn-env-day" title="Day lighting">Day</button>
+            <button class="env-btn" id="btn-env-sunset" title="Sunset lighting">Sunset</button>
+            <button class="env-btn" id="btn-env-night" title="Night illumination">Night</button>
+            <button class="env-btn" id="btn-env-satellite" title="Top-down orthographic plan">Top-down</button>
           </div>
         </div>
         <div class="tool-group">
-          <button class="tool-btn" id="btn-drone-tour" title="Open 360 Aerial Drone Tour">🚁 360° Drone Tour</button>
-          <button class="tool-btn" id="btn-walk" title="Street View / FPV Walk Mode">🚶 Walk</button>
-          <button class="tool-btn active" id="btn-activity" title="Show moving people and vehicles">✨ Life</button>
-          <button class="tool-btn active" id="btn-labels" title="Toggle 3D Plot Badges">🏷️ #</button>
-          <button class="tool-btn" id="btn-vastu" title="Toggle Vastu View">🧭 Vastu</button>
+          <button class="tool-btn" id="btn-drone-tour" title="Open 360 Aerial Drone Tour">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg> 360° Drone
+          </button>
+          <button class="tool-btn" id="btn-walk" title="Street Walk Mode">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/></svg> Walk
+          </button>
+          <button class="tool-btn active" id="btn-activity" title="Simulation">Simulation</button>
+          <button class="tool-btn active" id="btn-labels" title="Toggle 3D Plot Badges">Plot #</button>
+          <button class="tool-btn" id="btn-vastu" title="Toggle Vastu View">Vastu</button>
         </div>
         <div class="tool-group vr-tool-group">
-          <button class="tool-btn" id="btn-vr" title="Open stereoscopic headset view">🥽 VR View</button>
+          <button class="tool-btn" id="btn-vr" title="Open stereoscopic headset view">VR View</button>
         </div>
         <div class="tool-group">
-          <button class="tool-btn" id="btn-layers" title="Show/hide roads, utilities & buildings" aria-haspopup="true" aria-expanded="false">🧱 Layers</button>
-          <button class="tool-btn" id="btn-measure" title="Measure distance &amp; area (illustrative scene units)">📏 Measure</button>
+          <button class="tool-btn" id="btn-layers" title="Show/hide roads, utilities &amp; buildings" aria-haspopup="true" aria-expanded="false">Layers</button>
+          <button class="tool-btn" id="btn-measure" title="Measure distance &amp; area">Measure</button>
         </div>
         <div class="tool-group">
           <button class="tool-btn" id="btn-reset" title="Reset View" aria-label="Reset camera view">⟲</button>
@@ -207,7 +280,7 @@
 
       <!-- FPV Walk Mode Overlay Instructions -->
       <div class="walk-overlay is-hidden" id="walk-overlay">
-        <span>🚶 Street Walkthrough Active: Use <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or Arrow Keys to walk down the roads. Click and drag to look around.</span>
+        <span><strong style="color:#86EFAC;">Street Walk Active:</strong> Use <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or Arrow Keys to move along internal roads. Click and drag to steer view.</span>
         <button class="btn btn-small btn-primary" id="btn-exit-walk" style="padding:4px 10px; font-size:0.75rem;">Exit Walk</button>
       </div>
 
@@ -222,34 +295,35 @@
       </div>
 
       <div class="mp-hint" id="mp-hint">Drag to orbit 3D view · scroll to zoom · click a plot to view details</div>
-      <div class="vr-hint" aria-live="polite">🥽 VR-style view active · rotate your phone or use a headset viewer · tap VR View again to exit</div>
+      <div class="vr-hint" aria-live="polite">VR perspective active · Rotate device or drag to look around · Tap VR View to exit</div>
     </div>
   </div>
 
+  <!-- PLOT SHOWCASE (CARDS) -->
   <section id="plot-showcase" class="plot-showcase" aria-label="Premium plot showcase" hidden>
     <div class="showcase-head">
       <div>
-        <span class="land-eyebrow">BROWSE BY CARD</span>
-        <h2>Plot showcase</h2>
-        <p>48 of the project's 302 plots, illustrated as cards — filter, flip a card for specs, then compare or jump straight into the 3D view.</p>
+        <span class="land-eyebrow">BROWSE BY INVENTORY SHEET</span>
+        <h2>Plot directory showcase</h2>
+        <p>48 illustrative plots from the 302-plot masterplan — inspect specifications, flip cards, and compare side-by-side.</p>
       </div>
       <div class="showcase-filter-bar">
         <select id="sc-filter-status" class="finder-select">
-          <option value="all">All statuses</option>
+          <option value="all">All Statuses</option>
           <option value="available">Available</option>
           <option value="hold">On Hold</option>
           <option value="reserved">Reserved</option>
           <option value="sold">Sold</option>
         </select>
         <select id="sc-filter-facing" class="finder-select">
-          <option value="all">All facings</option>
+          <option value="all">All Facings</option>
           <option value="East">East</option>
           <option value="West">West</option>
           <option value="North">North</option>
           <option value="South">South</option>
         </select>
         <select id="sc-filter-size" class="finder-select">
-          <option value="all">All sizes</option>
+          <option value="all">All Sizes</option>
           <option value="1800">1,800 sqft</option>
           <option value="2000">2,000 sqft</option>
           <option value="2100">2,100 sqft</option>
@@ -257,7 +331,7 @@
           <option value="3000">3,000 sqft</option>
         </select>
         <select id="sc-filter-price" class="finder-select">
-          <option value="8000000">Any price</option>
+          <option value="8000000">Any Price</option>
           <option value="4500000">Under ₹45 Lakhs</option>
           <option value="6000000">Under ₹60 Lakhs</option>
         </select>
@@ -265,38 +339,27 @@
     </div>
 
     <p class="showcase-count" id="sc-count">Loading plots…</p>
-
     <div class="showcase-grid" id="sc-grid" aria-live="polite"></div>
 
-    <button class="btn btn-outline showcase-more" id="sc-load-more" hidden>Show more plots</button>
+    <button class="btn btn-outline showcase-more" id="sc-load-more" hidden style="margin:24px auto 0; display:block;">Show more plots</button>
 
     <div class="compare-tray" id="sc-compare-tray" hidden>
-      <span id="sc-compare-tray-label">Select up to 2 plots to compare</span>
+      <span id="sc-compare-tray-label" style="font-size:0.84rem; font-weight:600;">Select up to 2 plots to compare</span>
       <div class="compare-tray-chips" id="sc-compare-chips"></div>
-      <button class="btn btn-primary btn-small" id="sc-compare-open" disabled>Compare selected</button>
-      <button class="btn btn-ghost btn-small" id="sc-compare-clear">Clear</button>
-    </div>
-
-    <!-- INTERACTIVE SATELLITE MAP WITH LEAFLET -->
-    <div style="margin-top: 40px;">
-      <div class="section-head">
-        <div>
-          <h2>Property Location on Satellite Map</h2>
-          <p>View the exact location of Stambadri Enclave with nearby infrastructure and amenities</p>
-        </div>
-      </div>
-      <div id="leaflet-map"></div>
+      <button class="btn btn-primary btn-small" id="sc-compare-open" disabled>Compare Selected</button>
+      <button class="btn btn-ghost btn-small" id="sc-compare-clear" style="color:#fff;">Clear</button>
     </div>
   </section>
+</section>
 
-<!-- Plot Showcase Comparison Modal (self-contained — independent of the 3D-view compare modal) -->
+<!-- Plot Showcase Comparison Modal -->
 <div class="compare-modal" id="sc-compare-modal">
   <div class="compare-content">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3 style="font-size:1.3rem;">Side-by-Side Plot Comparison</h3>
+      <h3 style="font-size:1.4rem;">Side-by-Side Plot Comparison</h3>
       <button class="drawer-close" id="sc-compare-close" aria-label="Close comparison">×</button>
     </div>
-    <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;">Comparing the two plots you selected from the showcase cards.</p>
+    <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;">Comparing the two plots selected from the showcase inventory.</p>
     <table class="compare-table" id="sc-compare-table">
       <thead>
         <tr><th>Attribute</th><th id="sc-th-p1">Plot 1</th><th id="sc-th-p2">Plot 2</th></tr>
@@ -306,83 +369,54 @@
   </div>
 </div>
 
-  <section id="land-explorer" class="land-explorer" aria-label="Satellite land explorer" hidden>
-    <div class="land-map-heading">
-      <div><span class="land-eyebrow">EXPLORE THE LOCATION</span><h2>Land &amp; surroundings</h2><p>Khammam region · Official Telangana Cadastral Survey &amp; Satellite Imagery</p></div>
-      <a id="land-external" href="https://www.google.com/maps/@17.24767,80.14368,13z/data=!3m1!1e3" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+<!-- SATELLITE LAND MAP -->
+<section id="land-explorer" class="wrap land-explorer" aria-label="Satellite land explorer" hidden style="padding:0; border:none; margin-top:24px;">
+  <div class="land-map-heading">
+    <div>
+      <span class="land-eyebrow">REGIONAL GEOSPATIAL VIEW</span>
+      <h2>Land &amp; surroundings</h2>
+      <p>Khammam regional satellite imagery · Site GPS coordinate mapping</p>
     </div>
-
-    <!-- Telangana Cadastral Survey Search Control Strip -->
-    <div class="gis-survey-strip" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:16px; margin-bottom:16px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-        <span style="font-weight:700; color:#15803d; display:flex; align-items:center; gap:6px; font-size:1.05rem;">
-          🏛️ Telangana Revenue Cadastral Survey Boundary (TGRAC / Bhu Bharati)
-        </span>
-        <span style="font-size:0.75rem; background:#dcfce7; color:#166534; padding:4px 10px; border-radius:12px; font-weight:700;">
-          Official 30cm Survey Layer
-        </span>
-      </div>
-      <form id="tg-survey-form" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
-        <div>
-          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">District</label>
-          <input type="text" id="tg-district" value="Khammam" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
-        </div>
-        <div>
-          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">Mandal</label>
-          <input type="text" id="tg-mandal" value="Khammam Rural" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
-        </div>
-        <div>
-          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">Village</label>
-          <input type="text" id="tg-village" value="Gurralapadu" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
-        </div>
-        <div>
-          <label style="font-size:0.75rem; font-weight:600; display:block; margin-bottom:2px; color:#475569;">Survey No.</label>
-          <input type="text" id="tg-surveyno" placeholder="e.g. 123/2" value="123/2" class="mp-search" style="margin:0; width:100%; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;">
-        </div>
-        <div style="display:flex; align-items:flex-end;">
-          <button type="submit" class="btn btn-primary btn-small" style="width:100%; justify-content:center; padding:8px 12px; font-size:0.85rem;">🔍 Search Cadastral</button>
-        </div>
-      </form>
-
-      <div id="tg-parcel-card" style="margin-top:14px; padding:14px; background:white; border-radius:8px; border:1px solid #cbd5e1; display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong id="tg-parcel-title" style="font-size:1.1rem; color:#0f172a;">Survey No. 123/2</strong>
-          <span id="tg-parcel-badge" style="background:#e0f2fe; color:#0369a1; padding:3px 10px; border-radius:10px; font-size:0.75rem; font-weight:700;">Verified TGRAC Survey</span>
-        </div>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-top:10px; font-size:0.85rem;">
-          <div><span style="color:#64748b; display:block; font-size:0.75rem;">Total Area</span><strong id="tg-parcel-area">2.15 Acres (10,406 sq yds)</strong></div>
-          <div><span style="color:#64748b; display:block; font-size:0.75rem;">Location</span><strong id="tg-parcel-loc">Gurralapadu, Khammam</strong></div>
-          <div><span style="color:#64748b; display:block; font-size:0.75rem;">GPS Coordinates</span><strong id="tg-parcel-coords">17.24767° N, 80.14368° E</strong></div>
-          <div><span style="color:#64748b; display:block; font-size:0.75rem;">Official Record</span><a id="tg-parcel-link" href="https://bhubharati.telangana.gov.in/gis/" target="_blank" style="color:#2563eb; font-weight:600;">Bhu Bharati Portal ↗</a></div>
-        </div>
-        <div style="font-size:0.72rem; color:#64748b; margin-top:10px; border-top:1px dashed #e2e8f0; padding-top:6px;">
-          ℹ️ <em>Map visualization only. Survey parcel boundaries are for reference &amp; should be independently verified with Telangana Revenue / Bhu Bharati records.</em>
-        </div>
+    <a id="land-external" href="https://www.google.com/maps/@17.24767,80.14368,13z/data=!3m1!1e3" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+  </div>
+  <div class="land-map-stage" id="land-map-stage">
+    <div id="land-map" role="region" aria-label="Interactive satellite map"></div>
+    <div class="map-mode-switcher" role="group" aria-label="Map presentation mode">
+      <button id="land-2d" class="active" aria-pressed="true" title="True top-down 2D site plan view">2D</button>
+      <button id="land-3d" aria-pressed="false" title="Elevated 3D aerial perspective">3D</button>
+    </div>
+    <div class="land-map-tools" role="group" aria-label="Map display">
+      <button id="land-labels" class="active" aria-pressed="true">Road Labels</button>
+      <button id="land-reset">Reset View</button>
+    </div>
+    <div class="land-map-compass" id="land-compass" role="button" aria-label="Reset bearing to north" title="Click to reset bearing to north">
+      <div class="land-map-compass-dial" id="land-compass-dial">
+        <span class="land-map-compass-n">N</span>
       </div>
     </div>
-    <div class="land-map-stage" id="land-map-stage">
-      <div id="land-map" role="region" aria-label="Interactive satellite map"></div>
-      <div class="land-map-tools" role="group" aria-label="Map display">
-        <button id="land-flat" class="active" aria-pressed="true">2D map</button>
-        <button id="land-tilt" aria-pressed="false">3D aerial</button>
-        <button id="land-labels" class="active" aria-pressed="true">Road labels</button>
-        <button id="land-reset">Reset region</button>
-      </div>
-      <div class="land-map-status" id="land-map-status" role="status" aria-live="polite">Loading satellite imagery…</div>
-      <div class="land-map-caption">SATELLITE IMAGERY <span>Not live footage or surveyed boundaries</span></div>
+    <div class="land-map-status" id="land-map-status" role="status" aria-live="polite">Loading satellite imagery…</div>
+    <div class="land-map-caption">SATELLITE IMAGERY <span>Not live footage or surveyed boundaries</span></div>
+  </div>
+  <div class="land-map-footer">
+    <form id="land-coordinate-form">
+      <label for="land-coordinates">Have the site GPS pin?</label>
+      <div class="land-coordinate-input"><input id="land-coordinates" placeholder="Latitude, longitude" aria-describedby="land-location-note" required><button type="submit">Go to pin ↗</button></div>
+    </form>
+    <div>
+      <strong id="land-center">17.24767° N, 80.14368° E</strong>
+      <p id="land-location-note">Regional view only. Enter site coordinates to inspect your land. Plot boundaries require a verified survey.</p>
     </div>
-    <div class="land-map-footer">
-      <form id="land-coordinate-form">
-        <label for="land-coordinates">Have the site GPS pin?</label>
-        <div class="land-coordinate-input"><input id="land-coordinates" placeholder="Latitude, longitude" aria-describedby="land-location-note" required><button type="submit">Go to pin ↗</button></div>
-      </form>
-      <div><strong id="land-center">17.24767° N, 80.14368° E</strong><p id="land-location-note">Regional view only. Enter site coordinates to inspect your land. Plot boundaries require a verified survey.</p></div>
-    </div>
-  </section>
+  </div>
+</section>
 
-<section class="wrap">
+<!-- Amenities & Development Specifications -->
+<section id="amenities" class="wrap">
   <div class="section-head">
-    <div><h2>What's included at Stambadri Enclave</h2></div>
+    <div>
+      <span class="editorial-eyebrow">Amenities</span>
+      <h2>What's included at Stambadri Enclave.</h2>
+      <p>Verified on-site infrastructure and communal amenities delivered with Phase 1 development.</p>
+    </div>
   </div>
   <div class="doc-grid" id="amenities-grid"></div>
 </section>
@@ -392,7 +426,7 @@
 <aside class="plot-drawer" id="plot-drawer">
   <div class="drawer-head">
     <div>
-      <span class="eyebrow" id="drawer-block">BLOCK A</span>
+      <span class="eyebrow" id="drawer-block" style="margin-bottom:4px;">BLOCK A</span>
       <h3 id="drawer-title">Plot 000</h3>
     </div>
     <button class="drawer-close" id="drawer-close" aria-label="Close">×</button>
@@ -411,9 +445,9 @@
       <div class="spec-item"><div class="k">Booking amount</div><div class="v" id="spec-booking">—</div></div>
     </div>
 
-    <!-- Mortgage / EMI Estimator Widget -->
+    <!-- Loan / EMI Estimator Widget -->
     <div class="emi-calc-box">
-      <div class="emi-title">🏦 Estimated Loan EMI</div>
+      <div class="emi-title">Estimated Bank Loan EMI</div>
       <div class="emi-row">
         <span>Down Payment (20%):</span>
         <strong id="emi-dp-val">₹0</strong>
@@ -425,7 +459,7 @@
       <div class="emi-row" style="margin-top:8px;">
         <span>Tenure:</span>
         <span>
-          <select id="emi-tenure-select" style="padding:2px 6px; font-size:0.8rem;">
+          <select id="emi-tenure-select" class="finder-select" style="padding:4px 8px; font-size:0.8rem; width:auto;">
             <option value="10">10 Years</option>
             <option value="15">15 Years</option>
             <option value="20" selected>20 Years</option>
@@ -434,7 +468,7 @@
         </span>
       </div>
       <div class="emi-result">
-        <div style="font-size:0.75rem; color:#065F46;">Est. Monthly Payment (at 8.5% p.a.)</div>
+        <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">Est. Monthly Payment (@ 8.5% p.a.)</div>
         <div class="emi-result-amount" id="emi-monthly-val">₹0 / mo</div>
       </div>
     </div>
@@ -451,25 +485,25 @@
     <div class="drawer-ctas">
       <a href="#" id="cta-call" class="btn btn-call">Call Sales Now</a>
       <a href="#" id="cta-whatsapp" class="btn btn-whatsapp" target="_blank" rel="noopener">WhatsApp About This Plot</a>
-      <button class="btn btn-outline" id="cta-compare">⚡ Compare With Another Plot</button>
-      <button class="btn btn-ghost" id="cta-visit">Book a Site Visit</button>
+      <button class="btn btn-outline" id="cta-compare">Compare With Another Plot</button>
+      <button class="btn btn-ghost" id="cta-visit">Book Site Visit</button>
       <button class="btn btn-ghost" id="cta-save">Save Plot</button>
     </div>
   </div>
 </aside>
 
-<!-- Plot Comparison Modal Overlay -->
+<!-- Plot Comparison Modal (from Masterplan view) -->
 <div class="compare-modal" id="compare-modal">
   <div class="compare-content">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3 style="font-size:1.3rem;">Side-by-Side Plot Comparison</h3>
+      <h3 style="font-size:1.4rem;">Side-by-Side Plot Comparison</h3>
       <button class="drawer-close" id="compare-close" aria-label="Close comparison">×</button>
     </div>
     <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;">Compare Plot <span id="comp-p1-num">--</span> against another selected plot.</p>
 
-    <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
-      <label style="font-size:0.85rem; font-weight:600;">Select 2nd Plot:</label>
-      <select id="comp-select-p2" style="padding:8px 12px; border-radius:var(--radius-s); border:1px solid var(--stone-line); font-family:inherit;">
+    <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+      <label style="font-size:0.82rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Select 2nd Plot:</label>
+      <select id="comp-select-p2" class="finder-select" style="max-width:320px;">
         <option value="">Choose a plot...</option>
       </select>
     </div>
@@ -483,18 +517,19 @@
         </tr>
       </thead>
       <tbody id="compare-tbody">
-        <tr><td colspan="3" style="text-align:center; color:var(--ink-soft);">Select a second plot above to compare.</td></tr>
+        <tr><td colspan="3" style="text-align:center; color:var(--ink-soft); padding:24px;">Select a second plot above to compare.</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- Location & Distance Matrix Section -->
+<!-- Regional Connectivity Section -->
 <section class="wrap" id="location-matrix">
   <div class="section-head">
     <div>
-      <h2>Real-World Connectivity &amp; Proximity</h2>
-      <p style="color:var(--ink-soft); margin-top:4px;">Gurralapadu Village, Khammam Municipal Corporation, Telangana</p>
+      <span class="editorial-eyebrow">Location</span>
+      <h2>Real-world connectivity &amp; proximity.</h2>
+      <p>Gurralapadu Village, Khammam Municipal Corporation, Telangana</p>
     </div>
   </div>
   <div class="location-grid">
@@ -510,7 +545,7 @@
     </div>
     <div class="location-card">
       <div class="dist">Nearby</div>
-      <div class="place">Kodhada X-Road &amp; Suryapet–Khammam Rd</div>
+      <div class="place">Kodhada X-Road &amp; Suryapet Rd</div>
       <div class="time">Hyderabad–Suryapet highway junction</div>
     </div>
     <div class="location-card">
@@ -520,17 +555,26 @@
     </div>
   </div>
   <div class="transport-access-grid" aria-label="Nearby transport options">
-    <div class="transport-access-card"><span class="transport-icon">🛣️</span><div><strong>Road access</strong><p>Direct frontage on the Khammam–Kodada national highway for private cars, cabs, and site-visit pickups.</p></div></div>
-    <div class="transport-access-card"><span class="transport-icon">🚌</span><div><strong>Public transport</strong><p>Khammam's old &amp; new bus stands and railway station are roughly 10 minutes away. Confirm current stops and timings before departure.</p></div></div>
-    <div class="transport-access-card"><span class="transport-icon">✈️</span><div><strong>City route</strong><p>Reached via the Khammam–Warangal Highway and Suryapet–Khammam Road; the sales team can share the recommended route for your visit.</p></div></div>
+    <div class="transport-access-card">
+      <span class="transport-icon">🛣️</span>
+      <div><strong>Road Access</strong><p>Direct highway frontage for private vehicular transit, cabs, and scheduled site-inspection pickups.</p></div>
+    </div>
+    <div class="transport-access-card">
+      <span class="transport-icon">🚌</span>
+      <div><strong>Public Transit</strong><p>Khammam's central bus station and railway terminus are approximately 10 minutes away.</p></div>
+    </div>
+    <div class="transport-access-card">
+      <span class="transport-icon">✈️</span>
+      <div><strong>Regional Routes</strong><p>Accessible via Khammam–Warangal Highway and Suryapet–Khammam Expressway works.</p></div>
+    </div>
   </div>
 </section>
 
-<!-- 360° Drone Tour Fullscreen Modal -->
+<!-- 360° Drone Fullscreen Modal -->
 <div class="drone-modal" id="drone-modal">
   <div class="drone-modal-head">
     <h3>
-      <span>🚁 360° Aerial Drone View</span>
+      <span>🚁 360° Aerial Site View</span>
       <span class="drone-badge">LIVE SITE MEDIA</span>
     </h3>
     <button class="drawer-close" id="drone-close" style="color:#fff;" aria-label="Close 360° tour">×</button>
@@ -538,33 +582,83 @@
   <div class="drone-pano-viewport" id="drone-viewport">
     <img src="img/drone-tour-360.jpg" alt="360 Drone Aerial Tour" class="drone-pano-img" id="drone-pano-img">
 
-    <!-- Interactive Hotspot Pins -->
     <div class="drone-hotspot" style="top: 55%; left: 32%;" title="Click to view plot layout">
       <span class="drone-hotspot-dot"></span>
-      <span>📍 Preview Plot Layout</span>
+      <span>Preview Plot Layout</span>
     </div>
     <div class="drone-hotspot" style="top: 58%; left: 52%;" title="Click to view open-space park">
       <span class="drone-hotspot-dot"></span>
-      <span>📍 Open-Space Park</span>
+      <span>Open-Space Park</span>
     </div>
     <div class="drone-hotspot" style="top: 48%; left: 72%;" title="Click to view second park">
       <span class="drone-hotspot-dot"></span>
-      <span>📍 Second Open-Space Park</span>
+      <span>Second Open-Space Park</span>
     </div>
     <div class="drone-hotspot" style="top: 38%; left: 45%;" title="Click to view highway access">
       <span class="drone-hotspot-dot"></span>
-      <span>📍 Khammam–Kodada Highway Link</span>
+      <span>Khammam–Kodada Highway Link</span>
     </div>
 
     <div class="drone-instructions">
-      ↔️ Drag mouse or touch left/right to pan 360° aerial view · Click hotspots to inspect locations (illustrative demo panorama)
+      ↔️ Drag mouse or touch to pan 360° aerial perspective
     </div>
   </div>
 </div>
 
+<!-- Sophisticated Dark Brand Footer -->
+<footer>
+  <div class="wrap">
+    <div class="footer-hero-statement">
+      <div>
+        <h2>Let's build the<br>next landmark.</h2>
+      </div>
+      <div>
+        <p>GV Infra Projects develops DTCP &amp; RERA-sanctioned plotted infrastructure across Telangana. Grounded in structural geometry, legal transparency, and sustained residential appreciation.</p>
+      </div>
+    </div>
+
+    <div class="footer-grid">
+      <div>
+        <img src="img/real/gv-infra-logo.png" alt="GV Infra Projects" class="brand-logo" style="margin-bottom:16px;">
+        <p style="max-width:36ch; font-size:0.86rem; color:#8E9EA9; line-height:1.65;">#5-5-140/1, 1st Floor, Nustar Bhavan, Opp. Mangalya Shopping Mall, Vanastalipuram, Hyderabad – 500070</p>
+      </div>
+
+      <div>
+        <h5>Developments</h5>
+        <a href="projects.html">All Projects</a>
+        <a href="project.html">Stambadri Enclave 3D</a>
+        <a href="#" class="trigger-drone-tour">360° Visual Tour</a>
+        <a href="admin.html">Operations Console</a>
+      </div>
+
+      <div>
+        <h5>Architecture</h5>
+        <a href="#amenities">Civil Carriageways</a>
+        <a href="#location-matrix">Regional Arterial Axis</a>
+        <a href="index.html#approvals">DTCP Sanctions</a>
+        <a href="index.html#calculator">Loan Amortization</a>
+      </div>
+
+      <div>
+        <h5>Direct Contact</h5>
+        <a href="tel:+919392887268">+91 9392887268</a>
+        <a href="https://wa.me/919392887268">WhatsApp Official</a>
+        <a href="mailto:info@gvinfraprojects.com">info@gvinfraprojects.com</a>
+        <span style="font-size:0.78rem; color:#647582; display:block; margin-top:8px;">Mon–Sat 9:30 AM – 6:30 PM</span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 GV Infra Projects. All rights reserved. DTCP Sanctioned Layout TLP No. 3147/Khammam municip/2020/0378.</span>
+      <span>Hyderabad &amp; Khammam, Telangana, India</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Bottom CTA Bar -->
 <div class="mobile-cta-bar">
-  <a href="tel:+919000000000" class="btn btn-call">Call</a>
-  <a href="https://wa.me/919000000000" target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
+  <a href="tel:+919392887268" class="btn btn-call">Call</a>
+  <a href="https://wa.me/919392887268" target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
   <a href="index.html" class="btn btn-outline">Home</a>
 </div>
 
@@ -577,136 +671,10 @@
 }
 </script>
 <script src="js/data.js"></script>
+<script src="js/auth.js"></script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script type="module" src="js/land-map.js?v=layout1"></script>
 <script src="js/main.js"></script>
-
-<!-- LEAFLET INTERACTIVE MAP INITIALIZATION -->
-<script>
-  if (document.getElementById('leaflet-map')) {
-    const map = L.map('leaflet-map').setView([17.24767, 80.14368], 15);
-
-    // Satellite imagery layer (Esri World Imagery)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Esri, DigitalGlobe, Earthstar Geographics',
-      maxZoom: 19,
-      minZoom: 10
-    }).addTo(map);
-
-    // Project boundary rectangle (GREEN)
-    const bounds = [
-      [17.2510, 80.1403],
-      [17.2510, 80.1470],
-      [17.2443, 80.1470],
-      [17.2443, 80.1403]
-    ];
-
-    L.rectangle(bounds, {
-      color: '#15803D',
-      weight: 3,
-      fill: true,
-      fillColor: '#15803D',
-      fillOpacity: 0.15,
-      dashArray: '5, 5'
-    }).addTo(map).bindPopup('<strong>STAMBADRI ENCLAVE</strong><br>302 Plots · Gurralapadu, Khammam', { offset: [0, -10] });
-
-    // Infrastructure markers (colored dots)
-    const infrastructure = [
-      { name: '🏥 Khammam Hospital', lat: 17.3668, lng: 80.1398, color: '#EF4444', distance: '~15 km' },
-      { name: '🚂 Railway Station', lat: 17.3695, lng: 80.1489, color: '#3B82F6', distance: '~16 km' },
-      { name: '🚌 Bus Stand (Old)', lat: 17.3720, lng: 80.1461, color: '#8B5CF6', distance: '~17 km' },
-      { name: '🏬 Shopping Complex', lat: 17.2600, lng: 80.1300, color: '#F59E0B', distance: 'Nearby' }
-    ];
-
-    infrastructure.forEach(item => {
-      L.circleMarker([item.lat, item.lng], {
-        radius: 10,
-        fillColor: item.color,
-        color: '#fff',
-        weight: 2.5,
-        opacity: 0.9,
-        fillOpacity: 0.8
-      })
-      .bindPopup(`<strong>${item.name}</strong><br><small>${item.distance} from project</small>`)
-      .addTo(map);
-    });
-
-    // Walking routes (orange polyline)
-    L.polyline([
-      [17.2490, 80.1450],
-      [17.2485, 80.1440],
-      [17.2475, 80.1438],
-      [17.2468, 80.1435]
-    ], {
-      color: '#FF6B35',
-      weight: 3,
-      opacity: 0.8,
-      dashArray: '8, 4'
-    }).addTo(map).bindPopup('📍 Walking Path - Virtual Tour Route');
-
-    // Central park marker
-    L.circleMarker([17.2485, 80.1440], {
-      radius: 12,
-      fillColor: '#4ADE80',
-      color: '#fff',
-      weight: 2.5,
-      opacity: 1,
-      fillOpacity: 0.85
-    }).bindPopup('🌳 Central Open-Space Park').addTo(map);
-
-    // Water treatment marker
-    L.circleMarker([17.2460, 80.1430], {
-      radius: 10,
-      fillColor: '#3B82F6',
-      color: '#fff',
-      weight: 2.5,
-      opacity: 1,
-      fillOpacity: 0.8
-    }).bindPopup('💧 Water Treatment Plant').addTo(map);
-
-    // Power distribution marker
-    L.circleMarker([17.2470, 80.1438], {
-      radius: 9,
-      fillColor: '#FBBF24',
-      color: '#fff',
-      weight: 2.5,
-      opacity: 1,
-      fillOpacity: 0.8
-    }).bindPopup('⚡ Power Distribution Center').addTo(map);
-
-    // Community hall marker
-    L.circleMarker([17.2475, 80.1445], {
-      radius: 11,
-      fillColor: '#A78BFA',
-      color: '#fff',
-      weight: 2.5,
-      opacity: 1,
-      fillOpacity: 0.85
-    }).bindPopup('🏛️ Community Hall & Recreation').addTo(map);
-
-    // Zoom to fit project bounds
-    map.fitBounds(bounds, { padding: [50, 50] });
-
-    // Add a legend control
-    const legend = L.control({ position: 'bottomleft' });
-    legend.onAdd = function(map) {
-      const div = L.DomUtil.create('div', 'info' );
-      div.innerHTML = `
-        <div style="background:white; padding:12px 14px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.1); font-size:0.8rem; max-width:180px;">
-          <strong style="display:block; margin-bottom:6px;">Project Legend</strong>
-          <div style="margin-bottom:4px;"><span style="display:inline-block; width:10px; height:10px; background:#15803D; border-radius:2px; margin-right:6px;"></span>Project Boundary</div>
-          <div style="margin-bottom:4px;"><span style="display:inline-block; width:8px; height:8px; background:#4ADE80; border-radius:50%; margin-right:6px;"></span>Parks & Green Space</div>
-          <div style="margin-bottom:4px;"><span style="display:inline-block; width:8px; height:8px; background:#3B82F6; border-radius:50%; margin-right:6px;"></span>Utilities</div>
-          <div><span style="display:inline-block; width:8px; height:8px; background:#FF6B35; border-radius:50%; margin-right:6px;"></span>Walking Routes</div>
-        </div>
-      `;
-      return div;
-    };
-    legend.addTo(map);
-  }
-</script>
-<script src="js/ai-assistant.js"></script>
-<script src="js/easy-mode.js"></script>
+<script src="js/chatbot.js"></script>
 </body>
 </html>
