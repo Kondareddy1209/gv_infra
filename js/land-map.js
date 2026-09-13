@@ -132,6 +132,9 @@ function initMap(retries = 15) {
         container.setAttribute('role', 'region');
         container.setAttribute('aria-label', 'Interactive satellite map explorer');
       }
+
+      // Render Admin-Marked Real-World Land Boundaries
+      renderAdminParcelsOnPublicMap();
     });
 
     // Error handling
@@ -485,6 +488,85 @@ function bindControls() {
             gisEngine.highlightParcelOnMap(map, result);
           }
         }
+      }
+    });
+  }
+}
+
+function renderAdminParcelsOnPublicMap() {
+  if (!map || !window.GV_DATA?.getAdminParcels) return;
+
+  const adminParcels = window.GV_DATA.getAdminParcels();
+  if (!adminParcels || !adminParcels.length) return;
+
+  const features = adminParcels.map(p => ({
+    type: 'Feature',
+    geometry: {
+      type: 'Polygon',
+      coordinates: [p.coordinates]
+    },
+    properties: p
+  }));
+
+  const geojson = {
+    type: 'FeatureCollection',
+    features: features
+  };
+
+  if (map.getSource('admin-marked-parcels')) {
+    map.getSource('admin-marked-parcels').setData(geojson);
+  } else {
+    map.addSource('admin-marked-parcels', {
+      type: 'geojson',
+      data: geojson
+    });
+
+    // Glowing Fill Layer
+    map.addLayer({
+      id: 'admin-parcels-fill',
+      type: 'fill',
+      source: 'admin-marked-parcels',
+      paint: {
+        'fill-color': [
+          'match',
+          ['get', 'status'],
+          'available', '#4ADE80',
+          'reserved', '#FBBF24',
+          '#F87171'
+        ],
+        'fill-opacity': 0.40
+      }
+    });
+
+    // Glowing Outline Layer
+    map.addLayer({
+      id: 'admin-parcels-line',
+      type: 'line',
+      source: 'admin-marked-parcels',
+      paint: {
+        'line-color': [
+          'match',
+          ['get', 'status'],
+          'available', '#15803D',
+          'reserved', '#D97706',
+          '#DC2626'
+        ],
+        'line-width': 4,
+        'line-blur': 1
+      }
+    });
+
+    // Popup on Click
+    map.on('click', 'admin-parcels-fill', (e) => {
+      const p = e.features[0].properties;
+      if ($('tg-parcel-card')) {
+        $('tg-parcel-card').style.display = 'block';
+        $('tg-parcel-title').textContent = `${p.title} (Survey ${p.surveyNo})`;
+        $('tg-parcel-area').textContent = `${p.areaAcres} Acres (${p.areaSqYds?.toLocaleString()} sq yds)`;
+        $('tg-parcel-loc').textContent = `${p.village}, ${p.mandal}, ${p.district}`;
+        $('tg-parcel-coords').textContent = `Asking Price: ₹${Number(p.priceTotal).toLocaleString("en-IN")}`;
+        $('tg-parcel-link').href = `https://wa.me/919000000000?text=${encodeURIComponent(`Hi GV Infra, I want details about ${p.title} (Survey ${p.surveyNo})`)}`;
+        $('tg-parcel-link').textContent = `📱 Chat on WhatsApp ➔`;
       }
     });
   }

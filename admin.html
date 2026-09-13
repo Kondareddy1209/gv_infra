@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — GV Infra Projects</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="js/language.js"></script>
 <style>
   body { padding-bottom: 40px; }
@@ -45,14 +46,15 @@
   <aside class="admin-nav">
     <a href="#" class="tab-link active" data-tab="dashboard">Dashboard</a>
     <a href="#" class="tab-link" data-tab="plots">Plots &amp; Pricing</a>
+    <a href="#" class="tab-link" data-tab="land-marker">🏛️ Land &amp; Boundary Marker</a>
     <a href="#" class="tab-link" data-tab="leads">Leads</a>
   </aside>
 
   <main class="admin-main">
 
     <div class="note-box">
-      This is a demo admin panel backed by <code>localStorage</code> so you can show the "live update" flow with no real backend:
-      change a plot's status or price below, then open <a href="project.html" target="_blank" style="text-decoration:underline;">the public masterplan in a new tab</a> — it updates automatically because both pages read from the same mock data layer (<code>js/data.js</code>). Swap that file for real Supabase calls in production.
+      This is a real-time admin portal backed by <code>localStorage</code> sync:
+      mark land parcel boundaries or update plot prices below, then open <a href="project.html" target="_blank" style="text-decoration:underline;">the public website in a new tab</a> — it syncs immediately!
     </div>
 
     <section id="tab-dashboard" class="tab-section active">
@@ -77,6 +79,88 @@
       <button class="btn btn-ghost btn-small mt-24" id="reset-demo">Reset demo data</button>
     </section>
 
+    <!-- NEW: REAL LAND & BOUNDARY MARKER TAB -->
+    <section id="tab-land-marker" class="tab-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <h2>🏛️ Interactive Land Boundary Marker</h2>
+          <p style="color:var(--ink-soft); font-size:0.88rem;">Click on the satellite map to draw real land boundaries. Marked land syncs automatically to the main public website.</p>
+        </div>
+        <button id="btn-clear-draw" class="btn btn-outline btn-small">🧹 Clear Current Polygon</button>
+      </div>
+
+      <!-- Map Draw Canvas -->
+      <div id="admin-map-container" style="width:100%; height:450px; border-radius:12px; overflow:hidden; border:1px solid #cbd5e1; margin-bottom:16px; position:relative;">
+        <div id="admin-map" style="width:100%; height:100%;"></div>
+        <div style="position:absolute; top:12px; right:12px; z-index:1000; background:rgba(255,255,255,0.95); padding:8px 12px; border-radius:8px; font-size:0.78rem; font-weight:700; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+          📍 Click map points to form a polygon. Double-click or click "Save" when finished.
+        </div>
+      </div>
+
+      <!-- Parcel Details Form -->
+      <form id="admin-parcel-form" style="background:#f8fafc; padding:20px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:24px;">
+        <h3 style="font-size:1.05rem; margin-bottom:14px; color:#0f172a;">Land Parcel Specifications</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Land Title / Venture Name</label>
+            <input type="text" id="parcel-title" placeholder="e.g. Khammam Prime Commercial Land" required style="width:100%; padding:8px;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Survey Number(s)</label>
+            <input type="text" id="parcel-survey" placeholder="e.g. 138/A, 139/B" required style="width:100%; padding:8px;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">District</label>
+            <input type="text" id="parcel-district" value="Khammam" required style="width:100%; padding:8px;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Mandal</label>
+            <input type="text" id="parcel-mandal" value="Khammam Rural" required style="width:100%; padding:8px;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Village</label>
+            <input type="text" id="parcel-village" value="Gurralapadu" required style="width:100%; padding:8px;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Total Area (Acres)</label>
+            <input type="number" step="0.01" id="parcel-area" placeholder="e.g. 4.5" required style="width:100%; padding:8px;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Total Asking Price (₹)</label>
+            <input type="number" id="parcel-price" placeholder="e.g. 45000000" required style="width:100%; padding:8px;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Status</label>
+            <select id="parcel-status" style="width:100%; padding:8px;">
+              <option value="available">🟢 Available for Sale</option>
+              <option value="reserved">🟠 Reserved</option>
+              <option value="sold">🔴 Sold</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:600; display:block; margin-bottom:4px;">Facing / Vastu</label>
+            <select id="parcel-facing" style="width:100%; padding:8px;">
+              <option value="East">East Facing (Highly Auspicious)</option>
+              <option value="North">North Facing (Auspicious)</option>
+              <option value="West">West Facing (Balanced)</option>
+              <option value="South">South Facing</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:12px;">
+          <button type="submit" class="btn btn-primary" style="padding:10px 20px;">💾 Save &amp; Publish Land Boundary</button>
+        </div>
+      </form>
+
+      <h3 style="font-size:1.05rem; margin-bottom:12px;">Currently Marked Land Boundaries</h3>
+      <table>
+        <thead>
+          <tr><th>Title</th><th>Survey No.</th><th>Area</th><th>Price</th><th>Facing</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="admin-parcels-table"></tbody>
+      </table>
+    </section>
+
     <section id="tab-leads" class="tab-section">
       <h2 style="margin-bottom:8px;">Leads</h2>
       <p style="color:var(--ink-soft); font-size:0.88rem; margin-bottom:20px;">Captured from the callback form, site-visit requests, and plot enquiries on the public site.</p>
@@ -89,6 +173,7 @@
   </main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="js/data.js"></script>
 <script src="js/admin.js"></script>
 </body>

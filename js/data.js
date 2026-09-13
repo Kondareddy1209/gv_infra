@@ -341,5 +341,93 @@ const GV_DATA = (() => {
     telLink() {
       return `tel:${COMPANY.phone.replace(/\s+/g, "")}`;
     },
+
+    // --- Admin Interactive Land Parcels Storage & Sync ---
+    getAdminParcels() {
+      const stored = localStorage.getItem('gv_admin_parcels');
+      if (stored) {
+        try {
+          return JSON.parse(stored);
+        } catch (e) {
+          console.error('[GV_DATA] Failed to parse admin parcels:', e);
+        }
+      }
+      // Initial default admin-marked land boundaries for demo
+      const defaults = [
+        {
+          id: 'admin_parcel_1',
+          title: 'Stambadri Enclave Phase 1 - Prime BT Road Parcel',
+          surveyNo: '138/A, 139/A',
+          district: 'Khammam',
+          mandal: 'Khammam Rural',
+          village: 'Gurralapadu',
+          areaAcres: 5.20,
+          areaSqYds: 25168,
+          priceTotal: 46500000,
+          pricePerSqYd: 18500,
+          facing: 'East',
+          status: 'available',
+          owner: 'GV Infra Projects',
+          coordinates: [
+            [80.14300, 17.24700],
+            [80.14520, 17.24700],
+            [80.14520, 17.24920],
+            [80.14300, 17.24920],
+            [80.14300, 17.24700]
+          ],
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: 'admin_parcel_2',
+          title: 'Gurralapadu Commercial Highway Frontage',
+          surveyNo: '141/5/A, 142/2',
+          district: 'Khammam',
+          mandal: 'Khammam Rural',
+          village: 'Gurralapadu',
+          areaAcres: 3.10,
+          areaSqYds: 15004,
+          priceTotal: 33000000,
+          pricePerSqYd: 22000,
+          facing: 'North',
+          status: 'reserved',
+          owner: 'GV Infra Commercial',
+          coordinates: [
+            [80.14180, 17.24520],
+            [80.14350, 17.24520],
+            [80.14350, 17.24680],
+            [80.14180, 17.24680],
+            [80.14180, 17.24520]
+          ],
+          createdAt: new Date().toISOString()
+        }
+      ];
+      localStorage.setItem('gv_admin_parcels', JSON.stringify(defaults));
+      return defaults;
+    },
+
+    saveAdminParcel(parcel) {
+      const parcels = this.getAdminParcels();
+      if (!parcel.id) {
+        parcel.id = 'admin_parcel_' + Date.now();
+        parcel.createdAt = new Date().toISOString();
+        parcels.push(parcel);
+      } else {
+        const idx = parcels.findIndex(p => p.id === parcel.id);
+        if (idx !== -1) {
+          parcels[idx] = parcel;
+        } else {
+          parcels.push(parcel);
+        }
+      }
+      localStorage.setItem('gv_admin_parcels', JSON.stringify(parcels));
+      return parcels;
+    },
+
+    deleteAdminParcel(id) {
+      let parcels = this.getAdminParcels();
+      parcels = parcels.filter(p => p.id !== id);
+      localStorage.setItem('gv_admin_parcels', JSON.stringify(parcels));
+      return parcels;
+    }
   };
 })();
