@@ -86,6 +86,10 @@
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   background: var(--bg);
   color-scheme: light;
@@ -140,9 +144,9 @@ h1,
 h2 {
   font-family: var(--font-display);
   color: var(--ink);
-  line-height: 1.1;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
@@ -152,15 +156,16 @@ h5,
 h6 {
   font-family: var(--font-sans);
   color: var(--ink);
-  line-height: 1.3;
-  font-weight: 600;
+  line-height: 1.25;
+  font-weight: 700;
   letter-spacing: -0.01em;
 }
 
 p {
   color: var(--ink-body);
-  font-size: 0.96rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.75;
+  font-weight: 400;
 }
 
 .font-serif {
@@ -347,9 +352,9 @@ p {
 
 .nav-item {
   font-family: var(--font-sans);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.045em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.055em;
   text-transform: uppercase;
   color: var(--ink-body);
   position: relative;
@@ -677,13 +682,13 @@ p {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: var(--radius-xs);
-  font-weight: 600;
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
+  padding: 12px 26px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
   border: 1px solid transparent;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   text-transform: uppercase;
 }
@@ -858,13 +863,13 @@ p {
 }
 
 .hero h1 {
-  font-size: clamp(3rem, 5vw, 4.6rem);
+  font-size: clamp(3.2rem, 5.5vw, 5.2rem);
   max-width: 18ch;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   color: #FFFFFF;
-  font-weight: 600;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  font-weight: 700;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.5);
   text-wrap: balance;
 }
 
@@ -877,12 +882,13 @@ p {
 }
 
 .hero p.lede {
-  margin-top: 24px;
-  font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.90);
+  margin-top: 28px;
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.95);
   max-width: 52ch;
-  line-height: 1.7;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  line-height: 1.75;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  font-weight: 400;
 }
 
 .hero-ctas {
@@ -928,11 +934,11 @@ p {
 
 .stat-num {
   font-family: var(--font-display);
-  font-size: 2.1rem;
+  font-size: 2.6rem;
   color: var(--ink);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .stat-label {
@@ -1348,21 +1354,22 @@ section.drone-cinematic-section {
 
 .section-head h2 {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 3.6vw, 3.2rem);
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  font-size: clamp(2.6rem, 4vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
   color: var(--ink);
   max-width: 24ch;
-  line-height: 1.1;
+  line-height: 1.05;
   text-wrap: balance;
 }
 
 .section-head p {
   color: var(--ink-soft);
   max-width: 52ch;
-  margin-top: 12px;
-  font-size: 1.02rem;
-  line-height: 1.65;
+  margin-top: 14px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  font-weight: 400;
 }
 
 /* ---------------- Architectural Specification Ledger ---------------- */
@@ -1406,11 +1413,11 @@ section.drone-cinematic-section {
 
 .spec-ledger-value {
   font-family: var(--font-display);
-  font-size: 1.85rem;
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1.15;
-  letter-spacing: -0.015em;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--brand-forest);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .spec-ledger-note {
@@ -1604,11 +1611,12 @@ section.drone-cinematic-section {
 
 .infra-lead-dossier h3 {
   font-family: var(--font-display);
-  font-size: 1.85rem;
-  font-weight: 500;
+  font-size: 2.2rem;
+  font-weight: 700;
   color: var(--ink);
-  line-height: 1.25;
-  margin-bottom: 16px;
+  line-height: 1.15;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
 }
 
 .infra-lead-dossier p {
@@ -2264,10 +2272,12 @@ section.drone-cinematic-section {
 
 .portfolio-flagship-details h3 {
   font-family: var(--font-display);
-  font-size: 2.2rem;
+  font-size: 2.8rem;
   color: var(--ink);
-  margin-bottom: 14px;
-  font-weight: 500;
+  margin-bottom: 16px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
 }
 
 .portfolio-desc {
@@ -2839,11 +2849,12 @@ footer {
 .footer-hero-statement h2 {
   color: #FFFFFF;
   font-family: var(--font-display);
-  font-size: clamp(2.6rem, 4.6vw, 4rem);
-  font-weight: 600;
-  line-height: 1.08;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.05;
   max-width: 16ch;
   text-wrap: balance;
+  letter-spacing: -0.03em;
 }
 
 .footer-hero-statement p {

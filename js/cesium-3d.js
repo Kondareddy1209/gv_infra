@@ -31,12 +31,20 @@ class CesiumLandViewer {
     }
 
     try {
+      let terrainProvider = undefined;
+      try {
+        if (typeof Cesium.createWorldTerrainAsync === 'function') {
+          terrainProvider = await Cesium.createWorldTerrainAsync({
+            requestWaterMask: true,
+            requestVertexNormals: true
+          });
+        }
+      } catch (tErr) {
+        console.warn("[Cesium3D] World terrain unavailable, falling back to ellipsoid terrain:", tErr);
+      }
+
       // Initialize Cesium 3D Viewer with World Terrain & Imagery
-      this.viewer = new Cesium.Viewer(this.containerId, {
-        terrainProvider: await Cesium.createWorldTerrainAsync({
-          requestWaterMask: true,
-          requestVertexNormals: true
-        }),
+      const viewerOptions = {
         animation: false,
         timeline: false,
         baseLayerPicker: false,
@@ -47,7 +55,12 @@ class CesiumLandViewer {
         sceneModePicker: false,
         selectionIndicator: true,
         navigationHelpButton: false
-      });
+      };
+      if (terrainProvider) {
+        viewerOptions.terrainProvider = terrainProvider;
+      }
+
+      this.viewer = new Cesium.Viewer(this.containerId, viewerOptions);
 
       // Hide default credit logo for clean UI
       const creditDisplay = this.viewer.creditDisplay;

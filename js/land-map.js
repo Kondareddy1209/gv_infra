@@ -144,8 +144,14 @@ async function switchView(view) {
 
   Object.entries(sections).forEach(([key, id]) => {
     const el = $(id);
-    if (el) el.hidden = key !== view;
+    if (!el) return;
+    if (key === view) {
+      el.removeAttribute('hidden');
+    } else {
+      el.setAttribute('hidden', '');
+    }
   });
+
   Object.entries(buttons).forEach(([key, id]) => {
     const el = $(id);
     if (!el) return;
@@ -154,8 +160,9 @@ async function switchView(view) {
     el.setAttribute('aria-pressed', String(active));
   });
 
+  const loading = $('layout-loading');
+
   if (view === 'model') {
-    const loading = $('layout-loading');
     if (loading) {
       loading.hidden = false;
       loading.textContent = 'Loading illustrative 3D layout…';
@@ -172,6 +179,7 @@ async function switchView(view) {
       console.error('3D preview:', error);
     }
   } else if (view === 'showcase') {
+    if (loading) loading.hidden = true;
     try {
       showcasePromise ||= import('./plot-showcase.js');
       await showcasePromise;
@@ -179,17 +187,23 @@ async function switchView(view) {
       console.error('Plot showcase:', error);
     }
   } else if (view === 'land') {
-    const loading = $('layout-loading');
     if (loading) loading.hidden = true;
     if (!map) {
       initMap();
-    } else {
-      map.resize();
     }
+    setTimeout(() => {
+      if (map) map.resize();
+    }, 100);
   } else if (view === 'cesium') {
+    if (loading) loading.hidden = true;
     if (window.CesiumLandViewer) {
       cesiumInstance ||= new window.CesiumLandViewer('cesium-container');
-      cesiumInstance.init();
+      await cesiumInstance.init();
+      setTimeout(() => {
+        if (cesiumInstance && cesiumInstance.viewer) {
+          cesiumInstance.viewer.resize();
+        }
+      }, 100);
     }
   }
 }
