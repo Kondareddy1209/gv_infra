@@ -268,6 +268,40 @@
   color: rgba(255, 255, 255, 0.82);
 }
 
+.land-map-proof-panel {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: grid;
+  gap: 8px;
+  width: min(320px, calc(100% - 28px));
+}
+
+.land-map-proof-panel div {
+  display: grid;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: var(--radius-s);
+  padding: 9px 11px;
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(8px);
+}
+
+.land-map-proof-panel strong {
+  font-size: 0.72rem;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.land-map-proof-panel span {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
 /* ---- Footer: coordinate entry + what the centre point actually is ---- */
 .land-map-footer {
   display: grid;
@@ -407,6 +441,14 @@
     background: var(--bg-raised);
     padding: 11px 16px;
     backdrop-filter: none;
+  }
+
+  .land-map-proof-panel {
+    position: static;
+    width: 100%;
+    padding: 10px;
+    background: var(--surface-soft);
+    border-top: 1px solid var(--hairline-soft);
   }
 }
 

@@ -100,9 +100,14 @@
 <!-- Project Hero Header -->
 <header style="padding: 72px 0 36px; background: var(--bg); border-bottom: 1px solid var(--stone-line);">
   <div class="wrap">
-    <span class="eyebrow"><span class="eyebrow-dot"></span> GURRALAPADU, KHAMMAM–KODADA HIGHWAY · DTCP SANCTIONED</span>
-    <h1 style="font-size: clamp(2.6rem, 4.2vw, 3.8rem); max-width: 24ch; margin-top:8px; font-weight:500; line-height:1.1;">Stambadri Enclave.<br><span class="gold-text">Engineered acreage, masterplanned.</span></h1>
-    <p style="margin-top:16px; color:var(--ink-body); max-width:60ch; font-size:1.05rem; line-height:1.7;">Explore satellite surroundings, then inspect the illustrative 3D layout to compare plots, evaluate Vastu orientation, and walk the internal carriageways.</p>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> GURRALAPADU, KHAMMAM-KODADA HIGHWAY · DTCP SANCTIONED</span>
+    <h1 style="font-size: clamp(2.6rem, 4.2vw, 3.8rem); max-width: 24ch; margin-top:8px; font-weight:500; line-height:1.1;">Stambadri Enclave.<br><span class="gold-text">Real land, visible online.</span></h1>
+    <p style="margin-top:16px; color:var(--ink-body); max-width:66ch; font-size:1.05rem; line-height:1.7;">Start with the Khammam satellite land view, then move into the 3D plot model to compare availability, road access, Vastu orientation, EMI estimates, and direct sales contact from one screen.</p>
+    <div class="project-hero-actions">
+      <a href="#layout-explorer" class="btn btn-primary">Inspect 3D Layout</a>
+      <a href="#land-explorer" class="btn btn-outline" id="hero-open-land">Open Satellite Map</a>
+      <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra%2C%20I%20want%20to%20book%20a%20site%20visit%20for%20Stambadri%20Enclave%20in%20Khammam." target="_blank" rel="noopener" class="btn btn-whatsapp">Book on WhatsApp</a>
+    </div>
   </div>
 </header>
 
@@ -159,12 +164,42 @@
     </div>
   </div>
 
+  <div class="real-land-command" aria-label="Real land inspection workflow">
+    <div>
+      <span class="land-eyebrow">BUYER COMMAND CENTER</span>
+      <h2>Inspect the actual land story before the site visit.</h2>
+      <p>The platform separates verified project facts from demo visualization. Buyers can view satellite context, enter a GPS pin, switch into the 3D masterplan, check Vastu facing, save plots, and contact sales without waiting for a manual brochure response.</p>
+    </div>
+    <div class="real-land-steps">
+      <a href="#land-explorer" class="real-land-step" data-switch-view="land">
+        <strong>01</strong>
+        <span>Satellite Land</span>
+        <small>Khammam regional imagery with GPS pin support.</small>
+      </a>
+      <a href="#layout-explorer" class="real-land-step" data-switch-view="model">
+        <strong>02</strong>
+        <span>3D Masterplan</span>
+        <small>Orbit, walk, measure, and select plots.</small>
+      </a>
+      <button class="real-land-step" type="button" id="command-vastu">
+        <strong>03</strong>
+        <span>Vastu View</span>
+        <small>Color plots by North, East, West, and South facing.</small>
+      </button>
+      <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra%2C%20I%20want%20current%20availability%20and%20site%20visit%20details%20for%20Stambadri%20Enclave." target="_blank" rel="noopener" class="real-land-step">
+        <strong>04</strong>
+        <span>Direct Contact</span>
+        <small>WhatsApp sales with a ready enquiry message.</small>
+      </a>
+    </div>
+  </div>
+
   <div class="land-view-switch" role="group" aria-label="Property viewer">
-    <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer">3D Layout Preview</button>
-    <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase">Plot Showcase (Cards)</button>
-    <button id="view-land" aria-pressed="false" aria-controls="land-explorer">Satellite Land Map</button>
-    <button id="view-cesium" aria-pressed="false" aria-controls="cesium-explorer">🌐 Cesium 3D Globe</button>
-    <span>Interactive architectural tool · Card browser · Satellite survey · Cesium 3D Globe</span>
+    <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer">3D Layout</button>
+    <button id="view-land" aria-pressed="false" aria-controls="land-explorer">Real Satellite Map</button>
+    <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase">Plot Cards</button>
+    <button id="view-cesium" aria-pressed="false" aria-controls="cesium-explorer">Terrain Globe</button>
+    <span>3D model · satellite context · Vastu · direct booking</span>
   </div>
   <p id="layout-loading" role="status" hidden></p>
 
@@ -172,6 +207,10 @@
   <div class="masterplan-shell" id="layout-explorer">
     <aside class="mp-sidebar">
       <h4>Plot Directory</h4>
+      <div class="sidebar-proof">
+        <strong>Live buyer mode</strong>
+        <span>Filter by budget, status, facing, and area. Click any plot to contact sales with the exact plot number.</span>
+      </div>
       <input type="text" id="plot-search" class="mp-search" placeholder="Search plot number, e.g. 114">
 
       <div class="filter-group">
@@ -393,7 +432,7 @@
     <div>
       <span class="land-eyebrow">REGIONAL GEOSPATIAL VIEW</span>
       <h2>Land &amp; surroundings</h2>
-      <p>Khammam regional satellite imagery · Site GPS coordinate mapping</p>
+      <p>Khammam regional satellite imagery · Site GPS coordinate mapping · boundary-ready workflow</p>
     </div>
     <a id="land-external" href="https://www.google.com/maps/@17.24767,80.14368,13z/data=!3m1!1e3" target="_blank" rel="noopener">Open in Google Maps ↗</a>
   </div>
@@ -414,6 +453,11 @@
     </div>
     <div class="land-map-status" id="land-map-status" role="status" aria-live="polite">Loading satellite imagery…</div>
     <div class="land-map-caption">SATELLITE IMAGERY <span>Not live footage or surveyed boundaries</span></div>
+    <div class="land-map-proof-panel">
+      <div><strong>GPS Ready</strong><span>Enter exact site pin when survey coordinates are available.</span></div>
+      <div><strong>Boundary Ready</strong><span>Verified GeoJSON boundary can be added without redesign.</span></div>
+      <div><strong>Buyer Safe</strong><span>Imagery is context, not legal proof or ownership record.</span></div>
+    </div>
   </div>
   <div class="land-map-footer">
     <form id="land-coordinate-form">

@@ -291,7 +291,7 @@ class TelanganaGenAIAssistant {
         • <strong>??????:</strong> 1800 ?.?????? ????? 3000 ?.?????? ????<br>
         • <strong>???.?.???.? (RERA) ?????:</strong> P02400005892<br>
         • <strong>??:</strong> ????? ??????? ?18,500 ????????<br><br>
-        ?? ?????? ??????????? ??????? ?????????: <a href="https://wa.me/919000000000?text=Hi%20GV%20Infra,%20I%20want%20plot%20details" target="_blank" style="color:#15803d; font-weight:700;">WhatsApp Click ?</a>
+        ?? ?????? ??????????? ??????? ?????????: <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra,%20I%20want%20plot%20details" target="_blank" style="color:#15803d; font-weight:700;">WhatsApp Click ?</a>
       `;
     }
 
@@ -322,7 +322,7 @@ class TelanganaGenAIAssistant {
       return `
         ?? <strong>Instant Automated WhatsApp Site Visit Booking:</strong><br><br>
         Click below to instantly launch WhatsApp with pre-filled site visit details:<br><br>
-        <a href="https://wa.me/919000000000?text=Hi%20GV%20Infra,%20I%20would%20like%20to%20book%20a%20site%20visit%20for%20Stambadri%20Enclave" target="_blank" style="background:#16a34a; color:white; padding:8px 14px; border-radius:8px; text-decoration:none; display:inline-block; font-weight:bold;">
+        <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra,%20I%20would%20like%20to%20book%20a%20site%20visit%20for%20Stambadri%20Enclave" target="_blank" style="background:#16a34a; color:white; padding:8px 14px; border-radius:8px; text-decoration:none; display:inline-block; font-weight:bold;">
           ?? Open WhatsApp Direct Chat ?
         </a>
       `;

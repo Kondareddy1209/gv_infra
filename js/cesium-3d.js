@@ -126,7 +126,7 @@ class CesiumLandViewer {
             <p><strong>Asking Price:</strong> ?${Number(p.priceTotal).toLocaleString("en-IN")}</p>
             <p><strong>Facing:</strong> ${p.facing} Facing</p>
             <p><strong>Status:</strong> <span style="background:#dcfce7; color:#166534; padding:2px 8px; border-radius:10px; font-weight:bold;">${p.status.toUpperCase()}</span></p>
-            <a href="https://wa.me/919000000000?text=Hi%20GV%20Infra,%20I%20want%20details%20about%20${encodeURIComponent(p.title)}" target="_blank" style="background:#16a34a; color:white; padding:8px 14px; border-radius:8px; text-decoration:none; display:inline-block; font-weight:bold; margin-top:10px;">
+            <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra,%20I%20want%20details%20about%20${encodeURIComponent(p.title)}" target="_blank" style="background:#16a34a; color:white; padding:8px 14px; border-radius:8px; text-decoration:none; display:inline-block; font-weight:bold; margin-top:10px;">
               ?? Chat on WhatsApp Direct ?
             </a>
           </div>

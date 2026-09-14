@@ -70,17 +70,17 @@ class NonTechEasyMode {
         }
       </style>
       <div class="easy-action-bar">
-        <a href="https://wa.me/919000000000?text=Hi%20GV%20Infra,%20I%20want%20to%20see%20Stambadri%20Enclave%20land%20photos%20and%20prices." target="_blank" class="easy-btn btn-wa-easy">
-          ?? <span>WhatsApp</span>
+        <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra,%20I%20want%20to%20see%20Stambadri%20Enclave%20land%20photos%20and%20prices." target="_blank" class="easy-btn btn-wa-easy">
+          💬 <span>WhatsApp</span>
         </a>
-        <a href="tel:+919000000000" class="easy-btn btn-call-easy">
-          ?? <span>Call Sales</span>
+        <a href="tel:+919392887268" class="easy-btn btn-call-easy">
+          📞 <span>Call Sales</span>
         </a>
         <a href="https://maps.google.com/?q=17.24767,80.14368" target="_blank" class="easy-btn btn-nav-easy">
-          ?? <span>Drive to Land</span>
+          📍 <span>Drive to Land</span>
         </a>
         <button id="btn-telugu-audio" class="easy-btn btn-audio-easy">
-          ?? <span>??????</span>
+          🔊 <span>వినండి</span>
         </button>
       </div>
     `;

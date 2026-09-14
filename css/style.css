@@ -602,6 +602,71 @@ p {
   transition: color 0.22s ease;
 }
 
+@media (max-width: 1140px) {
+  .nav-links {
+    display: none !important;
+  }
+  .nav-mobile-toggle {
+    display: flex !important;
+  }
+}
+
+/* ---------------- 3D Hero Video Background & Scrim Overlay ---------------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 82vh;
+}
+
+.hero-video-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
+  filter: brightness(0.65) contrast(1.1);
+  will-change: transform;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.78) 0%,
+    rgba(15, 23, 42, 0.60) 50%,
+    rgba(15, 23, 42, 0.92) 100%
+  );
+  z-index: 1;
+}
+
+.hero .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+}
+
+.hero p.lede {
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
 
 
 /* ---------------- Architectural Buttons ---------------- */
@@ -915,6 +980,25 @@ p {
   fill: #9AE6B4;
 }
 
+.hero-reality-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.hero-reality-strip span {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(13, 20, 24, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-xs);
+  padding: 6px 11px;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
 /* ---------------- Hero Architectural Visual ---------------- */
 .hero-visual {
   width: 100%;
@@ -1143,6 +1227,83 @@ p {
 
 .ticker-divider {
   color: var(--stone-line);
+}
+
+.project-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.real-land-command {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr);
+  gap: 28px;
+  align-items: stretch;
+  margin: 0 0 26px;
+  padding: 24px;
+  background: #FFFFFF;
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-s);
+  box-shadow: var(--shadow-subtle);
+}
+
+.real-land-command h2 {
+  font-size: clamp(1.45rem, 2.3vw, 2rem);
+  max-width: 16ch;
+}
+
+.real-land-command p {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: var(--ink-body);
+}
+
+.real-land-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.real-land-step {
+  display: grid;
+  align-content: start;
+  min-height: 154px;
+  text-align: left;
+  background: var(--surface-soft);
+  border: 1px solid var(--stone-line);
+  border-radius: var(--radius-s);
+  padding: 14px;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.real-land-step:hover {
+  transform: translateY(-2px);
+  border-color: var(--brand-forest-light);
+  background: #FFFFFF;
+}
+
+.real-land-step strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--accent-bronze);
+  line-height: 1;
+}
+
+.real-land-step span {
+  margin-top: 12px;
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: var(--ink);
+}
+
+.real-land-step small {
+  display: block;
+  margin-top: 7px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
 /* ---------------- Sections Rhythm & Alternating Grounds ---------------- */
@@ -2734,6 +2895,29 @@ footer {
   margin-bottom: 16px;
 }
 
+.sidebar-proof {
+  display: grid;
+  gap: 4px;
+  margin: -4px 0 14px;
+  padding: 12px;
+  background: var(--brand-forest-surface);
+  border: 1px solid rgba(20, 54, 40, 0.14);
+  border-radius: var(--radius-s);
+}
+
+.sidebar-proof strong {
+  font-size: 0.78rem;
+  color: var(--brand-forest);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sidebar-proof span {
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--ink-body);
+}
+
 .mp-search {
   width: 100%;
   padding: 10px 14px;
@@ -3820,6 +4004,15 @@ footer {
     gap: 36px;
   }
 
+  .real-land-command {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .real-land-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .masterplan-shell {
     grid-template-columns: 1fr;
     min-height: unset;
@@ -4033,6 +4226,18 @@ footer {
 
   .hero h1 {
     font-size: 2.3rem;
+  }
+
+  .project-hero-actions .btn {
+    width: 100%;
+  }
+
+  .real-land-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .real-land-step {
+    min-height: 118px;
   }
 
   .editorial-section {

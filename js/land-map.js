@@ -240,6 +240,30 @@ function bindControls() {
   if ($('view-model')) $('view-model').addEventListener('click', () => switchView('model'));
   if ($('view-showcase')) $('view-showcase').addEventListener('click', () => switchView('showcase'));
   if ($('view-cesium')) $('view-cesium').addEventListener('click', () => switchView('cesium'));
+  document.querySelectorAll('[data-switch-view]').forEach((trigger) => {
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      const targetView = trigger.dataset.switchView;
+      switchView(targetView);
+      $(sectionForView(targetView))?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+  if ($('hero-open-land')) {
+    $('hero-open-land').addEventListener('click', (event) => {
+      event.preventDefault();
+      switchView('land');
+      $('land-explorer')?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  }
+  if ($('command-vastu')) {
+    $('command-vastu').addEventListener('click', () => {
+      switchView('model').then(() => {
+        const vastuButton = $('btn-vastu');
+        if (vastuButton && !vastuButton.classList.contains('active')) vastuButton.click();
+        $('layout-explorer')?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      });
+    });
+  }
 
   if ($('land-2d')) $('land-2d').addEventListener('click', () => setMapMode('2d'));
   if ($('land-3d')) $('land-3d').addEventListener('click', () => setMapMode('3d'));
@@ -331,6 +355,10 @@ function bindControls() {
   if ($('land-coordinates')) {
     $('land-coordinates').addEventListener('input', (e) => e.target.setCustomValidity(''));
   }
+}
+
+function sectionForView(view) {
+  return { land: 'land-explorer', model: 'layout-explorer', showcase: 'plot-showcase', cesium: 'cesium-explorer' }[view] || 'layout-explorer';
 }
 
 // Initialize land-map UI from centralized location configuration
