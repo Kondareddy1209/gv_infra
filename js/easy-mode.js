@@ -16,8 +16,6 @@ class NonTechEasyMode {
 
   initUI() {
     this.renderFloatingActionBar();
-    this.renderEasyModeToggle();
-    this.bindEvents();
   }
 
   // Floating Action Bar for Non-Tech Users (Fixed at bottom on Mobile/Desktop)
@@ -94,53 +92,12 @@ class NonTechEasyMode {
     });
   }
 
-  // Easy Mode Toggle Button in Sub-header
-  renderEasyModeToggle() {
-    const header = document.querySelector("header .wrap") || document.querySelector(".land-view-switch");
-    if (!header || document.getElementById("toggle-easy-mode")) return;
-
-    const toggleWrap = document.createElement("div");
-    toggleWrap.id = "toggle-easy-mode";
-    toggleWrap.style.cssText = "margin-top: 14px; display: inline-flex; align-items: center; gap: 10px; background: #FEF3C7; border: 1px solid #F59E0B; padding: 8px 16px; border-radius: 50px;";
-    toggleWrap.innerHTML = `
-      <span style="font-weight: 700; color: #B45309; font-size: 0.85rem;">? Non-Tech Buyer View:</span>
-      <button id="btn-toggle-easy" style="background: #16A34A; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
-        ?? Simple Visual Mode ON
-      </button>
-    `;
-    header.appendChild(toggleWrap);
-  }
-
-  bindEvents() {
-    const btn = document.getElementById("btn-toggle-easy");
-    if (btn) {
-      btn.addEventListener("click", () => {
-        this.isEasyMode = !this.isEasyMode;
-        btn.textContent = this.isEasyMode ? "?? Simple Visual Mode ON" : "? Standard View";
-        btn.style.background = this.isEasyMode ? "#16A34A" : "#64748B";
-        this.applyEasyModeUI();
-      });
-    }
-  }
-
-  applyEasyModeUI() {
-    const sidebar = document.querySelector(".mp-sidebar");
-    if (sidebar) {
-      sidebar.style.display = this.isEasyMode ? "none" : "block";
-    }
-    const canvasArea = document.querySelector(".mp-canvas-area");
-    if (canvasArea) {
-      canvasArea.style.width = this.isEasyMode ? "100%" : "";
-    }
-  }
-
   playTeluguAudio() {
     const msg = new SpeechSynthesisUtterance();
-    msg.text = "????????! ??.?? ?????? ???????????? ?????????? ????????? ?? ???????. ??? ?????-????? ?????? ???? ????? ??.??.??.?? ????? ???.?.???.? ????????? ????? ??????? ??????. ????? ???? ??????? ???? ??????? ????. ?????? ???????? ???????? ???? ???? ??????.";
+    msg.text = "నమస్కారం! జి.వి ఇంఫ్రా ప్రాజెక్ట్స్ స్తంభాద్రి ఎన్క్లేవ్ కి స్వాగతం. ఇది ఖమ్మం-కోదాడ నేషనల్ హైవే పక్కన డి.టి.సి.పి మరియు ఆర్.ఇ.ఆర్.ఎ ఆమోదించిన ఓపెన్ ప్లాట్ల వెంచర్. అన్ని రకాల బ్యాంక్ లోన్ సదుపాయం కలదు. పూర్తి వివరాలకు వాట్సాప్ లేదా కాల్ చేయండి.";
     msg.lang = "te-IN";
     msg.rate = 0.9;
     window.speechSynthesis.speak(msg);
-    alert("?? ???? ????????: ??.?? ?????? ??????? ??????? (?????? ??????)");
   }
 }
 
