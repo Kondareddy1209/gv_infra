@@ -27,13 +27,35 @@ const GV_DATA = (() => {
     name: "GV Infra Projects",
     tagline: "DTCP Open Plots & Constructions",
     md: "G. Surya Teja — Managing Director",
-    phone: "+91 90000 00000", // placeholder — not published as plain text on the real site
-    whatsapp: "919000000000", // digits only, country code, no + or spaces — used in wa.me links
+    phone: "+91 9392887268",
+    whatsapp: "919392887268", // normalized digits only (country code 91 + 10 digits)
     email: "info@gvinfraprojects.com",
     hqAddress: "#5-5-140/1, 1st Floor, Nustar Bhavan, Opp. Mangalya Shopping Mall, Vanastalipuram, Hyderabad – 500070",
     khammamOffice: "Star Complex, 5th Floor #501, Opp. HP Petrol Bunk, Raparthi Nagar, Khammam – 507002",
     website: "https://www.gvinfraprojects.com",
     hours: "Mon–Sat, 9:30 AM – 6:30 PM",
+  };
+
+  // ===========================================================
+  // PROJECT LOCATION CONFIGURATION - Single Source of Truth
+  // ===========================================================
+  // Coordinates are [longitude, latitude] in WGS84 decimal degrees
+  // verified: true = independently surveyed/legal boundary
+  // type: "regional" = regional centre estimate, "verified" = survey boundary
+  const PROJECT_LOCATION = {
+    name: "Regional Centre",
+    locality: "Gurralapadu",
+    city: "Khammam",
+    district: "Khammam",
+    state: "Telangana",
+    country: "India",
+    coordinates: {
+      center: [80.14368, 17.24767], // Regional estimate [lng, lat]
+      verified: false,
+      type: "regional",
+      source: "Regional centre around Khammam / Gurralapadu area — not independently verified as exact project location"
+    },
+    boundary: null, // GeoJSON Polygon or MultiPolygon when verified survey available
   };
 
   const PROJECT = {
@@ -188,10 +210,37 @@ const GV_DATA = (() => {
 
   const STORAGE_KEY = "gv_infra_plots_v1";
 
+  function sanitizePlotPrices(plots) {
+    // Guard against corrupted price values (e.g., INR-formatted strings, NaN, Infinity)
+    // If a price is invalid we re-derive it from area * pricePerSqft from original build
+    return plots.map(p => {
+      let price = typeof p.price === 'string'
+        ? Number(String(p.price).replace(/[^0-9.-]/g, ''))
+        : Number(p.price);
+      if (!isFinite(price) || price <= 0 || price > 999999999) {
+        // Re-derive from the same deterministic formula used in buildPlots
+        const seed = (p.row !== undefined && p.col !== undefined) ? (p.row * 8 + p.col + 1) : p.plotNumber;
+        const pps = p.pricePerSqft && p.pricePerSqft > 0 ? Math.round(p.pricePerSqft) : (950 + Math.floor(Math.abs(Math.sin(seed * 9973.13) * 10000) % 300));
+        price = Math.round((p.area || 2000) * pps);
+      }
+      return { ...p, price: Math.round(price) };
+    });
+  }
+
   function loadPlots() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { /* fall through to regenerate */ }
+      try {
+        const parsed = JSON.parse(saved);
+        const sanitized = sanitizePlotPrices(parsed);
+        // If any prices were corrupted and fixed, re-save the clean data
+        const hadCorruption = parsed.some((p, i) => p.price !== sanitized[i].price);
+        if (hadCorruption) {
+          savePlots(sanitized);
+          console.info('[GV_DATA] Detected and fixed corrupted plot prices in localStorage.');
+        }
+        return sanitized;
+      } catch (e) { /* fall through to regenerate */ }
     }
     const fresh = buildPlots();
     savePlots(fresh);
@@ -204,10 +253,107 @@ const GV_DATA = (() => {
 
   let plotCache = loadPlots();
 
+  const MASTERPLAN_DEMO_KEY = "gv_infra_masterplan_demo_v1";
+  const DEFAULT_MASTERPLAN_DEMO = {
+    displayName: PROJECT.name,
+    overlayVisible: true,
+    overlayScale: 1,
+    showRoads: true,
+    showOpenSpaces: true,
+    showAmenities: true,
+    mapZoom: 14.5,
+    showMapLabels: true,
+    showMapControls: true,
+    defaultMode: "2d"
+  };
+
+  function readMasterplanDemo() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(MASTERPLAN_DEMO_KEY) || "null");
+      const config = { ...DEFAULT_MASTERPLAN_DEMO, ...(saved && typeof saved === "object" ? saved : {}) };
+      config.displayName = String(config.displayName || DEFAULT_MASTERPLAN_DEMO.displayName).trim().slice(0, 80) || DEFAULT_MASTERPLAN_DEMO.displayName;
+      config.overlayScale = Math.min(1.35, Math.max(0.75, Number(config.overlayScale) || 1));
+      config.mapZoom = Math.min(17, Math.max(12, Number(config.mapZoom) || DEFAULT_MASTERPLAN_DEMO.mapZoom));
+      config.defaultMode = config.defaultMode === "3d" ? "3d" : "2d";
+      ["overlayVisible", "showRoads", "showOpenSpaces", "showAmenities", "showMapLabels", "showMapControls"].forEach((key) => {
+        config[key] = config[key] !== false;
+      });
+      return config;
+    } catch (error) {
+      return { ...DEFAULT_MASTERPLAN_DEMO };
+    }
+  }
+
+  function saveMasterplanDemo(config) {
+    localStorage.setItem(MASTERPLAN_DEMO_KEY, JSON.stringify(config));
+  }
+
+  // Expose location configuration as the single source of truth for project coordinates
+  function getProjectLocation() {
+    return PROJECT_LOCATION;
+  }
+
+  function getProjectCenter() {
+    return PROJECT_LOCATION.coordinates.center;
+  }
+
+  function getExternalMapLink(lng, lat, zoom = 13) {
+    return `https://www.google.com/maps/@${lat},${lng},${zoom}z/data=!3m1!1e3`;
+  }
+
+  function getProjectBoundary() {
+    return PROJECT_LOCATION.boundary;
+  }
+
+  // Check whether verified boundary GeoJSON exists
+  function hasVerifiedBoundary() {
+    const boundary = PROJECT_LOCATION.boundary;
+    return boundary &&
+      typeof boundary.type === 'string' &&
+      (boundary.type === 'Polygon' || boundary.type === 'MultiPolygon') &&
+      Array.isArray(boundary.coordinates) &&
+      boundary.coordinates.length > 0;
+  }
+
+  function isLocationVerified() {
+    return PROJECT_LOCATION.coordinates.verified === true;
+  }
+
   return {
     company: COMPANY,
     project: PROJECT,
     otherProjects: OTHER_PROJECTS,
+
+    // Geospatial helpers — single source of truth for location data
+    getProjectLocation,
+    getProjectCenter,
+    getExternalMapLink,
+    getProjectBoundary,
+    hasVerifiedBoundary,
+    isLocationVerified,
+
+    getMasterplanDemo() {
+      return readMasterplanDemo();
+    },
+
+    updateMasterplanDemo(updates) {
+      const clean = { ...readMasterplanDemo(), ...(updates || {}) };
+      clean.displayName = String(clean.displayName || DEFAULT_MASTERPLAN_DEMO.displayName).trim().slice(0, 80) || DEFAULT_MASTERPLAN_DEMO.displayName;
+      clean.overlayScale = Math.min(1.35, Math.max(0.75, Number(clean.overlayScale) || 1));
+      clean.mapZoom = Math.min(17, Math.max(12, Number(clean.mapZoom) || DEFAULT_MASTERPLAN_DEMO.mapZoom));
+      clean.defaultMode = clean.defaultMode === "3d" ? "3d" : "2d";
+      ["overlayVisible", "showRoads", "showOpenSpaces", "showAmenities", "showMapLabels", "showMapControls"].forEach((key) => {
+        clean[key] = clean[key] !== false;
+      });
+      saveMasterplanDemo(clean);
+      return clean;
+    },
+
+    resetMasterplanDemo() {
+      const clean = { ...DEFAULT_MASTERPLAN_DEMO };
+      saveMasterplanDemo(clean);
+      return clean;
+    },
 
     getPlots() {
       return plotCache;
@@ -246,7 +392,13 @@ const GV_DATA = (() => {
     updatePlotPrice(id, price) {
       const plot = plotCache.find(p => p.id === id);
       if (plot) {
-        plot.price = price;
+        // Always enforce clean integer storage — reject strings, NaN, Infinity, or out-of-range values
+        const cleanPrice = Math.round(Number(price));
+        if (!isFinite(cleanPrice) || cleanPrice <= 0 || cleanPrice > 999999999) {
+          console.warn('[GV_DATA] Rejected invalid price update:', price);
+          return plot;
+        }
+        plot.price = cleanPrice;
         plot.lastUpdated = new Date().toISOString().slice(0, 10);
         savePlots(plotCache);
       }
@@ -272,6 +424,17 @@ const GV_DATA = (() => {
     getLeads() {
       const raw = localStorage.getItem(this.LEADS_KEY);
       return raw ? JSON.parse(raw) : [];
+    },
+
+    updateLeadStatus(id, status) {
+      const leads = this.getLeads();
+      const lead = leads.find(l => (l.id && l.id === id) || (l.createdAt && l.createdAt === id));
+      if (lead) {
+        lead.status = status;
+        lead.updatedAt = new Date().toISOString();
+        localStorage.setItem(this.LEADS_KEY, JSON.stringify(leads));
+      }
+      return lead;
     },
 
     // --- Helpers ---
@@ -334,100 +497,47 @@ const GV_DATA = (() => {
       return "₹" + Math.round(amount).toLocaleString("en-IN");
     },
 
-    waLink(message) {
-      return `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(message)}`;
-    },
-
-    telLink() {
-      return `tel:${COMPANY.phone.replace(/\s+/g, "")}`;
-    },
-
-    // --- Admin Interactive Land Parcels Storage & Sync ---
-    getAdminParcels() {
-      const stored = localStorage.getItem('gv_admin_parcels');
-      if (stored) {
-        try {
-          return JSON.parse(stored);
-        } catch (e) {
-          console.error('[GV_DATA] Failed to parse admin parcels:', e);
-        }
+    normalizePhone(phone, defaultCountry = "91") {
+      if (!phone) return "";
+      let digits = String(phone).replace(/\D/g, "");
+      if (!digits) return "";
+      // Remove leading zeroes
+      digits = digits.replace(/^0+/, "");
+      // Remove duplicated country code (e.g. 91919392887268 -> 919392887268)
+      if (digits.length === 14 && digits.startsWith(defaultCountry + defaultCountry)) {
+        digits = digits.slice(defaultCountry.length);
       }
-      // Initial default admin-marked land boundaries for demo
-      const defaults = [
-        {
-          id: 'admin_parcel_1',
-          title: 'Stambadri Enclave Phase 1 - Prime BT Road Parcel',
-          surveyNo: '138/A, 139/A',
-          district: 'Khammam',
-          mandal: 'Khammam Rural',
-          village: 'Gurralapadu',
-          areaAcres: 5.20,
-          areaSqYds: 25168,
-          priceTotal: 46500000,
-          pricePerSqYd: 18500,
-          facing: 'East',
-          status: 'available',
-          owner: 'GV Infra Projects',
-          coordinates: [
-            [80.14300, 17.24700],
-            [80.14520, 17.24700],
-            [80.14520, 17.24920],
-            [80.14300, 17.24920],
-            [80.14300, 17.24700]
-          ],
-          createdAt: new Date().toISOString()
-        },
-        {
-          id: 'admin_parcel_2',
-          title: 'Gurralapadu Commercial Highway Frontage',
-          surveyNo: '141/5/A, 142/2',
-          district: 'Khammam',
-          mandal: 'Khammam Rural',
-          village: 'Gurralapadu',
-          areaAcres: 3.10,
-          areaSqYds: 15004,
-          priceTotal: 33000000,
-          pricePerSqYd: 22000,
-          facing: 'North',
-          status: 'reserved',
-          owner: 'GV Infra Commercial',
-          coordinates: [
-            [80.14180, 17.24520],
-            [80.14350, 17.24520],
-            [80.14350, 17.24680],
-            [80.14180, 17.24680],
-            [80.14180, 17.24520]
-          ],
-          createdAt: new Date().toISOString()
-        }
-      ];
-      localStorage.setItem('gv_admin_parcels', JSON.stringify(defaults));
-      return defaults;
-    },
-
-    saveAdminParcel(parcel) {
-      const parcels = this.getAdminParcels();
-      if (!parcel.id) {
-        parcel.id = 'admin_parcel_' + Date.now();
-        parcel.createdAt = new Date().toISOString();
-        parcels.push(parcel);
-      } else {
-        const idx = parcels.findIndex(p => p.id === parcel.id);
-        if (idx !== -1) {
-          parcels[idx] = parcel;
-        } else {
-          parcels.push(parcel);
-        }
+      // If exactly 10 digits (standard Indian mobile number without country code)
+      if (digits.length === 10) {
+        digits = defaultCountry + digits;
       }
-      localStorage.setItem('gv_admin_parcels', JSON.stringify(parcels));
-      return parcels;
+      return digits;
     },
 
-    deleteAdminParcel(id) {
-      let parcels = this.getAdminParcels();
-      parcels = parcels.filter(p => p.id !== id);
-      localStorage.setItem('gv_admin_parcels', JSON.stringify(parcels));
-      return parcels;
-    }
+    buildWhatsAppUrl(phone, message) {
+      const targetPhone = this.normalizePhone(phone || COMPANY.whatsapp || "919392887268");
+      if (!targetPhone) return "#";
+      if (message && String(message).trim()) {
+        return `https://wa.me/${targetPhone}?text=${encodeURIComponent(String(message).trim())}`;
+      }
+      return `https://wa.me/${targetPhone}`;
+    },
+
+    waLink(message, phone) {
+      return this.buildWhatsAppUrl(phone || COMPANY.whatsapp, message);
+    },
+
+    telLink(phone) {
+      const digits = this.normalizePhone(phone || COMPANY.phone || "919392887268");
+      return `tel:+${digits}`;
+    },
   };
 })();
+
+// Globally expose centralized WhatsApp utilities and data layer
+if (typeof window !== "undefined") {
+  window.GV_DATA = GV_DATA;
+  window.normalizeWhatsAppPhone = (phone, country) => GV_DATA.normalizePhone(phone, country);
+  window.buildWhatsAppUrl = (phone, msg) => GV_DATA.buildWhatsAppUrl(phone, msg);
+}
+

@@ -1,250 +1,336 @@
 /* ============================================================
-   Premium Plot Showcase — card grid, flip cards, comparison tray.
-   Loaded only by project.html, alongside css/style.css (reuses its
-   .compare-modal / .compare-table / .finder-select / .btn-* rules).
+   GV INFRA PROJECTS — Architectural Plot Showcase & Inventory Sheets
+   Design: Premium Property Inventory Sheets (project.html)
    ============================================================ */
 
-.plot-showcase { margin-top: 32px; }
+.plot-showcase {
+  margin-top: 36px;
+}
 
 .showcase-head {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 18px;
-  margin-bottom: 18px;
+  gap: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--stone-line);
+  padding-bottom: 20px;
 }
-.showcase-head h2 { font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); margin-top: 4px; }
-.showcase-head p { font-size: 0.88rem; color: var(--ink-soft); max-width: 56ch; margin-top: 6px; }
+
+.showcase-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  color: var(--ink);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.showcase-head p {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  max-width: 58ch;
+  margin-top: 6px;
+}
 
 .showcase-filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .showcase-count {
   font-size: 0.8rem;
   color: var(--ink-soft);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   line-height: 1.5;
+  font-weight: 500;
 }
 
+/* ---- Plot Grid ---- */
 .showcase-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
 }
 
 .sc-empty {
   grid-column: 1 / -1;
   text-align: center;
   color: var(--ink-soft);
-  padding: 40px 20px;
+  padding: 48px 24px;
   background: var(--surface-soft);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-xs);
   border: 1px dashed var(--stone-line);
+  font-size: 0.95rem;
 }
 
-/* ---- Flip card ---- */
-.sc-card { perspective: 1200px; height: 240px; }
+/* ---- Architectural Inventory Card ---- */
+.sc-card {
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+  min-height: 440px;
+  height: 440px;
+  cursor: pointer;
+  position: relative;
+}
+
 .sc-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.5s cubic-bezier(.4, .2, .2, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
   transform-style: preserve-3d;
-  border-radius: var(--radius-m);
-  box-shadow: var(--shadow-1);
+  -webkit-transform-style: preserve-3d;
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-subtle);
 }
-.sc-card.flipped .sc-card-inner { transform: rotateY(180deg); }
 
-/* Hover-to-flip on devices that actually have a pointer — touch keeps the explicit button instead. */
-@media (hover: hover) and (pointer: fine) {
-  .sc-card:hover .sc-card-inner { transform: rotateY(180deg); }
+.sc-card:hover .sc-card-inner {
+  box-shadow: var(--shadow-editorial);
+  transform: translateY(-2px);
+}
+
+.sc-card.flipped .sc-card-inner,
+.sc-card.selected .sc-card-inner {
+  transform: rotateY(180deg);
+}
+.sc-card.flipped:hover .sc-card-inner,
+.sc-card.selected:hover .sc-card-inner {
+  transform: rotateY(180deg) translateY(-2px);
 }
 
 .sc-card-face {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-xs);
   border: 1px solid var(--stone-line);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: #FFFFFF;
+  box-sizing: border-box;
 }
 
-.sc-card-front { justify-content: flex-end; }
-.sc-card-back {
-  transform: rotateY(180deg);
-  background: var(--bg-raised);
-  padding: 16px;
+/* Front Face: Property Inventory Sheet Summary */
+.sc-card-front {
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+  z-index: 2;
+  padding: 24px;
+  justify-content: space-between;
+}
+
+.sc-front-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--stone-hairline);
+  padding-bottom: 14px;
+}
+
+.sc-plot-no {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.sc-plot-block {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 4px;
 }
 
 .sc-status-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  color: #fff;
   font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: var(--radius-xs);
+  color: #FFFFFF;
+}
+
+.sc-front-body {
+  margin: auto 0;
+}
+
+.sc-plot-specs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--stone-hairline);
+}
+.sc-plot-spec-item .k {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+.sc-plot-spec-item .v {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+.sc-plot-price {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--brand-forest);
+  line-height: 1.1;
+}
+.sc-plot-rate {
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.sc-front-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--stone-line);
+  padding-top: 14px;
 }
 
 .sc-flip-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 2;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--ink);
-  font-size: 0.95rem;
-  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--brand-forest);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 4px 0;
+}
+.sc-flip-btn:hover { color: var(--ink); }
+
+/* Back Face: Specifications Sheet */
+.sc-card-back {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  background: #FFFFFF;
+  padding: 22px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sc-card.selected .sc-card-back,
+.sc-card.flipped .sc-card-back {
+  border-color: var(--brand-forest);
+}
+
+.sc-back-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--stone-hairline);
+  padding-bottom: 12px;
+}
+.sc-back-header .sc-plot-no {
+  font-size: 1.25rem;
+}
+.sc-back-header-right {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
 }
-.sc-flip-btn:hover { background: #fff; }
-.sc-card-back .sc-flip-btn { background: var(--surface-soft); }
 
-.sc-front-body {
-  position: relative;
-  z-index: 1;
-  padding: 12px 14px 14px;
-  background: linear-gradient(0deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.05) 90%);
-  color: #fff;
+.sc-spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 14px 0;
+  font-size: 0.82rem;
 }
-.sc-plot-no { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; }
-.sc-plot-block { font-size: 0.72rem; opacity: 0.85; margin-top: 1px; }
-.sc-plot-dims { font-size: 0.78rem; opacity: 0.9; margin-top: 6px; }
-.sc-plot-price { font-size: 1rem; font-weight: 700; color: #86EFAC; margin-top: 2px; }
+.sc-spec-list > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--stone-hairline);
+  padding-bottom: 6px;
+}
+.sc-spec-list dt {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.sc-spec-list dd {
+  font-weight: 600;
+  color: var(--ink);
+}
+.sc-spec-price {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--brand-forest);
+}
 
-.sc-card-back .sc-plot-no { font-size: 0.95rem; color: var(--ink); margin-bottom: 10px; }
-
-.sc-spec-list { display: grid; gap: 6px; font-size: 0.78rem; }
-.sc-spec-list > div { display: flex; justify-content: space-between; gap: 8px; }
-.sc-spec-list dt { color: var(--ink-soft); }
-.sc-spec-list dd { color: var(--ink); font-weight: 600; }
-
-.sc-back-actions { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
-.sc-back-actions .btn { justify-content: center; }
+.sc-back-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--stone-line);
+  padding-top: 12px;
+}
 
 .sc-compare-check {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   font-size: 0.78rem;
   color: var(--ink-body);
   cursor: pointer;
+  user-select: none;
 }
-.sc-compare-check input { accent-color: var(--brand-green); width: 15px; height: 15px; }
-.sc-compare-check.disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* Premium card animations */
-.sc-card-inner {
-  transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+.sc-compare-check input {
+  accent-color: var(--brand-forest);
+  width: 14px;
+  height: 14px;
 }
-
-.sc-card {
-  animation: fadeInUp 0.5s ease-out;
-  animation-fill-mode: both;
+.sc-compare-check.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
-.sc-card:nth-child(1) { animation-delay: 0.05s; }
-.sc-card:nth-child(2) { animation-delay: 0.1s; }
-.sc-card:nth-child(3) { animation-delay: 0.15s; }
-.sc-card:nth-child(4) { animation-delay: 0.2s; }
-.sc-card:nth-child(5) { animation-delay: 0.25s; }
-.sc-card:nth-child(6) { animation-delay: 0.3s; }
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.sc-card-inner:hover {
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
-}
-
-.sc-flip-btn {
-  transition: all 0.2s ease;
-}
-
-.sc-flip-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
-}
-
-.sc-card-front {
-  background: linear-gradient(135deg, rgba(27, 54, 43, 0.8), rgba(27, 54, 43, 0.95));
-  transition: all 0.3s ease;
-}
-
-.sc-card:hover .sc-card-front {
-  background: linear-gradient(135deg, rgba(27, 54, 43, 0.9), rgba(27, 54, 43, 1));
-}
-
-.showcase-more {
-  animation: fadeInUp 0.5s ease-out;
-  transition: all 0.3s ease;
-}
-
-.showcase-more:hover {
-  transform: translateY(-2px);
-}
-
-/* Mobile optimizations */
-@media (max-width: 600px) {
-  .sc-card { height: 220px; }
-  .showcase-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-}
-
-.showcase-more { margin: 24px auto 0; display: flex; }
-
-/* ---- Comparison tray ---- */
+/* Comparison Floating Tray */
 .compare-tray {
-  position: sticky;
-  bottom: 14px;
-  margin-top: 24px;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--obsidian);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-xs);
+  padding: 12px 24px;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
-  background: rgba(15, 23, 42, 0.94);
-  backdrop-filter: blur(12px);
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
-  font-size: 0.84rem;
+  gap: 18px;
+  z-index: 160;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
 }
-.compare-tray-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.compare-tray-chips {
+  display: flex;
+  gap: 8px;
+}
 .compare-tray-chip {
-  background: rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-full);
-  padding: 3px 11px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
   font-size: 0.76rem;
   font-weight: 600;
-}
-.compare-tray .btn-ghost { color: #fff; }
-.compare-tray .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); }
-
-@media (max-width: 640px) {
-  .showcase-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-  .sc-card { height: 210px; }
-  .compare-tray { flex-direction: column; align-items: stretch; border-radius: var(--radius-m); bottom: 8px; }
 }

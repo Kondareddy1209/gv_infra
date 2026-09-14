@@ -3,7 +3,14 @@ import { initMasterplan } from "./masterplan.js";
 const plots = GV_DATA.getPlots();
 const canvas = document.getElementById("masterplan-canvas");
 
-let activeFilters = { status: "all", facing: "all", size: "all", maxPrice: 8000000, search: "" };
+const urlParams = new URLSearchParams(window.location.search);
+let activeFilters = {
+  status: urlParams.get("status") || "all",
+  facing: urlParams.get("facing") || "all",
+  size: urlParams.get("size") || "all",
+  maxPrice: urlParams.has("price") ? Number(urlParams.get("price")) : 8000000,
+  search: urlParams.get("search") || urlParams.get("plot") || ""
+};
 
 function matchesFilters(plot) {
   if (activeFilters.status !== "all" && plot.status !== activeFilters.status) return false;
@@ -25,7 +32,7 @@ const tooltipEl = document.getElementById("mp-hover-tooltip");
 
 const mp = initMasterplan({
   canvas,
-  onSelectPlot: (plot) => openDrawer(plot),
+  onSelectPlot: (plot) => { if (plot) openDrawer(plot); },
   onHoverPlot: (plot, x, y) => updateTooltip(plot, x, y),
   onHeadingChange: (deg) => { compassDial.style.transform = `rotate(${deg}deg)`; },
 });
@@ -62,6 +69,7 @@ refreshFilter();
 // ---------- Chip & Range Filter Groups ----------
 function wireChipGroup(containerId, key) {
   const el = document.getElementById(containerId);
+  if (!el) return;
   el.addEventListener("click", (e) => {
     const btn = e.target.closest(".chip");
     if (!btn) return;
@@ -75,25 +83,48 @@ wireChipGroup("filter-status", "status");
 wireChipGroup("filter-facing", "facing");
 wireChipGroup("filter-size", "size");
 
+function syncChipUI(containerId, activeVal) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  [...el.children].forEach((c) => {
+    c.classList.toggle("active", c.dataset.value === activeVal);
+  });
+}
+syncChipUI("filter-status", activeFilters.status);
+syncChipUI("filter-facing", activeFilters.facing);
+syncChipUI("filter-size", activeFilters.size);
+
 // Price Range Slider Listener
 const priceSlider = document.getElementById("filter-price");
 const priceValLabel = document.getElementById("price-val-label");
 
-priceSlider.addEventListener("input", (e) => {
-  const val = Number(e.target.value);
-  activeFilters.maxPrice = val;
-  priceValLabel.textContent = val >= 8000000 ? "All Prices" : `Under ${GV_DATA.formatINR(val)}`;
-  refreshFilter();
-});
+if (priceSlider) {
+  if (activeFilters.maxPrice < 8000000) priceSlider.value = activeFilters.maxPrice;
+  priceSlider.addEventListener("input", (e) => {
+    const val = Number(e.target.value);
+    activeFilters.maxPrice = val;
+    priceValLabel.textContent = val >= 8000000 ? "All Prices" : `Under ${GV_DATA.formatINR(val)}`;
+    refreshFilter();
+  });
+}
 
-document.getElementById("plot-search").addEventListener("input", (e) => {
-  activeFilters.search = e.target.value.trim();
-  refreshFilter();
-  if (activeFilters.search.length >= 2) {
+const searchInput = document.getElementById("plot-search");
+if (searchInput) {
+  if (activeFilters.search) searchInput.value = activeFilters.search;
+  searchInput.addEventListener("input", (e) => {
+    activeFilters.search = e.target.value.trim();
+    refreshFilter();
+    if (activeFilters.search.length >= 2) {
+      const match = plots.find(p => String(p.plotNumber) === activeFilters.search);
+      if (match) mp.focusPlot(match.id);
+    }
+  });
+
+  if (activeFilters.search) {
     const match = plots.find(p => String(p.plotNumber) === activeFilters.search);
-    if (match) mp.focusPlot(match.id);
+    if (match) setTimeout(() => { mp.focusPlot(match.id); openDrawer(match); }, 650);
   }
-});
+}
 
 // ---------- Glassmorphic Toolbar Controls ----------
 document.getElementById("btn-reset").addEventListener("click", () => mp.resetView());
@@ -189,7 +220,7 @@ btnActivity?.addEventListener("click", () => {
 btnVr?.addEventListener("click", async () => {
   const active = mp.toggleVRMode();
   btnVr.classList.toggle("active", active);
-  btnVr.textContent = active ? "✕ Exit VR" : "🥽 VR View";
+  btnVr.textContent = active ? "✕ Exit VR" : "VR View";
   const area = canvas.closest(".mp-canvas-area");
   if (active && !document.fullscreenElement) {
     try { await area.requestFullscreen?.(); } catch (_) { /* Fullscreen is optional. */ }
@@ -200,7 +231,7 @@ document.addEventListener("fullscreenchange", () => {
   if (!document.fullscreenElement && btnVr?.classList.contains("active")) {
     mp.toggleVRMode(false);
     btnVr.classList.remove("active");
-    btnVr.textContent = "🥽 VR View";
+    btnVr.textContent = "VR View";
   }
 });
 
@@ -334,7 +365,7 @@ function openDrawer(plot) {
 
   document.getElementById("cta-call").href = GV_DATA.telLink();
   document.getElementById("cta-whatsapp").href = GV_DATA.waLink(
-    `Hi GV Infra, I am interested in Plot ${plot.plotNumber} at Peacock Valley (${plot.area} sq.ft, ${plot.facing} facing). Please share availability and booking details.`
+    `Hi GV Infra, I am interested in Plot ${plot.plotNumber} at ${GV_DATA.project.name} (${plot.area} sq.ft, ${plot.facing} facing). Please share availability and booking details.`
   );
 
   drawer.classList.add("open");
@@ -345,28 +376,43 @@ function openDrawer(plot) {
 function closeDrawer() {
   drawer.classList.remove("open");
   scrim.classList.remove("open");
+  currentPlot = null;
+  mp.selectPlot(null);
 }
 
 document.getElementById("drawer-close").addEventListener("click", closeDrawer);
 scrim.addEventListener("click", closeDrawer);
 
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    if (drawer.classList.contains("open")) closeDrawer();
+    const droneModal = document.getElementById("drone-modal");
+    if (droneModal && droneModal.classList.contains("open")) droneModal.classList.remove("open");
+    const compModal = document.getElementById("compare-modal");
+    if (compModal && compModal.classList.contains("open")) compModal.classList.remove("open");
+  }
+});
+
 document.getElementById("cta-visit").addEventListener("click", () => {
+  if (!currentPlot) return;
   const name = prompt("Your name, to book a site visit:");
-  if (!name) return;
+  if (!name || !name.trim()) return;
   const phone = prompt("Your phone number:");
-  if (!phone) return;
+  if (!phone || !phone.trim()) return;
   GV_DATA.saveLead({
-    name, phone,
+    name: name.trim(),
+    phone: phone.trim(),
     project: GV_DATA.project.name,
-    plot: currentPlot?.plotNumber,
+    plot: currentPlot.plotNumber,
     source: "website_3d_masterplan",
     status: "site_visit_booked",
   });
   logInteraction("site_visit_request", currentPlot);
-  alert(`Thanks ${name} — we've noted your interest in Plot ${currentPlot.plotNumber}. Our sales team will call you to confirm a date.`);
+  alert(`Thanks ${name.trim()} — we've noted your interest in Plot ${currentPlot.plotNumber} at ${GV_DATA.project.name}. Our sales team will call you to confirm a date.`);
 });
 
 document.getElementById("cta-save").addEventListener("click", () => {
+  if (!currentPlot) return;
   const saved = JSON.parse(localStorage.getItem("gv_saved_plots") || "[]");
   if (!saved.includes(currentPlot.id)) saved.push(currentPlot.id);
   localStorage.setItem("gv_saved_plots", JSON.stringify(saved));

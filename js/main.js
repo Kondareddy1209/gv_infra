@@ -196,6 +196,61 @@ document.addEventListener("DOMContentLoaded", () => {
     updateMatchCount();
   }
 
+  // 3b. Header SEARCH Trigger Logic (Desktop, Tablet, Mobile)
+  function setupHeaderSearch() {
+    const searchBtns = document.querySelectorAll(".nav-search-btn");
+
+    function triggerSearchFocus() {
+      const finderEl = document.getElementById("finder");
+      if (finderEl) {
+        const header = document.querySelector(".site-nav");
+        const headerHeight = header ? header.offsetHeight : 98;
+        const targetY = finderEl.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
+
+        window.scrollTo({
+          top: Math.max(0, targetY),
+          behavior: "smooth"
+        });
+
+        // Spotlight highlight effect
+        finderEl.classList.add("finder-spotlight");
+        setTimeout(() => finderEl.classList.remove("finder-spotlight"), 2200);
+
+        // Programmatically focus primary filter input
+        const primaryInput = document.getElementById("hp-finder-facing") || document.getElementById("hp-finder-size");
+        if (primaryInput) {
+          setTimeout(() => {
+            primaryInput.focus({ preventScroll: true });
+          }, 350);
+        }
+
+        // Close mobile drawer if open
+        const mobilePanel = document.getElementById("mobile-nav-panel");
+        if (mobilePanel && mobilePanel.classList.contains("open")) {
+          mobilePanel.classList.remove("open");
+          document.body.classList.remove("menu-open");
+        }
+      } else {
+        // Subpages redirect to homepage finder with hash
+        window.location.href = "index.html#finder";
+      }
+    }
+
+    searchBtns.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        triggerSearchFocus();
+      });
+    });
+
+    // If navigated from subpage with #finder hash
+    if (window.location.hash === "#finder") {
+      setTimeout(triggerSearchFocus, 400);
+    }
+  }
+
+  setupHeaderSearch();
+
   // 4. Homepage Interactive Investment & EMI Calculator Logic
   const calcSize = document.getElementById("hp-calc-size");
   const calcRate = document.getElementById("hp-calc-rate");
@@ -272,6 +327,58 @@ document.addEventListener("DOMContentLoaded", () => {
         playPauseBtn.textContent = "▶";
         playPauseBtn.setAttribute("aria-label", "Play promotional video");
       }
+    });
+  }
+
+  // 7. Site Navigation Scroll State & Mobile Navigation Panel
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  const siteNav = document.getElementById("site-nav");
+  if (siteNav) {
+    const handleScroll = () => {
+      const scrollPos = window.pageYOffset || document.documentElement.scrollTop || window.scrollY || 0;
+      if (scrollPos > 30) {
+        siteNav.classList.add("nav-scrolled");
+      } else {
+        siteNav.classList.remove("nav-scrolled");
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("DOMContentLoaded", handleScroll);
+    window.addEventListener("load", handleScroll);
+    window.addEventListener("pageshow", () => {
+      if (!window.location.hash) {
+        window.scrollTo(0, 0);
+        handleScroll();
+      }
+    });
+    handleScroll();
+  }
+
+  const mobileToggle = document.getElementById("nav-mobile-toggle");
+  const mobilePanel = document.getElementById("mobile-nav-panel");
+  const mobileClose = document.getElementById("mobile-nav-close");
+
+  if (mobileToggle && mobilePanel) {
+    mobileToggle.addEventListener("click", () => {
+      mobilePanel.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+  }
+  if (mobileClose && mobilePanel) {
+    mobileClose.addEventListener("click", () => {
+      mobilePanel.classList.remove("open");
+      document.body.style.overflow = "";
+    });
+  }
+  if (mobilePanel) {
+    mobilePanel.querySelectorAll(".mobile-nav-link").forEach(link => {
+      link.addEventListener("click", () => {
+        mobilePanel.classList.remove("open");
+        document.body.style.overflow = "";
+      });
     });
   }
 
