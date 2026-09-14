@@ -168,10 +168,12 @@ function initMap(retries = 15) {
   }
 }
 
-// View switching: 'land' (satellite) | 'model' (3D) | 'showcase' (cards)
+// View switching: 'land' (satellite) | 'model' (3D) | 'showcase' (cards) | 'cesium' (3D Globe)
+let cesiumInstance = null;
+
 async function switchView(view) {
-  const sections = { land: 'land-explorer', model: 'layout-explorer', showcase: 'plot-showcase' };
-  const buttons = { land: 'view-land', model: 'view-model', showcase: 'view-showcase' };
+  const sections = { land: 'land-explorer', model: 'layout-explorer', showcase: 'plot-showcase', cesium: 'cesium-explorer' };
+  const buttons = { land: 'view-land', model: 'view-model', showcase: 'view-showcase', cesium: 'view-cesium' };
 
   Object.entries(sections).forEach(([key, id]) => {
     const el = $(id);
@@ -217,6 +219,11 @@ async function switchView(view) {
       initMap();
     } else if (mapReady) {
       map.resize();
+    }
+  } else if (view === 'cesium') {
+    if (window.CesiumLandViewer) {
+      cesiumInstance ||= new window.CesiumLandViewer('cesium-container');
+      cesiumInstance.init();
     }
   }
 }
@@ -373,7 +380,7 @@ function goToCoordinates(lat, lng) {
 
 function bindControls() {
   // View switcher buttons
-  ['view-land', 'view-model', 'view-showcase'].forEach(id => {
+  ['view-land', 'view-model', 'view-showcase', 'view-cesium'].forEach(id => {
     const btn = $(id);
     if (btn) {
       const view = id.replace('view-', '');

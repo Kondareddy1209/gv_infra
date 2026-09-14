@@ -22,8 +22,11 @@
     display: none;
   }
 </style>
+<link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css">
 <script src="js/language.js"></script>
 <script src="js/telangana-gis.js"></script>
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Cesium.js"></script>
+<script src="js/cesium-3d.js"></script>
 </head>
 <body>
 
@@ -79,7 +82,8 @@
     <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer">3D layout preview</button>
     <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase">Plot showcase</button>
     <button id="view-land" aria-pressed="false" aria-controls="land-explorer">Satellite land map</button>
-    <span>Illustrative 3D layout · Card browser · Real surroundings</span>
+    <button id="view-cesium" aria-pressed="false" aria-controls="cesium-explorer">🌐 Cesium 3D Globe</button>
+    <span>Illustrative 3D layout · Card browser · Real surroundings · Cesium 3D Globe</span>
   </div>
   <p id="layout-loading" role="status" hidden></p>
   <div class="masterplan-shell" id="layout-explorer">
@@ -377,6 +381,16 @@
         <div class="land-coordinate-input"><input id="land-coordinates" placeholder="Latitude, longitude" aria-describedby="land-location-note" required><button type="submit">Go to pin ↗</button></div>
       </form>
       <div><strong id="land-center">17.24767° N, 80.14368° E</strong><p id="land-location-note">Regional view only. Enter site coordinates to inspect your land. Plot boundaries require a verified survey.</p></div>
+    </div>
+  </section>
+
+  <!-- CESIUMJS 3D GLOBE & PHOTOREALISTIC TERRAIN SECTION -->
+  <section id="cesium-explorer" class="land-explorer" aria-label="Cesium 3D Globe & Photorealistic Terrain" hidden>
+    <div class="land-map-heading">
+      <div><span class="land-eyebrow">CESIUM 3D GLOBE &amp; TERRAIN</span><h2>Real 3D Land &amp; Photorealistic Terrain</h2><p>Gurralapadu, Khammam Region · World Terrain Elevation &amp; 3D Extruded Parcels</p></div>
+    </div>
+    <div style="width:100%; height:600px; border-radius:16px; overflow:hidden; border:1px solid #cbd5e1; position:relative;">
+      <div id="cesium-container" style="width:100%; height:100%;"></div>
     </div>
   </section>
 
