@@ -118,6 +118,12 @@ function initMap(retries = 15) {
       const status = getStatusEl();
       if (status) status.textContent = getLocationNote();
       updateCompass();
+
+      // Initialize TGRAC Cadastral GIS layer on satellite map
+      if (window.TelanganaCadastralGIS && !window.tgracGisInstance) {
+        window.tgracGisInstance = new window.TelanganaCadastralGIS(map);
+        window.tgracGisInstance.initializeCadastralLayer();
+      }
     });
 
     map.on('error', (event) => {
@@ -145,10 +151,13 @@ async function switchView(view) {
   Object.entries(sections).forEach(([key, id]) => {
     const el = $(id);
     if (!el) return;
-    if (key === view) {
+    const isTarget = key === view;
+    if (isTarget) {
       el.removeAttribute('hidden');
+      el.style.display = key === 'model' ? 'grid' : 'block';
     } else {
       el.setAttribute('hidden', '');
+      el.style.display = 'none';
     }
   });
 
@@ -205,6 +214,11 @@ async function switchView(view) {
         }
       }, 100);
     }
+  }
+
+  const targetSection = $(sections[view]);
+  if (targetSection) {
+    targetSection.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
   }
 }
 
