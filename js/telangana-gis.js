@@ -92,11 +92,190 @@ class TelanganaCadastralGIS {
     this.map = mapInstance;
     this.activeParcelLayer = null;
     this.selectedParcel = null;
+    this.tgracCache = new Map();
+    this.layerState = {
+      satellite: true,
+      cadastral: false,
+      masterplan: false,
+      terrain: false
+    };
+  }
+
+  /**
+   * Initialize TGRAC cadastral layer overlay on MapLibre GL map
+   * Adds TGRAC service as a feature layer with style & interactivity
+   */
+  async initializeCadastralLayer() {
+    if (!this.map || !this.map.isStyleLoaded()) {
+      console.warn('[TelanganaGIS] Map not ready for cadastral layer');
+      return false;
+    }
+
+    try {
+      // Add source for government parcels (from TGRAC Cadastral 30cm layer)
+      if (!this.map.getSource('tgrac-cadastral')) {
+        this.map.addSource('tgrac-cadastral', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: this._parcelsToGeoJSON()
+          },
+          generateId: true
+        });
+      }
+
+      // Add fill + stroke layers for visual cadastral boundary display
+      if (!this.map.getLayer('cadastral-fill')) {
+        this.map.addLayer({
+          id: 'cadastral-fill',
+          type: 'fill',
+          source: 'tgrac-cadastral',
+          paint: {
+            'fill-color': '#143628',
+            'fill-opacity': 0.15,
+            'fill-opacity-transition': { duration: 200 }
+          }
+        }, 'road-labels');
+
+        this.map.addLayer({
+          id: 'cadastral-stroke',
+          type: 'line',
+          source: 'tgrac-cadastral',
+          paint: {
+            'line-color': '#143628',
+            'line-width': 2,
+            'line-opacity': 0.7
+          }
+        }, 'road-labels');
+
+        // Enable parcel click detection
+        this.map.on('click', 'cadastral-fill', (e) => this._onParcelClick(e));
+        this.map.on('mouseenter', 'cadastral-fill', () => {
+          this.map.getCanvas().style.cursor = 'pointer';
+        });
+        this.map.on('mouseleave', 'cadastral-fill', () => {
+          this.map.getCanvas().style.cursor = '';
+        });
+      }
+
+      return true;
+    } catch (err) {
+      console.error('[TelanganaGIS] Error initializing cadastral layer:', err);
+      return false;
+    }
+  }
+
+  /**
+   * Convert parcel data to GeoJSON features for MapLibre
+   */
+  _parcelsToGeoJSON() {
+    return KHAMMAM_SAMPLE_PARCELS.map(p => ({
+      type: 'Feature',
+      id: p.surveyNo,
+      geometry: {
+        type: 'Polygon',
+        coordinates: [p.coordinates]
+      },
+      properties: {
+        surveyNo: p.surveyNo,
+        village: p.village,
+        mandal: p.mandal,
+        district: p.district,
+        areaAcres: p.areaAcres,
+        areaSqYards: p.areaSqYards,
+        owner: p.owner,
+        status: p.status
+      }
+    }));
+  }
+
+  /**
+   * Handle parcel click — show details popup & WhatsApp CTA
+   */
+  _onParcelClick(e) {
+    const parcel = e.features[0].properties;
+    this.selectedParcel = parcel;
+
+    console.log(`[TelanganaGIS] Selected parcel: ${parcel.surveyNo}`);
+
+    // Update highlight
+    this.map.setFeatureState(
+      { source: 'tgrac-cadastral', id: parcel.surveyNo },
+      { selected: true }
+    );
+
+    // Show popup
+    const popupHTML = `
+      <div style="font-family: var(--font-sans); font-size: 12px; color: var(--ink); padding: 12px; max-width: 220px;">
+        <strong style="font-size: 13px; color: var(--ink);">Survey No. ${parcel.surveyNo}</strong>
+        <p style="margin: 6px 0 0; font-size: 11px; color: var(--ink-soft);">
+          ${parcel.village}, ${parcel.mandal}<br>
+          ${parcel.district} District
+        </p>
+        <p style="margin: 6px 0 0; font-size: 11px;">
+          <strong>${parcel.areaAcres} acres</strong> (${parcel.areaSqYards} sq.yds)
+        </p>
+        <p style="margin: 8px 0 0; font-size: 10px; color: var(--brand-forest); text-transform: uppercase; font-weight: 600;">
+          Status: ${parcel.status.replace('_', ' ')}
+        </p>
+        <a href="https://wa.me/919392887268?text=I'm interested in survey ${parcel.surveyNo} at ${parcel.village}. Please provide details."
+           target="_blank"
+           style="display: block; margin-top: 8px; padding: 6px 10px; background: #176B41; color: white; border-radius: 3px; text-decoration: none; text-align: center; font-weight: 600; font-size: 11px;">
+          Enquire on WhatsApp
+        </a>
+      </div>
+    `;
+
+    // Remove existing popup if any
+    document.querySelectorAll('.maplibregl-popup').forEach(p => p.remove());
+
+    new window.maplibregl.Popup({ closeButton: true, offset: 25 })
+      .setLngLat(e.lngLat)
+      .setHTML(popupHTML)
+      .addTo(this.map);
+  }
+
+  /**
+   * Query TGRAC ArcGIS REST endpoint for parcel data
+   * Falls back to demo data if TGRAC is offline
+   */
+  async queryTGRAC(surveyNo, village = "Gurralapadu") {
+    const cacheKey = `${surveyNo}:${village}`;
+    if (this.tgracCache.has(cacheKey)) {
+      return this.tgracCache.get(cacheKey);
+    }
+
+    try {
+      // Build TGRAC feature service query
+      const url = new URL(TELANGANA_GIS_CONFIG.endpoints.bhunakshaCadastral + '/query');
+      url.searchParams.append('where', `surveyno='${surveyNo}'`);
+      url.searchParams.append('outFields', '*');
+      url.searchParams.append('returnGeometry', 'true');
+      url.searchParams.append('f', 'json');
+
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (!response.ok) throw new Error(`TGRAC returned ${response.status}`);
+
+      const data = await response.json();
+      this.tgracCache.set(cacheKey, data);
+      return data;
+    } catch (err) {
+      console.warn(`[TelanganaGIS] TGRAC query failed for ${surveyNo}:`, err.message);
+      // Fall back to local demo data
+      const match = KHAMMAM_SAMPLE_PARCELS.find(
+        p => p.surveyNo.toLowerCase() === surveyNo.toLowerCase() && p.village === village
+      );
+      return match ? { features: [{ attributes: match, geometry: { rings: [match.coordinates] } }] } : null;
+    }
   }
 
   async searchBySurveyNumber(surveyNo, district = "Khammam", mandal = "Khammam Rural", village = "Gurralapadu") {
     console.log(`[TelanganaGIS] Querying Survey No: ${surveyNo} in ${village}, ${mandal}, ${district}`);
-    
+
     const localMatch = KHAMMAM_SAMPLE_PARCELS.find(p => p.surveyNo.toLowerCase() === surveyNo.trim().toLowerCase());
     if (localMatch) {
       return this.formatParcelResult(localMatch);
@@ -285,6 +464,65 @@ class TelanganaCadastralGIS {
         [lng - d, lat - d]
       ]
     });
+  }
+
+  /**
+   * Toggle cadastral layer visibility on/off
+   */
+  toggleCadastralLayer(visible) {
+    if (!this.map) return;
+
+    this.layerState.cadastral = visible;
+
+    ['cadastral-fill', 'cadastral-stroke'].forEach(layerId => {
+      try {
+        if (this.map.getLayer(layerId)) {
+          this.map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
+        }
+      } catch (e) {
+        console.warn(`[TelanganaGIS] Could not toggle ${layerId}`);
+      }
+    });
+
+    console.log(`[TelanganaGIS] Cadastral layer: ${visible ? 'visible' : 'hidden'}`);
+  }
+
+  /**
+   * Fly to a specific parcel by survey number
+   */
+  async focusParcel(surveyNo) {
+    const parcel = KHAMMAM_SAMPLE_PARCELS.find(p => p.surveyNo === surveyNo);
+    if (!parcel || !this.map) return;
+
+    this.map.flyTo({
+      center: [parcel.lng, parcel.lat],
+      zoom: 14,
+      bearing: 0,
+      pitch: 45,
+      duration: 1500,
+      essential: true
+    });
+
+    console.log(`[TelanganaGIS] Focused on parcel ${surveyNo}`);
+  }
+
+  /**
+   * Fetch all Khammam cadastral parcels for a specific mandal/village
+   */
+  async fetchMandilParcels(mandal = "Khammam Rural", village = "Gurralapadu") {
+    const filtered = KHAMMAM_SAMPLE_PARCELS.filter(
+      p => p.mandal === mandal && p.village === village
+    );
+
+    console.log(`[TelanganaGIS] Found ${filtered.length} parcels in ${village}`);
+    return filtered;
+  }
+
+  /**
+   * Get government parcel data disclaimer for legal compliance
+   */
+  getDisclaimer() {
+    return TELANGANA_GIS_CONFIG.disclaimer;
   }
 }
 
