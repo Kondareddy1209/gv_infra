@@ -68,11 +68,11 @@
   --radius-l: 8px;
   --radius-full: 9999px;
 
-  /* Subtle Editorial Shadows (Never muddy or oversized) */
-  --shadow-subtle: 0 1px 3px rgba(16, 25, 30, 0.04), 0 4px 12px rgba(16, 25, 30, 0.03);
-  --shadow-1: 0 1px 3px rgba(16, 25, 30, 0.04), 0 4px 12px rgba(16, 25, 30, 0.03);
-  --shadow-editorial: 0 16px 40px rgba(16, 25, 30, 0.06), 0 2px 6px rgba(16, 25, 30, 0.03);
-  --shadow-luxury: 0 16px 40px rgba(16, 25, 30, 0.06), 0 2px 6px rgba(16, 25, 30, 0.03);
+  /* Subtle Editorial Shadows (Professional depth hierarchy) */
+  --shadow-subtle: 0 1px 2px rgba(16, 25, 30, 0.03), 0 2px 6px rgba(16, 25, 30, 0.02);
+  --shadow-1: 0 2px 8px rgba(16, 25, 30, 0.06);
+  --shadow-editorial: 0 8px 24px rgba(16, 25, 30, 0.08), 0 1px 3px rgba(16, 25, 30, 0.04);
+  --shadow-luxury: 0 16px 40px rgba(16, 25, 30, 0.1), 0 2px 6px rgba(16, 25, 30, 0.04);
 
   /* Layout Widths */
   --container: 1260px;
@@ -140,9 +140,10 @@ h1,
 h2 {
   font-family: var(--font-display);
   color: var(--ink);
-  line-height: 1.15;
-  font-weight: 500;
-  letter-spacing: -0.018em;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 h3,
@@ -179,7 +180,7 @@ p {
 .wrap {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 40px;
 }
 
 .wrap-wide {
@@ -267,9 +268,10 @@ p {
   top: 0;
   left: 0;
   right: 0;
-  background: var(--bg);
+  background: rgba(251, 249, 245, 0.98);
   border-bottom: 1px solid var(--stone-hairline);
-  box-shadow: 0 2px 14px rgba(15, 20, 18, 0.04);
+  box-shadow: 0 4px 16px rgba(13, 20, 24, 0.06);
+  backdrop-filter: blur(8px);
 }
 
 .site-nav .wrap {
@@ -690,25 +692,28 @@ p {
   background: var(--brand-forest);
   color: #FFFFFF;
   border-color: var(--brand-forest);
+  box-shadow: 0 2px 8px rgba(20, 54, 40, 0.12);
 }
 
 .btn-primary:hover {
   background: var(--brand-forest-light);
   border-color: var(--brand-forest-light);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(20, 54, 40, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(20, 54, 40, 0.18);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--ink);
   border-color: var(--stone-line);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-outline:hover {
   background: #FFFFFF;
-  border-color: var(--ink);
+  border-color: var(--brand-forest);
   color: var(--ink);
+  box-shadow: var(--shadow-1);
 }
 
 .btn-whatsapp {
@@ -853,13 +858,14 @@ p {
 }
 
 .hero h1 {
-  font-size: clamp(2.8rem, 4.8vw, 4.4rem);
+  font-size: clamp(3rem, 5vw, 4.6rem);
   max-width: 18ch;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
   color: #FFFFFF;
-  font-weight: 500;
+  font-weight: 600;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  text-wrap: balance;
 }
 
 .gold-text {
@@ -1004,11 +1010,11 @@ p {
   width: 100%;
   aspect-ratio: 16/11;
   max-height: 480px;
-  border-radius: var(--radius-s);
+  border-radius: 6px;
   overflow: hidden;
   background: #0E161C;
   position: relative;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
@@ -1314,9 +1320,10 @@ section[id] {
 }
 
 section.editorial-section {
-  padding: 110px 0;
+  padding: 120px 0;
   border-bottom: 1px solid var(--stone-line);
   background: var(--bg);
+  position: relative;
 }
 
 section.section-alternate {
@@ -1341,12 +1348,13 @@ section.drone-cinematic-section {
 
 .section-head h2 {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 3.4vw, 3rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 3.6vw, 3.2rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
   color: var(--ink);
   max-width: 24ch;
-  line-height: 1.15;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
 .section-head p {
@@ -1362,7 +1370,8 @@ section.drone-cinematic-section {
   background: #FFFFFF;
   border-top: 1px solid var(--stone-line);
   border-bottom: 1px solid var(--stone-line);
-  padding: 48px 0;
+  padding: 56px 0;
+  box-shadow: inset 0 1px 0 rgba(226, 221, 211, 0.5);
 }
 
 .spec-ledger-grid {
@@ -1428,12 +1437,12 @@ section.drone-cinematic-section {
 .hp-finder-bar {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: var(--radius-xs);
-  padding: 24px 32px;
-  box-shadow: 0 14px 40px rgba(13, 20, 24, 0.07);
+  border-radius: 6px;
+  padding: 28px 36px;
+  box-shadow: var(--shadow-editorial);
   display: grid;
   grid-template-columns: repeat(4, 1fr) auto;
-  gap: 24px;
+  gap: 28px;
   align-items: flex-end;
 }
 
@@ -1517,9 +1526,10 @@ section.drone-cinematic-section {
 .editorial-img-frame {
   position: relative;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
   background: var(--surface-soft);
+  box-shadow: var(--shadow-subtle);
 }
 
 .editorial-img-frame img {
@@ -1569,11 +1579,17 @@ section.drone-cinematic-section {
 .infra-lead-dossier {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   padding: 44px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: var(--shadow-subtle);
+  transition: box-shadow 0.3s ease;
+}
+
+.infra-lead-dossier:hover {
+  box-shadow: var(--shadow-1);
 }
 
 .technical-kicker {
@@ -1605,8 +1621,8 @@ section.drone-cinematic-section {
 .infra-cross-section {
   background: var(--bg);
   border: 1px solid var(--stone-line);
-  padding: 24px;
-  border-radius: 2px;
+  padding: 28px;
+  border-radius: 4px;
 }
 
 .infra-cross-section-title {
@@ -1660,9 +1676,11 @@ section.drone-cinematic-section {
 .infra-schedule-panel {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-subtle);
+  overflow: hidden;
 }
 
 .infra-schedule-row {
@@ -1720,11 +1738,12 @@ section.drone-cinematic-section {
 .amenities-hero-block {
   background: var(--surface-soft);
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   padding: 44px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: var(--shadow-subtle);
 }
 
 .amenities-hero-badge {
@@ -1781,9 +1800,11 @@ section.drone-cinematic-section {
 .amenities-ledger {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-subtle);
+  overflow: hidden;
 }
 
 .amenities-ledger-item {
@@ -1904,8 +1925,9 @@ section.drone-cinematic-section {
 .transit-ledger {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
+  box-shadow: var(--shadow-subtle);
 }
 
 .transit-ledger-header {
@@ -2025,13 +2047,14 @@ section.drone-cinematic-section {
 
 .drone-preview-box {
   position: relative;
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.18);
   aspect-ratio: 16/10;
   background-size: cover;
   background-position: center;
   cursor: pointer;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 
 .drone-preview-overlay {
@@ -2088,8 +2111,9 @@ section.drone-cinematic-section {
   gap: 48px;
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   padding: 48px;
+  box-shadow: var(--shadow-subtle);
 }
 
 .calc-field-group {
@@ -2206,10 +2230,11 @@ section.drone-cinematic-section {
 .portfolio-flagship-media {
   position: relative;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
   background: var(--surface-soft);
   aspect-ratio: 16/10;
+  box-shadow: var(--shadow-subtle);
 }
 
 .portfolio-flagship-media img {
@@ -2316,16 +2341,18 @@ section.drone-cinematic-section {
 .venture-card {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-subtle);
 }
 
 .venture-card:hover {
-  border-color: var(--brand-forest);
-  transform: translateY(-2px);
+  border-color: var(--accent-bronze);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-editorial);
 }
 
 .venture-card-thumb {
@@ -2408,8 +2435,10 @@ section.drone-cinematic-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   background: #FFFFFF;
+  box-shadow: var(--shadow-subtle);
+  overflow: hidden;
 }
 
 .verification-column {
@@ -2467,9 +2496,10 @@ section.drone-cinematic-section {
 
 .dossier-survey-preview {
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
   aspect-ratio: 16/10;
+  box-shadow: var(--shadow-subtle);
 }
 
 .dossier-survey-preview img {
@@ -2700,25 +2730,27 @@ section.drone-cinematic-section {
 .site-visit-advisory {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-left: 3px solid var(--brand-forest);
-  padding: 18px 22px;
+  border-left: 4px solid var(--brand-forest);
+  padding: 20px 24px;
   font-size: 0.86rem;
   color: var(--ink-body);
   line-height: 1.58;
   display: flex;
   align-items: center;
   gap: 14px;
-  border-radius: 2px;
+  border-radius: 4px;
+  box-shadow: var(--shadow-subtle);
 }
 
 .callback-editorial-form {
   background: #FFFFFF;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
-  padding: 40px;
+  border-radius: 4px;
+  padding: 44px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-shadow: var(--shadow-subtle);
 }
 
 .callback-editorial-form h4 {
@@ -2752,20 +2784,21 @@ section.drone-cinematic-section {
 
 .editorial-input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px 16px;
   border: 1px solid var(--stone-line);
-  border-radius: 2px;
+  border-radius: 3px;
   font-family: inherit;
   font-size: 0.88rem;
   color: var(--ink);
   background: var(--bg);
   outline: none;
-  transition: border-color 0.18s ease;
+  transition: all 0.2s ease;
 }
 
 .editorial-input:focus {
   border-color: var(--brand-forest);
   background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(20, 54, 40, 0.08);
 }
 
 .form-submit-btn {
@@ -2788,7 +2821,7 @@ section.drone-cinematic-section {
 footer {
   background: var(--obsidian);
   color: #8E9EA9;
-  padding: 96px 0 44px;
+  padding: 100px 0 48px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -2806,10 +2839,11 @@ footer {
 .footer-hero-statement h2 {
   color: #FFFFFF;
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
-  font-weight: 400;
-  line-height: 1.1;
+  font-size: clamp(2.6rem, 4.6vw, 4rem);
+  font-weight: 600;
+  line-height: 1.08;
   max-width: 16ch;
+  text-wrap: balance;
 }
 
 .footer-hero-statement p {
