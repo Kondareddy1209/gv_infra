@@ -462,7 +462,15 @@
   <div class="land-map-footer">
     <form id="land-coordinate-form">
       <label for="land-coordinates">Have the site GPS pin?</label>
-      <div class="land-coordinate-input"><input id="land-coordinates" placeholder="Latitude, longitude" aria-describedby="land-location-note" required><button type="submit">Go to pin ↗</button></div>
+      <div class="land-coordinate-input">
+        <input id="land-coordinates" placeholder="e.g. 17.24767, 80.14368 or paste Google Maps link" aria-describedby="land-location-note">
+        <button type="submit">Go to pin ↗</button>
+      </div>
+      <div class="land-preset-chips" style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+        <button type="button" class="chip btn-preset-pin" data-pin="17.24767, 80.14368" style="padding:4px 10px; font-size:0.75rem; border-radius:4px; cursor:pointer;">📍 Stambadri Enclave (Khammam)</button>
+        <button type="button" class="chip btn-preset-pin" data-pin="17.66298, 80.87154" style="padding:4px 10px; font-size:0.75rem; border-radius:4px; cursor:pointer;">📍 Bhadrachalam</button>
+        <button type="button" class="chip btn-preset-pin" data-pin="17.33120, 78.56010" style="padding:4px 10px; font-size:0.75rem; border-radius:4px; cursor:pointer;">📍 Hyderabad HQ</button>
+      </div>
     </form>
     <div>
       <strong id="land-center">17.24767° N, 80.14368° E</strong>

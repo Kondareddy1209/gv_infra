@@ -325,6 +325,53 @@ function bindControls() {
         $('land-location-note').textContent = getLocationNote();
       }
       
+
+  if ($('land-2d')) $('land-2d').addEventListener('click', () => setMapMode('2d'));
+  if ($('land-3d')) $('land-3d').addEventListener('click', () => setMapMode('3d'));
+  
+  if ($('land-compass')) {
+    $('land-compass').addEventListener('click', () => resetBearing());
+  }
+
+  if ($('land-labels')) {
+    $('land-labels').addEventListener('click', () => {
+      if (!map?.getLayer('road-labels')) return;
+      labelsVisible = !labelsVisible;
+      map.setLayoutProperty('road-labels', 'visibility', labelsVisible ? 'visible' : 'none');
+      $('land-labels').classList.toggle('active', labelsVisible);
+      $('land-labels').setAttribute('aria-pressed', String(labelsVisible));
+    });
+  }
+
+  if ($('land-reset')) {
+    $('land-reset').addEventListener('click', () => {
+      marker?.remove();
+      marker = null;
+      if ($('land-coordinates')) $('land-coordinates').value = '';
+      
+      const center = getLocationCenter();
+      if (map && center) {
+        const targetPitch = currentMode === '3d' ? 50 : 0;
+        map.flyTo({ 
+          center: center, 
+          zoom: 12, 
+          pitch: targetPitch, 
+          bearing: 0, 
+          duration: reducedMotion ? 0 : 1000 
+        });
+      }
+      
+      if ($('land-center') && center) {
+        const [lng, lat] = center;
+        $('land-center').textContent = `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'}, ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'W' : 'E'}`;
+      }
+      if ($('land-external') && center) {
+        $('land-external').href = getExternalMapLink(center[0], center[1]);
+      }
+      if ($('land-location-note')) {
+        $('land-location-note').textContent = getLocationNote();
+      }
+      
       const status = getStatusEl();
       if (status) {
         status.textContent = currentMode === '3d'
@@ -334,37 +381,82 @@ function bindControls() {
     });
   }
 
+  function goToCoordinates(val) {
+    if (!val) return;
+    let lat, lng;
+
+    // Check if user pasted a Google Maps URL
+    const gmapsMatch = val.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || val.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+    if (gmapsMatch) {
+      lat = parseFloat(gmapsMatch[1]);
+      lng = parseFloat(gmapsMatch[2]);
+    } else {
+      const cleaned = val.replace(/[°NnEeSsWw]/g, '').trim();
+      const parts = cleaned.split(',').map(s => s.trim());
+      if (parts.length === 2) {
+        let p1 = parseFloat(parts[0]);
+        let p2 = parseFloat(parts[1]);
+        if (Number.isFinite(p1) && Number.isFinite(p2)) {
+          if (Math.abs(p1) <= 90 && Math.abs(p2) <= 180) {
+            lat = p1;
+            lng = p2;
+          } else if (Math.abs(p2) <= 90 && Math.abs(p1) <= 180) {
+            lat = p2;
+            lng = p1;
+          }
+        }
+      }
+    }
+
+    const input = $('land-coordinates');
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 85.051129 || Math.abs(lng) > 180) {
+      if (input) {
+        input.setCustomValidity('Enter latitude and longitude separated by a comma (e.g. 17.24767, 80.14368) or paste a Google Maps link.');
+        input.reportValidity();
+      }
+      return;
+    }
+
+    if (input) input.setCustomValidity('');
+
+    const status = getStatusEl();
+    if (!mapReady) {
+      if (status) status.textContent = 'Map is loading satellite imagery. Please wait a moment...';
+      return;
+    }
+
+    marker?.remove();
+    marker = new window.maplibregl.Marker({ color: '#d1a34b' })
+      .setLngLat([lng, lat])
+      .setPopup(new window.maplibregl.Popup().setText(`Entered Location Pin: ${lat.toFixed(5)}°, ${lng.toFixed(5)}°`))
+      .addTo(map);
+
+    map.flyTo({ center: [lng, lat], zoom: 16, duration: reducedMotion ? 0 : 1200 });
+
+    if ($('land-center')) $('land-center').textContent = `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'}, ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'W' : 'E'}`;
+    if ($('land-external')) $('land-external').href = getExternalMapLink(lng, lat, 16);
+    if ($('land-location-note')) {
+      $('land-location-note').textContent = `Centred on ${lat.toFixed(5)}°, ${lng.toFixed(5)}°. Imagery is for regional location reference.`;
+    }
+    if (status) status.textContent = `Centred on ${lat.toFixed(5)}° N, ${lng.toFixed(5)}° E.`;
+  }
+
   if ($('land-coordinate-form')) {
     $('land-coordinate-form').addEventListener('submit', (event) => {
       event.preventDefault();
       const input = $('land-coordinates');
-      if (!input) return;
-      const parts = input.value.trim().split(',').map(s => s.trim());
-      const [lat, lng] = parts.map(Number);
-      if (parts.length !== 2 || parts.some(s => !s) || !Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 85.051129 || Math.abs(lng) > 180) {
-        input.setCustomValidity('Enter latitude (-85.051129 to 85.051129), longitude (-180 to 180), separated by a comma.');
-        input.reportValidity();
-        return;
-      }
-      const status = getStatusEl();
-      if (!mapReady) {
-        if (status) status.textContent = 'Map is not ready. Wait for imagery or reload to retry.';
-        return;
-      }
-      marker?.remove();
-      marker = new window.maplibregl.Marker({ color: '#d1a34b' })
-        .setLngLat([lng, lat])
-        .setPopup(new window.maplibregl.Popup().setText('Your entered pin — not independently verified.'))
-        .addTo(map);
-      map.flyTo({ center: [lng, lat], zoom: 17, duration: reducedMotion ? 0 : 1200 });
-      if ($('land-center')) $('land-center').textContent = `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'}, ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'W' : 'E'}`;
-      if ($('land-external')) $('land-external').href = getExternalMapLink(lng, lat, 17);
-      if ($('land-location-note')) {
-        $('land-location-note').textContent = 'User-entered pin, not verified by GV Infra. Imagery is not a legal survey or proof of ownership.';
-      }
-      if (status) status.textContent = 'Centred on the coordinates you entered. The pin marks that point only — it is not a surveyed plot boundary.';
+      if (input) goToCoordinates(input.value.trim());
     });
   }
+
+  document.querySelectorAll('.btn-preset-pin').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pin = btn.dataset.pin;
+      const input = $('land-coordinates');
+      if (input) input.value = pin;
+      goToCoordinates(pin);
+    });
+  });
 
   if ($('land-coordinates')) {
     $('land-coordinates').addEventListener('input', (e) => e.target.setCustomValidity(''));
