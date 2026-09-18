@@ -119,6 +119,54 @@ function initMap(retries = 15) {
       if (status) status.textContent = getLocationNote();
       updateCompass();
 
+      // --- CUSTOM PLOT LAYER ---
+      map.addSource('custom-plots', {
+        type: 'geojson',
+        data: 'custom_plots.geojson'
+      });
+      map.addLayer({
+        id: 'custom-plots-fill',
+        type: 'fill',
+        source: 'custom-plots',
+        paint: {
+            'fill-color': '#00ff00',
+            'fill-opacity': 0.4
+        }
+      });
+      map.addLayer({
+        id: 'custom-plots-line',
+        type: 'line',
+        source: 'custom-plots',
+        paint: {
+            'line-color': '#ffffff',
+            'line-width': 2
+        }
+      });
+      map.addLayer({
+        id: 'custom-plots-labels',
+        type: 'symbol',
+        source: 'custom-plots',
+        layout: {
+            'text-field': ['format', ['get', 'plot_number'], { 'font-scale': 1 }, '\n', {}, ['get', 'extent_sqyards'], { 'font-scale': 0.8 }, ' sqyds', {}],
+            'text-size': 12,
+            'text-anchor': 'center',
+            'text-max-width': 8
+        },
+        paint: {
+            'text-color': '#ffffff',
+            'text-halo-color': '#000000',
+            'text-halo-width': 1
+        }
+      });
+      
+      // Fly to the new custom plot location so it's instantly visible
+      map.flyTo({
+          center: [80.1365, 17.2485],
+          zoom: 16.5,
+          pitch: 0
+      });
+      // -------------------------
+
       // Initialize TGRAC Cadastral GIS layer on satellite map
       if (window.TelanganaCadastralGIS && !window.tgracGisInstance) {
         window.tgracGisInstance = new window.TelanganaCadastralGIS(map);
@@ -145,25 +193,36 @@ function initMap(retries = 15) {
 // View switching: 'land' (satellite) | 'model' (3D) | 'showcase' (cards) | 'cesium' (3D Globe)
 let cesiumInstance = null;
 async function switchView(view) {
+  console.log(`[switchView] Switching to view: ${view}`);
+
   const sections = { land: 'land-explorer', model: 'layout-explorer', showcase: 'plot-showcase', cesium: 'cesium-explorer' };
   const buttons = { land: 'view-land', model: 'view-model', showcase: 'view-showcase', cesium: 'view-cesium' };
 
+  // Hide/show view sections
   Object.entries(sections).forEach(([key, id]) => {
     const el = $(id);
-    if (!el) return;
+    if (!el) {
+      console.warn(`[switchView] Section not found: ${id}`);
+      return;
+    }
     const isTarget = key === view;
     if (isTarget) {
       el.removeAttribute('hidden');
       el.style.display = key === 'model' ? 'grid' : 'block';
+      console.log(`[switchView] Showing ${id}`);
     } else {
       el.setAttribute('hidden', '');
       el.style.display = 'none';
     }
   });
 
+  // Update button states
   Object.entries(buttons).forEach(([key, id]) => {
     const el = $(id);
-    if (!el) return;
+    if (!el) {
+      console.warn(`[switchView] Button not found: ${id}`);
+      return;
+    }
     const active = key === view;
     el.classList.toggle('active', active);
     el.setAttribute('aria-pressed', String(active));
@@ -222,6 +281,11 @@ async function switchView(view) {
   }
 }
 
+if (typeof window !== 'undefined') {
+  window.switchGVView = switchView;
+  window.GV_LAND_ENGINE = { onViewSwitched: switchView };
+}
+
 function setMapMode(mode) {
   if (!map || !mapReady) return;
   currentMode = mode;
@@ -263,11 +327,28 @@ function resetBearing() {
 
 function bindControls() {
   compassDial = $('land-compass-dial');
-  
-  if ($('view-land')) $('view-land').addEventListener('click', () => switchView('land'));
-  if ($('view-model')) $('view-model').addEventListener('click', () => switchView('model'));
-  if ($('view-showcase')) $('view-showcase').addEventListener('click', () => switchView('showcase'));
-  if ($('view-cesium')) $('view-cesium').addEventListener('click', () => switchView('cesium'));
+
+  // Main view switcher buttons
+  const viewButtons = [
+    ['view-land', 'land'],
+    ['view-model', 'model'],
+    ['view-showcase', 'showcase'],
+    ['view-cesium', 'cesium']
+  ];
+
+  viewButtons.forEach(([btnId, viewName]) => {
+    const btn = $(btnId);
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log(`[bindControls] Button clicked: ${btnId} → ${viewName}`);
+        switchView(viewName);
+      });
+      console.log(`[bindControls] Bound button: ${btnId}`);
+    } else {
+      console.warn(`[bindControls] Button not found: ${btnId}`);
+    }
+  });
   document.querySelectorAll('[data-switch-view]').forEach((trigger) => {
     trigger.addEventListener('click', (event) => {
       event.preventDefault();
@@ -293,52 +374,6 @@ function bindControls() {
     });
   }
 
-  if ($('land-2d')) $('land-2d').addEventListener('click', () => setMapMode('2d'));
-  if ($('land-3d')) $('land-3d').addEventListener('click', () => setMapMode('3d'));
-  
-  if ($('land-compass')) {
-    $('land-compass').addEventListener('click', () => resetBearing());
-  }
-
-  if ($('land-labels')) {
-    $('land-labels').addEventListener('click', () => {
-      if (!map?.getLayer('road-labels')) return;
-      labelsVisible = !labelsVisible;
-      map.setLayoutProperty('road-labels', 'visibility', labelsVisible ? 'visible' : 'none');
-      $('land-labels').classList.toggle('active', labelsVisible);
-      $('land-labels').setAttribute('aria-pressed', String(labelsVisible));
-    });
-  }
-
-  if ($('land-reset')) {
-    $('land-reset').addEventListener('click', () => {
-      marker?.remove();
-      marker = null;
-      if ($('land-coordinates')) $('land-coordinates').value = '';
-      
-      const center = getLocationCenter();
-      if (map && center) {
-        const targetPitch = currentMode === '3d' ? 50 : 0;
-        map.flyTo({ 
-          center: center, 
-          zoom: 12, 
-          pitch: targetPitch, 
-          bearing: 0, 
-          duration: reducedMotion ? 0 : 1000 
-        });
-      }
-      
-      if ($('land-center') && center) {
-        const [lng, lat] = center;
-        $('land-center').textContent = `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'}, ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'W' : 'E'}`;
-      }
-      if ($('land-external') && center) {
-        $('land-external').href = getExternalMapLink(center[0], center[1]);
-      }
-      if ($('land-location-note')) {
-        $('land-location-note').textContent = getLocationNote();
-      }
-      
 
   if ($('land-2d')) $('land-2d').addEventListener('click', () => setMapMode('2d'));
   if ($('land-3d')) $('land-3d').addEventListener('click', () => setMapMode('3d'));
@@ -499,13 +534,33 @@ function initLandLocation() {
 
 // Start when document is ready
 function startup() {
-  initLandLocation();
-  bindControls();
-  switchView('model');
+  try {
+    initLandLocation();
+    bindControls();
+    switchView('model');
+    console.log('[land-map] Initialized successfully');
+  } catch (error) {
+    console.error('[land-map] Startup error:', error);
+  }
 }
 
+// Ensure startup runs after DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', startup);
 } else {
-  startup();
+  // DOM already loaded, run immediately
+  if (document.body) {
+    startup();
+  } else {
+    // Fallback: schedule with timeout
+    setTimeout(startup, 100);
+  }
 }
+
+// Also ensure startup runs on window load as fallback
+window.addEventListener('load', () => {
+  if (!mapReady && !window.__landMapInitialized) {
+    window.__landMapInitialized = true;
+    startup();
+  }
+}, { once: true });
