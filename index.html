@@ -69,7 +69,7 @@
     <a href="#location" class="mobile-nav-link">Connectivity</a>
     <a href="#contact" class="mobile-nav-link">Contact</a>
     <a href="#account" class="mobile-nav-link nav-account-btn" data-gv-action="account"><span class="account-btn-label">Account / Sign In</span></a>
-    <a href="admin.html" class="mobile-nav-link mobile-nav-admin">Operations Console &rarr;</a>
+    <a href="admin.html" class="mobile-nav-link mobile-nav-admin">Project Administration &rarr;</a>
   </div>
   <div class="mobile-nav-footer">
     <p><strong>GV Infra Projects</strong> · Hyderabad &amp; Khammam</p>
@@ -79,14 +79,6 @@
 
 <!-- Hero Section (Integrated with 3D Video Background & Absolute Header) -->
 <header class="hero">
-  <!-- 3D Cinematic Background Video Layer -->
-  <div class="hero-video-bg">
-    <video autoplay loop muted playsinline poster="img/real/gurralapadu.png" class="hero-video-element">
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-residential-neighborhood-41556-large.mp4" type="video/mp4">
-    </video>
-    <div class="hero-video-overlay"></div>
-  </div>
-
   <div class="wrap hero-grid">
     <div>
       <div class="hero-eyebrow-row">
@@ -152,10 +144,7 @@
       </div>
 
       <canvas id="hero-canvas"></canvas>
-      <video class="hero-visual-video" autoplay loop muted playsinline poster="img/drone-tour-360.jpg">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-residential-suburb-41556-large.mp4" type="video/mp4">
-        <source src="https://cdn.coverr.co/videos/mp4/coverr-drone-shot-of-a-suburb-5494/1080p.mp4" type="video/mp4">
-      </video>
+      <video class="hero-visual-video" autoplay loop muted playsinline poster="img/drone-tour-360.jpg"></video>
       <button id="hero-video-playpause" class="hero-video-playpause" aria-label="Pause video" title="Play/pause">⏸</button>
 
       <div style="position:absolute; bottom:14px; right:14px; z-index:10;" class="ticker-item">
@@ -193,7 +182,7 @@
     </div>
 
     <div class="finder-field">
-      <label for="hp-finder-size">Plot Area (Sq.ft)</label>
+      <label for="hp-finder-size">Plot Area (Sq. Yards)</label>
       <select id="hp-finder-size" class="finder-select">
         <option value="all">All Sizes</option>
         <option value="1800">1,800 sqft (200 sq.yds)</option>
@@ -338,7 +327,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
           </span>
           <div class="schedule-body">
-            <h4>Engineered All-Weather Road Camber</h4>
+            <h4>Engineered Road Surface &amp; Drainage</h4>
             <p>High-compaction wet mix macadam sub-base with bitumen carpet and heavy-duty concrete curbstones designed for 30-year structural stability.</p>
           </div>
         </div>
@@ -704,7 +693,7 @@
       <div class="portfolio-flagship-details">
         <span class="technical-kicker">GURRALAPADU, KHAMMAM · DTCP SANCTIONED</span>
         <h3>Stambadri Enclave</h3>
-        <p class="portfolio-desc">A masterplanned 302-plot residential layout directly facing the Khammam–Kodada Highway. Engineered with 50ft, 40ft &amp; 30ft internal roads, underground electrical conduits, and two dedicated green parks spanning over 10,000 sq. yards.</p>
+        <p class="portfolio-desc">Our flagship 302-plot development in Khammam, offering premium highway-facing residential infrastructure with strong long-term investment potential.</p>
         
         <div class="portfolio-metric-ledger">
           <div class="pml-item">
@@ -981,7 +970,7 @@
         <a href="projects.html">All Projects</a>
         <a href="project.html">Stambadri Enclave 3D</a>
         <a href="#" class="trigger-drone-tour">360° Visual Tour</a>
-        <a href="admin.html">Operations Console</a>
+        <a href="admin.html">Project Administration</a>
       </div>
 
       <div>
@@ -1054,6 +1043,7 @@
 <script src="js/homepage-masterplan.js?v=masterplan-demo" type="module"></script>
 <script type="module" src="js/hero-scene.js"></script>
 <script src="js/main.js"></script>
+<script src="js/chatbot-i18n.js"></script>
 <script src="js/chatbot.js"></script>
 </body>
 </html>
