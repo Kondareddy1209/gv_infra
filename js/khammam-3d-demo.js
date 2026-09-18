@@ -1,21 +1,6 @@
 /**
  * KHAMMAM 3D REAL ESTATE GIS — COMPLETE DEMO
  * All 13 Features Ready for Approval
- *
- * Features:
- * 1. 3D Cesium Viewer (Esri World Satellite + ALOS Terrain)
- * 2. 3D Plot Extrusions & Status Coloring
- * 3. Plot Detail Drawer & WhatsApp CTA
- * 4. Telugu Voice Greeting
- * 5. Cinematic 3D Flyover Tour
- * 6. AI Spatial Search
- * 7. EMI Calculator
- * 8. 360° Drone Viewer
- * 9. Measurement Tools
- * 10. Responsive Design
- * 11. Dark/Light Mode
- * 12. Performance Optimization
- * 13. Deployment Ready
  */
 
 class KhammamRealEstateGIS {
@@ -24,17 +9,18 @@ class KhammamRealEstateGIS {
     this.plots = [];
     this.selectedPlotId = null;
     this.allPlotEntities = {};
+    this.billboardEntities = [];
     this.tourRunning = false;
 
     this.statusColors = {
-      available: { color: Cesium.Color.fromCssColorString('#16A34A').withAlpha(0.7), label: 'Available' },     // Emerald Green
-      reserved: { color: Cesium.Color.fromCssColorString('#EAB308').withAlpha(0.7), label: 'Reserved' },       // Gold
-      sold:     { color: Cesium.Color.fromCssColorString('#DC2626').withAlpha(0.7), label: 'Sold' },          // Crimson Red
-      hold:     { color: Cesium.Color.fromCssColorString('#4B5563').withAlpha(0.7), label: 'On Hold' }         // Grey
+      available: { color: Cesium.Color.fromCssColorString('#16A34A').withAlpha(0.8), label: 'Available', hex: '#16A34A', border: '#34D399' },   // Emerald Green
+      reserved:  { color: Cesium.Color.fromCssColorString('#EAB308').withAlpha(0.8), label: 'Reserved',  hex: '#EAB308', border: '#FBBF24' },   // Gold
+      sold:      { color: Cesium.Color.fromCssColorString('#DC2626').withAlpha(0.8), label: 'Sold',      hex: '#DC2626', border: '#F87171' },   // Crimson Red
+      hold:      { color: Cesium.Color.fromCssColorString('#4B5563').withAlpha(0.8), label: 'On Hold',   hex: '#4B5563', border: '#9CA3AF' }    // Grey
     };
 
-    // Khammam center
-    this.khammamCenter = { lat: 17.24767, lng: 80.14368 };
+    // Khammam / Gurralapadu center
+    this.khammamCenter = { lat: 17.2480, lng: 80.1365 };
   }
 
   /**
@@ -43,47 +29,62 @@ class KhammamRealEstateGIS {
   async init() {
     console.log('🚀 Initializing Khammam 3D Real Estate GIS...');
 
-    // 1. Create Cesium viewer
-    await this.createViewer();
+    try {
+      // 1. Create Cesium viewer
+      await this.createViewer();
 
-    // 2. Load sample plots
-    await this.loadPlots();
+      // 2. Enable Real 3D Atmospheric Lighting & Terrain Haze
+      this.enable3DEffects();
 
-    // 3. Render plot layer
-    this.renderPlotLayer();
+      // 3. Load sample plots
+      await this.loadPlots();
 
-    // 4. Setup interactivity
-    this.setupInteractivity();
+      // 4. Render 3D plot extrusions & floating price billboards
+      this.renderPlotLayer();
 
-    // 5. Setup UI controls
-    this.setupUI();
+      // 5. Setup interactivity
+      this.setupInteractivity();
 
-    // 6. Play Telugu greeting
-    this.playTeluguGreeting();
+      // 6. Setup UI controls
+      this.setupUI();
 
-    console.log('✅ Khammam 3D GIS Ready!');
+      // 7. Play Telugu greeting
+      this.playTeluguGreeting();
+
+      // Hide loading indicator
+      const loader = document.getElementById('loading-indicator');
+      if (loader) loader.style.display = 'none';
+
+      console.log('✅ Khammam 3D GIS Ready!');
+    } catch (err) {
+      console.error('❌ Failed to initialize GIS App:', err);
+      const loader = document.getElementById('loading-indicator');
+      if (loader) {
+        loader.innerHTML = `<div style="color:#ef4444; font-weight:bold; padding:20px;">Error loading viewer: ${err.message}</div>`;
+      }
+    }
   }
 
-  /**
-   * Create Cesium 3D Viewer
-   */
   async createViewer() {
     console.log('Creating Cesium viewer...');
 
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5MmY3YTk3Ni04NmYwLTRkMWUtODcyOC1lYzExMDBjNGIzY2YiLCJpZCI6OTcwNjcsImlhdCI6MTYzMjMwNDc4OH0.bCDhWYMrBYQCZQAuUkSvd-eHxzHwKpqTmHCBBKWYaJU'; // Free public token
-
     const container = document.getElementById('cesium-container');
     if (!container) {
-      console.error('❌ Cesium container not found!');
-      return;
+      throw new Error('Cesium container element #cesium-container not found');
     }
 
+    // Set Official Cesium Ion Access Token
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImpOSG5tR1R2VlpiakI3N1oiLCJqdGkiOiJlNzQyYjFkYy1mNTFhLTRmNDYtYWZlYS1lMDkzOWQxNTNhNTgiLCJpZCI6NTAwMjQ1LCJpc3MiOiJodHRwczovL2FwaS5jZXNpdW0uY29tIiwiYXVkIjoidW5kZWZpbmVkX2RlZmF1bHQiLCJpYXQiOjE3ODk3NTEyMDB9.afgAZ0_-DypvJYTakxIRlN22zwBQAOAvJTmjnoObJz4';
+
+    // 100% Free High-Res Satellite Imagery (Esri World Imagery)
+    const esriImagery = new Cesium.UrlTemplateImageryProvider({
+      url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      credit: 'Esri, Maxar, Earthstar Geographics',
+      maximumLevel: 19
+    });
+
     this.viewer = new Cesium.Viewer(container, {
-      terrainProvider: Cesium.CesiumTerrainProvider.fromUrl(
-        Cesium.Ion.DEFAULT_SERVER.url + '/v1/assets/1/vertexformat=compressed',
-        { requestWaterMask: true, requestVertexNormals: true }
-      ),
-      imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }), // Esri World Imagery
+      imageryProvider: esriImagery,
       scene3DOnly: true,
       animation: false,
       timeline: false,
@@ -92,39 +93,69 @@ class KhammamRealEstateGIS {
       infoBox: false,
       selectionIndicator: true,
       navigationHelpButton: false,
+      geocoder: false,
+      homeButton: false,
+      sceneModePicker: false
     });
 
-    // Disable default Cesium credit
-    this.viewer.creditDisplay.container.style.display = 'none';
+    // Hide default credit container if present
+    if (this.viewer.creditDisplay && this.viewer.creditDisplay.container) {
+      this.viewer.creditDisplay.container.style.display = 'none';
+    }
 
-    // Fly to Khammam
-    await this.viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(
-        this.khammamCenter.lng,
-        this.khammamCenter.lat,
-        2000 // 2km altitude
-      ),
-      orientation: {
-        heading: Cesium.Math.toRadians(0),
-        pitch: Cesium.Math.toRadians(-45),
-        roll: 0
-      },
-      duration: 3
-    });
+    // Try loading world terrain
+    try {
+      if (typeof Cesium.createWorldTerrainAsync === 'function') {
+        const terrain = await Cesium.createWorldTerrainAsync();
+        this.viewer.terrainProvider = terrain;
+      }
+    } catch (e) {
+      console.warn('World terrain fallback to default ellipsoid:', e);
+    }
 
     console.log('✅ Cesium viewer created');
+  }
+
+  /**
+   * Enable 3D Effects, Depth Testing, Atmosphere & Golden Hour Haze
+   */
+  enable3DEffects() {
+    const scene = this.viewer.scene;
+    const globe = scene.globe;
+
+    // Enable depth testing against terrain so 3D objects sit on top of hills
+    globe.depthTestAgainstTerrain = true;
+    globe.enableLighting = true;
+    globe.dynamicAtmosphereLighting = true;
+    globe.dynamicAtmosphereLightingFromSun = true;
+
+    // Sky atmosphere and haze
+    if (scene.skyAtmosphere) scene.skyAtmosphere.show = true;
+    if (scene.fog) {
+      scene.fog.enabled = true;
+      scene.fog.density = 0.0002;
+    }
+
+    // Set golden hour sun position for Khammam (September 18, 5:00 PM IST)
+    const date = new Date(2026, 8, 18, 11, 30); // 11:30 UTC = 17:00 IST
+    this.viewer.clock.currentTime = Cesium.JulianDate.fromDate(date);
+
+    console.log('✅ 3D Atmospheric Lighting & Terrain Haze enabled');
   }
 
   /**
    * Load plots from GeoJSON
    */
   async loadPlots() {
-    console.log('Loading 48 sample plots...');
+    console.log('Loading sample plots...');
 
     try {
-      const response = await fetch('data/sample_plots_complete.geojson');
+      let response = await fetch(`custom_plots.geojson?t=${Date.now()}`);
+      if (!response.ok) {
+        response = await fetch(`data/sample_plots_complete.geojson?t=${Date.now()}`);
+      }
       const geojson = await response.json();
-      this.plots = geojson.features;
+      this.plots = geojson.features || [];
       console.log(`✅ Loaded ${this.plots.length} plots`);
     } catch (err) {
       console.error('❌ Failed to load plots:', err);
@@ -133,57 +164,139 @@ class KhammamRealEstateGIS {
   }
 
   /**
-   * Render all plots as 3D extrusions on the map
+   * Render all plots as 3D extrusions + floating 3D price billboards on terrain
    */
   renderPlotLayer() {
-    console.log('Rendering plot layer with 3D extrusions...');
+    console.log('Rendering plot layer with 3D extrusions & floating billboards...');
 
     this.plots.forEach(feature => {
-      const props = feature.properties;
-      const status = props.status || 'available';
+      const props = feature.properties || {};
+      const status = (props.status || 'available').toLowerCase();
       const statusColor = this.statusColors[status] || this.statusColors.available;
+
+      if (!feature.geometry || !feature.geometry.coordinates || !feature.geometry.coordinates[0]) {
+        return;
+      }
 
       // Extract polygon coordinates
       const coords = feature.geometry.coordinates[0];
+      const flatCoords = coords.flatMap(([lng, lat]) => [lng, lat]);
 
-      // Create Cesium Cartesian positions
-      const positions = coords.map(([lng, lat]) =>
-        Cesium.Cartesian3.fromDegrees(lng, lat, 50)
-      );
+      // Calculate centroid of polygon for billboard pin
+      let sumLng = 0, sumLat = 0;
+      coords.forEach(([lng, lat]) => { sumLng += lng; sumLat += lat; });
+      const centerLng = sumLng / coords.length;
+      const centerLat = sumLat / coords.length;
 
       // Create polygon hierarchy
       const hierarchy = new Cesium.PolygonHierarchy(
-        positions.map(p => {
-          const cartographic = Cesium.Cartographic.fromCartesian(p);
-          return Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0);
-        })
+        Cesium.Cartesian3.fromDegreesArray(flatCoords)
       );
 
       // Add extrusion height based on status
-      const extrusionHeight = status === 'available' ? 80 : status === 'reserved' ? 60 : 40;
+      const extrusionHeight = status === 'available' ? 14 : status === 'reserved' ? 10 : 6;
+      const plotId = props.plot_id || props.plot_number || feature.id;
+      const plotNum = props.plot_number || `Plot ${plotId}`;
+      const priceLakhs = props.total_price_lakhs ? `₹${props.total_price_lakhs}L` : '₹35.1L';
 
-      // Create entity
+      // 1. Create 3D Extruded Polygon Entity
       const entity = this.viewer.entities.add({
-        id: `plot_${props.plot_id}`,
-        name: props.plot_number,
+        id: `plot_${plotId}`,
+        name: plotNum,
         polygon: {
           hierarchy: hierarchy,
           material: statusColor.color,
           outline: true,
-          outlineColor: Cesium.Color.WHITE.withAlpha(0.8),
-          outlineWidth: 2
+          outlineColor: Cesium.Color.WHITE.withAlpha(0.9),
+          outlineWidth: 2,
+          extrudedHeight: extrusionHeight,
+          height: 0
         },
-        properties: props,
-        extrudedHeight: extrusionHeight,
-        extrusion: {
-          show: true
-        }
+        properties: props
       });
 
-      this.allPlotEntities[props.plot_id] = entity;
+      this.allPlotEntities[plotId] = entity;
+
+      // 2. Create Floating 3D Billboard Pin Badge
+      const badgeCanvas = this.createPinBadgeCanvas(plotNum, priceLakhs, status, statusColor);
+      const billboardPosition = Cesium.Cartesian3.fromDegrees(centerLng, centerLat, extrusionHeight + 15);
+
+      const billboardEntity = this.viewer.entities.add({
+        id: `badge_${plotId}`,
+        position: billboardPosition,
+        billboard: {
+          image: badgeCanvas,
+          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+          scaleByDistance: new Cesium.NearFarScalar(100, 1.0, 3000, 0.4),
+          disableDepthTestDistance: Number.POSITIVE_INFINITY
+        },
+        polyline: {
+          positions: [
+            Cesium.Cartesian3.fromDegrees(centerLng, centerLat, 0),
+            billboardPosition
+          ],
+          width: 2,
+          material: Cesium.Color.fromCssColorString(statusColor.border).withAlpha(0.8)
+        },
+        properties: props
+      });
+
+      this.billboardEntities.push(billboardEntity);
     });
 
-    console.log(`✅ Rendered ${this.plots.length} 3D plots`);
+    // Zoom camera to frame all 48 rendered plots perfectly in view
+    this.viewer.zoomTo(this.viewer.entities, new Cesium.HeadingPitchRange(
+      Cesium.Math.toRadians(0),
+      Cesium.Math.toRadians(-40),
+      0
+    ));
+
+    console.log(`✅ Rendered and framed ${this.plots.length} 3D plots & billboards`);
+  }
+
+  /**
+   * Draw Canvas Badge for Floating 3D Billboard
+   */
+  createPinBadgeCanvas(plotNum, price, status, statusColor) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 150;
+    canvas.height = 65;
+    const ctx = canvas.getContext('2d');
+
+    // Background Card
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.roundRect(8, 4, 134, 46, 8);
+    ctx.fill();
+
+    // Border Glow
+    ctx.strokeStyle = statusColor.border;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Status Pill
+    ctx.fillStyle = statusColor.hex;
+    ctx.beginPath();
+    ctx.roundRect(14, 10, 52, 18, 4);
+    ctx.fill();
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillText(plotNum, 18, 23);
+
+    // Price Text
+    ctx.fillStyle = '#38BDF8';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillText(price, 72, 24);
+
+    // Status Subtext
+    ctx.fillStyle = '#94A3B8';
+    ctx.font = '10px sans-serif';
+    ctx.fillText(statusColor.label.toUpperCase(), 14, 42);
+
+    return canvas;
   }
 
   /**
@@ -199,13 +312,12 @@ class KhammamRealEstateGIS {
 
       if (Cesium.defined(pickedObject) && pickedObject.id) {
         const entity = pickedObject.id;
+        const props = entity.properties ? entity.properties.getValue(Cesium.JulianDate.now()) : {};
+        const plotId = props.plot_id || props.plot_number || entity.id.replace('plot_', '').replace('badge_', '');
 
-        // Extract plot ID from entity ID
-        const plotIdMatch = entity.id?.match(/plot_(\d+)/);
-        if (plotIdMatch) {
-          const plotId = parseInt(plotIdMatch[1]);
-          this.selectPlot(plotId);
-        }
+        this.selectPlot(plotId);
+      } else {
+        this.deselectPlot();
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
@@ -216,106 +328,130 @@ class KhammamRealEstateGIS {
    * Select a plot and show detail drawer
    */
   selectPlot(plotId) {
-    console.log(`📍 Selected plot ${plotId}`);
+    console.log(`Selecting plot ${plotId}...`);
+
+    this.deselectPlot();
 
     this.selectedPlotId = plotId;
-    const plot = this.plots.find(p => p.properties.plot_id === plotId);
+    const entity = this.allPlotEntities[plotId];
 
-    if (!plot) return;
-
-    const props = plot.properties;
+    if (!entity) {
+      console.warn(`Plot entity not found: ${plotId}`);
+      return;
+    }
 
     // Highlight selected plot
-    Object.values(this.allPlotEntities).forEach(entity => {
-      entity.polygon.material = Cesium.Color.fromCssColorString('#CCCCCC').withAlpha(0.3);
-    });
-
-    const selectedEntity = this.allPlotEntities[plotId];
-    selectedEntity.polygon.material = Cesium.Color.fromCssColorString('#FFD700').withAlpha(0.9); // Golden glow
+    if (entity.polygon) {
+      entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.95);
+      entity.polygon.outlineColor = Cesium.Color.WHITE;
+      entity.polygon.outlineWidth = 4;
+    }
 
     // Fly camera to plot
-    const coords = plot.geometry.coordinates[0];
-    const centerLng = coords.reduce((sum, [lng]) => sum + lng, 0) / coords.length;
-    const centerLat = coords.reduce((sum, [, lat]) => sum + lat, 0) / coords.length;
-
-    this.viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(centerLng, centerLat, 500),
-      duration: 1.5
+    this.viewer.flyTo(entity, {
+      duration: 1.5,
+      offset: new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-40), 200)
     });
 
-    // Update detail drawer
-    this.showPlotDetails(props);
+    // Extract plot properties
+    const props = entity.properties ? entity.properties.getValue(Cesium.JulianDate.now()) : {};
+
+    // Show detail drawer
+    this.showPlotDrawer(props);
   }
 
   /**
-   * Show plot details in drawer
+   * Deselect current plot
    */
-  showPlotDetails(props) {
+  deselectPlot() {
+    if (!this.selectedPlotId) return;
+
+    const entity = this.allPlotEntities[this.selectedPlotId];
+    if (entity && entity.polygon) {
+      const props = entity.properties ? entity.properties.getValue(Cesium.JulianDate.now()) : {};
+      const status = (props.status || 'available').toLowerCase();
+      const statusColor = this.statusColors[status] || this.statusColors.available;
+
+      entity.polygon.material = statusColor.color;
+      entity.polygon.outlineColor = Cesium.Color.WHITE.withAlpha(0.9);
+      entity.polygon.outlineWidth = 2;
+    }
+
+    this.selectedPlotId = null;
+    closePlotDrawer();
+  }
+
+  /**
+   * Show plot detail drawer
+   */
+  showPlotDrawer(props) {
     const drawer = document.getElementById('plot-detail-drawer');
     if (!drawer) return;
 
-    const totalPrice = (props.area_sqyards * props.price_per_sqyard).toLocaleString('en-IN');
-    const monthlyEMI = this.calculateEMI(props.area_sqyards * props.price_per_sqyard);
+    const plotNum = props.plot_number || props.plot_id || 'N/A';
+    const area = props.extent_sqyards || props.size || 1800;
+    const pricePerSqYd = props.price_per_sqyard || 2000;
+    const totalPrice = props.total_price || (area * pricePerSqYd);
+    const totalPriceLakhs = props.total_price_lakhs || (totalPrice / 100000).toFixed(2);
+    const facing = props.facing || 'East';
+    const status = (props.status || 'available').toUpperCase();
+    const surveyNum = props.survey_number || '45/A';
+
+    // Calculate loan EMI (80% LTV, 15 years @ 8.5%)
+    const loanAmount = totalPrice * 0.8;
+    const monthlyRate = 8.5 / 12 / 100;
+    const tenureMonths = 180;
+    const emi = Math.round((loanAmount * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / (Math.pow(1 + monthlyRate, tenureMonths) - 1));
 
     drawer.innerHTML = `
       <div class="drawer-header">
-        <h3>${props.plot_number}</h3>
-        <button onclick="closePlotDrawer()" class="close-btn">✕</button>
+        <div>
+          <h2>Plot ${plotNum}</h2>
+          <div style="font-size:12px; opacity:0.8;">Survey No: ${surveyNum} • ${props.mandal || 'Gurralapadu'}</div>
+        </div>
+        <button class="close-btn" onclick="closePlotDrawer()">×</button>
       </div>
 
-      <div class="drawer-content">
-        <div class="info-group">
-          <label>Plot Number</label>
-          <p>${props.plot_number}</p>
+      <div class="plot-stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">STATUS</div>
+          <div class="stat-value" style="color: ${status === 'AVAILABLE' ? '#10b981' : status === 'RESERVED' ? '#f59e0b' : '#ef4444'};">${status}</div>
         </div>
+        <div class="stat-card">
+          <div class="stat-label">FACING (VASTU)</div>
+          <div class="stat-value">${facing} 🧭</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">EXTENT</div>
+          <div class="stat-value">${area.toLocaleString()} sq.yds</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">PRICE / SQ.YD</div>
+          <div class="stat-value">₹${pricePerSqYd.toLocaleString()}</div>
+        </div>
+      </div>
 
-        <div class="info-group">
-          <label>Survey Number</label>
-          <p>${props.survey_number}</p>
-        </div>
+      <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <div style="font-size: 12px; color: #10b981; font-weight: 600;">TOTAL INVESTMENT</div>
+        <div style="font-size: 28px; font-weight: 800; color: #ffffff;">₹ ${totalPriceLakhs} Lakhs</div>
+        <div style="font-size: 11px; opacity: 0.8;">(₹ ${totalPrice.toLocaleString()} Total)</div>
+      </div>
 
-        <div class="info-group">
-          <label>Area</label>
-          <p>${props.area_sqyards.toLocaleString()} Sq.Yards</p>
-        </div>
+      <!-- EMI Calculator Widget -->
+      <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <div style="font-weight: 600; font-size: 14px; margin-bottom: 8px;">💳 Est. Monthly EMI (80% Loan)</div>
+        <div style="font-size: 20px; font-weight: 700; color: #38bdf8;" id="emi-result">₹ ${emi.toLocaleString('en-IN')}/mo</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 4px;">Based on 15-year tenure @ 8.5% p.a.</div>
+      </div>
 
-        <div class="info-group">
-          <label>Facing</label>
-          <p>${props.facing} 🧭</p>
-        </div>
-
-        <div class="info-group">
-          <label>Status</label>
-          <p><span class="status-badge status-${props.status}">${props.status.toUpperCase()}</span></p>
-        </div>
-
-        <div class="info-group price-highlight">
-          <label>Total Price</label>
-          <p class="price">₹ ${totalPrice}</p>
-          <p class="price-per-unit">@ ₹${props.price_per_sqyard.toLocaleString()}/sq.yard</p>
-        </div>
-
-        <div class="info-group">
-          <label>Estimated Monthly EMI</label>
-          <p class="emi-amount">₹ ${monthlyEMI.toLocaleString()}</p>
-          <p class="emi-note">(80% LTV, 15 years @ 8.5% p.a.)</p>
-        </div>
-
-        <div class="amenities-group">
-          <label>Amenities</label>
-          <div class="amenities-list">
-            ${props.amenities.map(a => `<span class="amenity-tag">✓ ${a}</span>`).join('')}
-          </div>
-        </div>
-
-        <div class="drawer-actions">
-          <button class="btn btn-whatsapp" onclick="inquireOnWhatsApp('${props.plot_number}')">
-            💬 Inquire on WhatsApp
-          </button>
-          <button class="btn btn-call" onclick="callSales('${props.contact_agent}')">
-            📞 Call Sales
-          </button>
-        </div>
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="action-btn whatsapp-btn" onclick="inquireOnWhatsApp('${plotNum}')">
+          💬 Inquire on WhatsApp
+        </button>
+        <button class="action-btn call-btn" onclick="callSales('+919392887268')">
+          📞 Call Sales (+91 93928 87268)
+        </button>
       </div>
     `;
 
@@ -323,167 +459,143 @@ class KhammamRealEstateGIS {
   }
 
   /**
-   * Calculate monthly EMI
-   */
-  calculateEMI(totalPrice) {
-    const principal = totalPrice * 0.8; // 80% LTV
-    const annualRate = 0.085; // 8.5% p.a.
-    const months = 180; // 15 years
-    const monthlyRate = annualRate / 12;
-
-    if (monthlyRate === 0) return principal / months;
-
-    const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) /
-                (Math.pow(1 + monthlyRate, months) - 1);
-
-    return Math.round(emi);
-  }
-
-  /**
-   * Play Telugu voice greeting
-   */
-  playTeluguGreeting() {
-    console.log('🔊 Playing Telugu greeting...');
-
-    const msg = new SpeechSynthesisUtterance('నమస్కారం, స్థాంభద్రి ఎన్‌క్లేవ్ కు స్వాగతం, గురుపాలపాడు, ఖమ్మం');
-    msg.lang = 'te-IN';
-    msg.rate = 0.9;
-    msg.pitch = 1;
-    msg.volume = 0.8;
-
-    // Log when speech starts
-    msg.onstart = () => console.log('🔊 Telugu greeting playing...');
-    msg.onend = () => console.log('✅ Telugu greeting complete');
-
-    window.speechSynthesis.speak(msg);
-  }
-
-  /**
-   * Start cinematic flyover tour
-   */
-  async startCinematicTour() {
-    if (this.tourRunning) return;
-
-    console.log('🎬 Starting cinematic tour...');
-    this.tourRunning = true;
-
-    const tourStops = [
-      { lat: 17.2480, lng: 80.1430, altitude: 1500, pitch: -30, name: 'Project Overview' },
-      { lat: 17.2470, lng: 80.1440, altitude: 800, pitch: -45, name: 'Central Park' },
-      { lat: 17.2490, lng: 80.1420, altitude: 600, pitch: -50, name: 'Residential Sector' },
-      { lat: 17.2460, lng: 80.1450, altitude: 400, pitch: -60, name: 'Final View' },
-    ];
-
-    for (const stop of tourStops) {
-      await this.viewer.camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(stop.lng, stop.lat, stop.altitude),
-        orientation: {
-          heading: Cesium.Math.toRadians(0),
-          pitch: Cesium.Math.toRadians(stop.pitch),
-          roll: 0
-        },
-        duration: 5
-      });
-
-      // Wait at each stop
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      console.log(`📍 ${stop.name}`);
-    }
-
-    // Return to start
-    await this.viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(80.14368, 17.24767, 2000),
-      duration: 3
-    });
-
-    this.tourRunning = false;
-    console.log('✅ Cinematic tour complete');
-  }
-
-  /**
-   * Filter plots by criteria
-   */
-  filterPlots(criteria) {
-    console.log('🔍 Filtering plots:', criteria);
-
-    const filtered = this.plots.filter(p => {
-      const props = p.properties;
-
-      if (criteria.facing && props.facing !== criteria.facing) return false;
-      if (criteria.status && props.status !== criteria.status) return false;
-      if (criteria.maxPrice && props.price_per_sqyard > criteria.maxPrice) return false;
-
-      return true;
-    });
-
-    console.log(`Found ${filtered.length} matching plots`);
-
-    // Highlight filtered plots
-    Object.values(this.allPlotEntities).forEach(entity => {
-      entity.polygon.material = Cesium.Color.fromCssColorString('#CCCCCC').withAlpha(0.2);
-    });
-
-    filtered.forEach(plot => {
-      const entity = this.allPlotEntities[plot.properties.plot_id];
-      const status = plot.properties.status;
-      const statusColor = this.statusColors[status] || this.statusColors.available;
-      entity.polygon.material = statusColor.color;
-    });
-
-    return filtered;
-  }
-
-  /**
-   * Setup UI controls
+   * Setup UI events for filters and buttons
    */
   setupUI() {
-    // Fly Over button
-    const flyButton = document.getElementById('start-tour-btn');
-    if (flyButton) {
-      flyButton.addEventListener('click', () => this.startCinematicTour());
+    console.log('Setting up UI controls...');
+
+    // Flyover Tour Button
+    const tourBtn = document.getElementById('start-tour-btn');
+    if (tourBtn) {
+      tourBtn.addEventListener('click', () => this.startCinematicTour());
     }
 
-    // Filter controls
-    const facingFilter = document.getElementById('filter-facing');
-    const statusFilter = document.getElementById('filter-status');
-    const priceFilter = document.getElementById('filter-price');
+    // Facing Filter
+    const facingSelect = document.getElementById('filter-facing');
+    if (facingSelect) {
+      facingSelect.addEventListener('change', () => this.applyFilters());
+    }
 
-    if (facingFilter) {
-      facingFilter.addEventListener('change', (e) => {
-        const facing = e.target.value === 'all' ? null : e.target.value;
-        const status = statusFilter?.value === 'all' ? null : statusFilter?.value;
-        const maxPrice = priceFilter?.value ? parseFloat(priceFilter.value) : null;
+    // Status Filter
+    const statusSelect = document.getElementById('filter-status');
+    if (statusSelect) {
+      statusSelect.addEventListener('change', () => this.applyFilters());
+    }
 
-        this.filterPlots({ facing, status, maxPrice });
+    // Price Filter
+    const priceSelect = document.getElementById('filter-price');
+    if (priceSelect) {
+      priceSelect.addEventListener('change', () => this.applyFilters());
+    }
+
+    console.log('✅ UI controls setup complete');
+  }
+
+  /**
+   * Apply filters to plot layer and billboards
+   */
+  applyFilters() {
+    const facingFilter = document.getElementById('filter-facing')?.value || 'all';
+    const statusFilter = document.getElementById('filter-status')?.value || 'all';
+    const priceFilter = parseFloat(document.getElementById('filter-price')?.value || Infinity);
+
+    console.log(`Filtering plots: facing=${facingFilter}, status=${statusFilter}, maxPrice=${priceFilter}`);
+
+    let matchCount = 0;
+
+    Object.values(this.allPlotEntities).forEach(entity => {
+      const props = entity.properties ? entity.properties.getValue(Cesium.JulianDate.now()) : {};
+      const facing = props.facing || '';
+      const status = (props.status || 'available').toLowerCase();
+      const price = props.price_per_sqyard || 0;
+      const plotId = props.plot_id || props.plot_number;
+
+      const matchesFacing = facingFilter === 'all' || facing === facingFilter;
+      const matchesStatus = statusFilter === 'all' || status === statusFilter;
+      const matchesPrice = price <= priceFilter;
+
+      const show = matchesFacing && matchesStatus && matchesPrice;
+      entity.show = show;
+
+      // Also toggle corresponding billboard pin
+      const badgeEntity = this.viewer.entities.getById(`badge_${plotId}`);
+      if (badgeEntity) badgeEntity.show = show;
+
+      if (show) matchCount++;
+    });
+
+    console.log(`✅ ${matchCount} plots match filter criteria`);
+  }
+
+  /**
+   * Start 3D Cinematic Flyover Tour
+   */
+  startCinematicTour() {
+    if (this.tourRunning) return;
+    this.tourRunning = true;
+
+    console.log('🎬 Starting Cinematic Tour...');
+
+    const waypoints = [
+      { lng: 80.1350, lat: 17.2470, height: 450, heading: 0, pitch: -35 },
+      { lng: 80.1380, lat: 17.2485, height: 350, heading: 90, pitch: -30 },
+      { lng: 80.1365, lat: 17.2495, height: 300, heading: 180, pitch: -25 },
+      { lng: 80.1350, lat: 17.2480, height: 600, heading: 0, pitch: -45 }
+    ];
+
+    let current = 0;
+
+    const flyToNext = () => {
+      if (current >= waypoints.length) {
+        this.tourRunning = false;
+        console.log('🎬 Tour complete');
+        return;
+      }
+
+      const wp = waypoints[current];
+      current++;
+
+      this.viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(wp.lng, wp.lat, wp.height),
+        orientation: {
+          heading: Cesium.Math.toRadians(wp.heading),
+          pitch: Cesium.Math.toRadians(wp.pitch),
+          roll: 0
+        },
+        duration: 4,
+        complete: () => {
+          setTimeout(flyToNext, 1000);
+        }
       });
+    };
+
+    flyToNext();
+  }
+
+  /**
+   * Play Telugu Welcome Greeting via Browser Speech Synthesis
+   */
+  playTeluguGreeting() {
+    if (!('speechSynthesis' in window)) return;
+
+    try {
+      const greetingText = "నమస్కారం! ఖమ్మం గుర్రాలపాడు శ్రీ స్తంభాద్రి ఎన్‌క్లేవ్‌కి స్వాగతం.";
+      const utterance = new SpeechSynthesisUtterance(greetingText);
+      utterance.lang = 'te-IN';
+      utterance.rate = 0.95;
+
+      const voices = window.speechSynthesis.getVoices();
+      const teluguVoice = voices.find(v => v.lang.includes('te'));
+      if (teluguVoice) utterance.voice = teluguVoice;
+
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn('Speech synthesis notice:', e);
     }
-
-    if (statusFilter) {
-      statusFilter.addEventListener('change', (e) => {
-        const facing = facingFilter?.value === 'all' ? null : facingFilter?.value;
-        const status = e.target.value === 'all' ? null : e.target.value;
-        const maxPrice = priceFilter?.value ? parseFloat(priceFilter.value) : null;
-
-        this.filterPlots({ facing, status, maxPrice });
-      });
-    }
-
-    if (priceFilter) {
-      priceFilter.addEventListener('change', (e) => {
-        const facing = facingFilter?.value === 'all' ? null : facingFilter?.value;
-        const status = statusFilter?.value === 'all' ? null : statusFilter?.value;
-        const maxPrice = parseFloat(e.target.value);
-
-        this.filterPlots({ facing, status, maxPrice });
-      });
-    }
-
-    console.log('✅ UI setup complete');
   }
 }
 
-// Global instances
+// Global instance
 let gisApp = null;
 
 // Initialize when DOM is ready
@@ -493,7 +605,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await gisApp.init();
 });
 
-// Global helper functions
+// Helper functions for inline HTML event handlers
 function closePlotDrawer() {
   const drawer = document.getElementById('plot-detail-drawer');
   if (drawer) drawer.classList.remove('open');
@@ -507,25 +619,4 @@ function inquireOnWhatsApp(plotNumber) {
 
 function callSales(phone) {
   window.location.href = `tel:${phone}`;
-}
-
-function calculateEMI() {
-  const principal = parseFloat(document.getElementById('loan-amount')?.value || 0);
-  const rate = parseFloat(document.getElementById('interest-rate')?.value || 8.5);
-  const months = parseFloat(document.getElementById('tenure')?.value || 180);
-
-  if (principal <= 0 || months <= 0) return 0;
-
-  const monthlyRate = rate / 12 / 100;
-  if (monthlyRate === 0) return Math.round(principal / months);
-
-  const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) /
-              (Math.pow(1 + monthlyRate, months) - 1);
-
-  const emiDisplay = document.getElementById('emi-result');
-  if (emiDisplay) {
-    emiDisplay.textContent = '₹ ' + Math.round(emi).toLocaleString('en-IN') + '/month';
-  }
-
-  return Math.round(emi);
 }

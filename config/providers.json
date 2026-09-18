@@ -1,0 +1,154 @@
+{
+  "providers": {
+    "imagery": [
+      {
+        "name": "esri_satellite",
+        "type": "esri_satellite",
+        "enabled": true,
+        "description": "Esri High-Resolution World Satellite Imagery",
+        "endpoint": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+        "failoverPriority": 1,
+        "timeout": 5000,
+        "fallbackOnError": true,
+        "attribution": "Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+      },
+      {
+        "name": "google_3d_tiles",
+        "type": "google_maps_3d_tiles",
+        "enabled": true,
+        "description": "Google Photorealistic 3D Tiles with high resolution",
+        "endpoint": "https://tile.googleapis.com/data/v3/",
+        "apiKeyEnvVar": "GOOGLE_MAPS_API_KEY",
+        "failoverPriority": 2,
+        "timeout": 3000,
+        "fallbackOnError": true,
+        "attribution": "© 2026 Google"
+      },
+      {
+        "name": "cesium_ion",
+        "type": "cesium_ion",
+        "enabled": true,
+        "description": "Cesium Ion default imagery (bundled)",
+        "tokenEnvVar": "CESIUM_ION_TOKEN",
+        "failoverPriority": 3,
+        "timeout": 3000,
+        "fallbackOnError": true,
+        "attribution": "Powered by Cesium"
+      },
+      {
+        "name": "bhuvan_wms",
+        "type": "wms",
+        "enabled": true,
+        "description": "ISRO Bhuvan - Indian satellite imagery (free, public)",
+        "endpoint": "https://bhuvan.nrsc.gov.in/wms",
+        "layers": "IRS_P6_LISS3_NCHP",
+        "failoverPriority": 4,
+        "timeout": 5000,
+        "fallbackOnError": true,
+        "attribution": "Data: ISRO / NrSC"
+      },
+      {
+        "name": "osm_fallback",
+        "type": "osm",
+        "enabled": true,
+        "description": "OpenStreetMap raster - ultimate fallback",
+        "endpoint": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "failoverPriority": 5,
+        "timeout": 5000,
+        "fallbackOnError": true,
+        "attribution": "© OpenStreetMap contributors"
+      }
+    ],
+    "terrain": [
+      {
+        "name": "cesium_world_terrain",
+        "type": "cesium_ion_terrain",
+        "enabled": true,
+        "description": "Cesium World Terrain with elevation data",
+        "timeout": 6000,
+        "fallbackOnError": true,
+        "options": {
+          "requestWaterMask": true,
+          "requestVertexNormals": true
+        }
+      },
+      {
+        "name": "ellipsoid_fallback",
+        "type": "ellipsoid",
+        "enabled": true,
+        "description": "Ellipsoid (no elevation) - ultimate fallback",
+        "timeout": 100,
+        "fallbackOnError": false
+      }
+    ],
+    "featureLayers": [
+      {
+        "name": "project_plots",
+        "type": "geojson",
+        "source": "custom_plots.geojson",
+        "format": "geojson",
+        "enabled": true,
+        "description": "GV Infra Stambadri Enclave plot boundaries",
+        "styling": {
+          "fillColor": "#16A34A",
+          "fillOpacity": 0.5,
+          "outlineColor": "#15803D",
+          "outlineWidth": 2,
+          "extrudedHeight": 8
+        }
+      },
+      {
+        "name": "tgrac_cadastral",
+        "type": "wfs",
+        "endpoint": "https://telangana-gis.local/wfs",
+        "featureName": "telangana:property_parcels",
+        "enabled": false,
+        "description": "Telangana Cadastral (TGRAC) - property boundaries",
+        "styling": {
+          "fillColor": "#3B82F6",
+          "fillOpacity": 0.15,
+          "outlineColor": "#1E40AF",
+          "outlineWidth": 1
+        }
+      }
+    ],
+    "fallbackStrategy": {
+      "maxRetries": 2,
+      "retryDelayMs": 1000,
+      "enableOfflineMode": true,
+      "offlineFallbackFormat": "2d_maplibre",
+      "timeout": 15000,
+      "logErrors": true
+    },
+    "camera": {
+      "defaultCenter": [80.14368, 17.24767],
+      "defaultHeight": 450,
+      "defaultPitch": -35,
+      "defaultHeading": 20,
+      "animationDuration": 2.5
+    },
+    "attribution": {
+      "position": "bottom-right",
+      "backgroundColor": "rgba(0, 0, 0, 0.7)",
+      "textColor": "#fff",
+      "fontSize": "10px",
+      "padding": "4px 8px"
+    }
+  },
+  "version": "1.1",
+  "lastUpdated": "2026-09-18",
+
+  "terrain": {
+    "provider": "cesium-world-terrain",
+    "enabled": true,
+    "requestVertexNormals": true,
+    "requestWaterMask": true,
+    "_comment": "Phase 2A. Needs Cesium ion token. Falls back to ellipsoid automatically."
+  },
+
+  "photorealisticTiles": {
+    "enabled": false,
+    "provider": "google",
+    "_comment": "Phase 2D. Disabled until Google Maps API key is configured. Enable by setting enabled=true."
+  }
+}

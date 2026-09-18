@@ -4,7 +4,9 @@
   "description": "A working, static prototype of the platform: premium homepage, a real interactive 3D masterplan you can rotate/zoom/click, a plot detail drawer with Call/WhatsApp/ Book-Visit CTAs, and a demo admin panel that shows plot changes propagating live to the public site — no backend required to run it.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:ai": "node scripts/test-ai-gateway.js",
+    "start:ai-server": "node server/server.js"
   },
   "keywords": [],
   "author": "",

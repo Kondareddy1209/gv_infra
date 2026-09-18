@@ -40,7 +40,7 @@ function cardHTML(plot) {
       <div class="sc-card-face sc-card-front" style="${swatchStyle(plot)}">
         <div class="sc-front-head">
           <div>
-            <div class="sc-plot-no">Plot ${plot.plotNumber}</div>
+            <div class="sc-plot-no">Plot ${plot.plotNumber}${plot.owner ? ` · ${plot.owner}` : ''}</div>
             <div class="sc-plot-block">Block ${plot.block} · Phase 1</div>
           </div>
           <span class="sc-status-badge" style="background:${statusColor}">${statusLabel}</span>
@@ -83,7 +83,7 @@ function cardHTML(plot) {
       <div class="sc-card-face sc-card-back">
         <div class="sc-back-header">
           <div>
-            <div class="sc-plot-no">Plot ${plot.plotNumber}</div>
+            <div class="sc-plot-no">Plot ${plot.plotNumber}${plot.owner ? ` · ${plot.owner}` : ''}</div>
             <div class="sc-plot-block">Block ${plot.block} · Specifications</div>
           </div>
           <div class="sc-back-header-right">

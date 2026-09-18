@@ -49,6 +49,26 @@
 
         Logger.info('Cesium Init', 'Cesium 3D viewer initialized successfully');
 
+        // Initialize Khammam Reality 3D (enhanced visualization with streets, buildings, landmarks)
+        try {
+          if (typeof KhammamReality3D !== 'undefined') {
+            console.log('%c🌍 Initializing Khammam Reality 3D...', 'color: #10b981; font-weight: bold;');
+            const reality3d = new KhammamReality3D(viewer.viewer);
+            await reality3d.initialize();
+
+            // Create control panel
+            if (typeof KhammamControlPanel !== 'undefined') {
+              const controlPanel = new KhammamControlPanel(viewer.viewer, reality3d);
+              controlPanel.createPanel();
+            }
+
+            window.Cesium3DReality = reality3d;
+            console.log('%c✓ Khammam Reality 3D Ready', 'color:#10b981; font-weight:bold;');
+          }
+        } catch (err) {
+          console.warn('⚠️  Khammam Reality 3D not available:', err.message);
+        }
+
         // Emit ready event
         window.dispatchEvent(new CustomEvent('cesium3d:ready', {
           detail: { viewer }

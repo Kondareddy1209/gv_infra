@@ -127,6 +127,32 @@ class CesiumViewer3D {
       // Initialize measurement tools
       this.measurementTools = new MeasurementTools(this.viewer, this.config);
 
+      // Initialize Real 3D Visual Effects Engine (Lighting, Shadows, Atmosphere, Extrusions)
+      if (typeof RealEstate3DEffects !== 'undefined') {
+        this.effectsEngine = new RealEstate3DEffects(this.viewer);
+        this.effectsEngine.init();
+        if (this.projectLayer && this.projectLayer.dataSource) {
+          this.effectsEngine.apply3DPlotExtrusions(this.projectLayer.dataSource.entities, 8.0);
+        }
+      }
+
+      // Initialize Interactive HUD Controls (Time of day, Fly-to shortcuts, 3D/2D toggle)
+      if (typeof RealEstateHUD !== 'undefined') {
+        this.hud = new RealEstateHUD(this.viewer, this.effectsEngine);
+        this.hud.init();
+      }
+
+      // Initialize 3D Floating Property Annotations & Billboards
+      if (typeof RealEstateAnnotations !== 'undefined') {
+        this.annotations = new RealEstateAnnotations(this.viewer);
+        this.annotations.addPropertyPins();
+      }
+
+      // Initialize 3D Land Video Tour Player
+      if (typeof Land3DVideoTourPlayer !== 'undefined') {
+        this.videoTourPlayer = new Land3DVideoTourPlayer(this.viewer);
+      }
+
       // Bind event listeners
       this.bindEventListeners();
 

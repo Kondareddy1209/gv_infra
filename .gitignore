@@ -9,3 +9,7 @@ Thumbs.db
 *.corrupt*
 *.repair*
 *.backup*
+.env
+.env.local
+.env.*.local
+

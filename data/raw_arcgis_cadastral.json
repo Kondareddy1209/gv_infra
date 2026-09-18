@@ -1,0 +1,154 @@
+{
+ "displayFieldName": "Remarks",
+ "fieldAliases": {
+  "OBJECTID": "OBJECTID",
+  "Remarks": "Remarks",
+  "LandUse_Fr": "LandUse_Fr",
+  "District": "District",
+  "Mandal": "Mandal",
+  "Village": "Village",
+  "DMV_1991": "DMV_1991",
+  "V_2011": "V_2011",
+  "Base_Syno": "Base_Syno",
+  "Descriptio": "Descriptio",
+  "Shape_Length": "Shape_Length",
+  "Shape_Area": "Shape_Area"
+ },
+ "geometryType": "esriGeometryPolygon",
+ "spatialReference": {
+  "wkid": 4326,
+  "latestWkid": 4326
+ },
+ "fields": [
+  {
+   "name": "OBJECTID",
+   "type": "esriFieldTypeOID",
+   "alias": "OBJECTID"
+  },
+  {
+   "name": "Remarks",
+   "type": "esriFieldTypeString",
+   "alias": "Remarks",
+   "length": 50
+  },
+  {
+   "name": "LandUse_Fr",
+   "type": "esriFieldTypeString",
+   "alias": "LandUse_Fr",
+   "length": 254
+  },
+  {
+   "name": "District",
+   "type": "esriFieldTypeString",
+   "alias": "District",
+   "length": 50
+  },
+  {
+   "name": "Mandal",
+   "type": "esriFieldTypeString",
+   "alias": "Mandal",
+   "length": 50
+  },
+  {
+   "name": "Village",
+   "type": "esriFieldTypeString",
+   "alias": "Village",
+   "length": 50
+  },
+  {
+   "name": "DMV_1991",
+   "type": "esriFieldTypeString",
+   "alias": "DMV_1991",
+   "length": 50
+  },
+  {
+   "name": "V_2011",
+   "type": "esriFieldTypeString",
+   "alias": "V_2011",
+   "length": 50
+  },
+  {
+   "name": "Base_Syno",
+   "type": "esriFieldTypeString",
+   "alias": "Base_Syno",
+   "length": 50
+  },
+  {
+   "name": "Descriptio",
+   "type": "esriFieldTypeString",
+   "alias": "Descriptio",
+   "length": 50
+  },
+  {
+   "name": "Shape_Length",
+   "type": "esriFieldTypeDouble",
+   "alias": "Shape_Length"
+  },
+  {
+   "name": "Shape_Area",
+   "type": "esriFieldTypeDouble",
+   "alias": "Shape_Area"
+  }
+ ],
+ "features": [
+  {
+   "attributes": {
+    "OBJECTID": 1,
+    "Remarks": " ",
+    "LandUse_Fr": "Naksha",
+    "District": "Mahabubnagar",
+    "Mandal": "Addakal",
+    "Village": "Baleedupalle",
+    "DMV_1991": "1437004",
+    "V_2011": "576028",
+    "Base_Syno": "111",
+    "Descriptio": "Surveyed",
+    "Shape_Length": 267.60269196273327,
+    "Shape_Area": 1975.608647805836
+   },
+   "geometry": {
+    "rings": [
+     [
+      [77.924321032577453, 16.460793743290679],
+      [77.923919558405515, 16.45993851477688],
+      [77.923739683048183, 16.460018092601125],
+      [77.924038463747948, 16.460554416387055],
+      [77.924121381396233, 16.460635611928108],
+      [77.924081514425225, 16.46092865785025],
+      [77.924321032577453, 16.460793743290679]
+     ]
+    ]
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 2,
+    "Remarks": " ",
+    "LandUse_Fr": "Naksha",
+    "District": "Mahabubnagar",
+    "Mandal": "Addakal",
+    "Village": "Baleedupalle",
+    "DMV_1991": "1437004",
+    "V_2011": "576028",
+    "Base_Syno": "112",
+    "Descriptio": "Surveyed",
+    "Shape_Length": 557.18898426181727,
+    "Shape_Area": 12447.727659845463
+   },
+   "geometry": {
+    "rings": [
+     [
+      [77.92364841766512, 16.460692122503659],
+      [77.924038463747948, 16.460554416387055],
+      [77.923739683048183, 16.460018092601125],
+      [77.923280919382776, 16.458857391865756],
+      [77.922912174060414, 16.460628150758293],
+      [77.923215479207116, 16.460650147633647],
+      [77.923328307734707, 16.460922520884555],
+      [77.92364841766512, 16.460692122503659]
+     ]
+    ]
+   }
+  }
+ ]
+}

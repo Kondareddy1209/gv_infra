@@ -42,7 +42,7 @@ window.GV_MASTERPLAN = mp;
 
 // ---------- Hover Tooltip Updater ----------
 function updateTooltip(plot, clientX, clientY) {
-  if (!plot || plot.status === "sold") {
+  if (!plot || (plot.status === "sold" && !plot.owner)) {
     tooltipEl.classList.remove("visible");
     return;
   }
@@ -50,10 +50,10 @@ function updateTooltip(plot, clientX, clientY) {
   const relX = clientX - rect.left;
   const relY = clientY - rect.top;
 
-  document.getElementById("tt-title").textContent = `Plot ${plot.plotNumber} · Block ${plot.block}`;
+  document.getElementById("tt-title").textContent = `Plot ${plot.plotNumber} · Block ${plot.block}` + (plot.owner ? ` · Owned by ${plot.owner}` : "");
   document.getElementById("tt-area").textContent = `${plot.area} sqft`;
   document.getElementById("tt-facing").textContent = `${plot.facing} Facing`;
-  document.getElementById("tt-price").textContent = GV_DATA.formatINR(plot.price);
+  document.getElementById("tt-price").textContent = plot.owner ? "Sold" : GV_DATA.formatINR(plot.price);
 
   tooltipEl.style.left = `${relX}px`;
   tooltipEl.style.top = `${relY}px`;
@@ -338,7 +338,7 @@ document.getElementById("emi-tenure-select").addEventListener("change", () => {
 function openDrawer(plot) {
   currentPlot = plot;
   document.getElementById("drawer-block").textContent = `BLOCK ${plot.block} · PHASE 1`;
-  document.getElementById("drawer-title").textContent = `Plot ${plot.plotNumber}`;
+  document.getElementById("drawer-title").textContent = `Plot ${plot.plotNumber}` + (plot.owner ? ` · Owned by ${plot.owner}` : "");
 
   const statusPill = document.getElementById("drawer-status");
   statusPill.textContent = GV_DATA.statusLabel(plot.status);

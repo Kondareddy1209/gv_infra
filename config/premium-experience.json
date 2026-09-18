@@ -1,0 +1,253 @@
+{
+  "mobile": {
+    "enabled": true,
+    "breakpoint": 768,
+    "camera": {
+      "fieldOfView": 60,
+      "defaultPitch": -30,
+      "defaultHeading": 0
+    },
+    "gestures": {
+      "pinchZoomEnabled": true,
+      "twoFingerRotateEnabled": true,
+      "swipePanEnabled": true
+    },
+    "gyroscope": {
+      "enabled": true,
+      "requiredPermission": true
+    },
+    "accelerometer": {
+      "enabled": true,
+      "movementThreshold": 2.0,
+      "requiredPermission": true
+    },
+    "bottomSheet": {
+      "animationDuration": 300,
+      "dragThreshold": 100,
+      "defaultHeight": "45vh"
+    },
+    "hud": {
+      "buttonSize": "48px",
+      "buttonSpacing": "12px",
+      "position": "bottom-right"
+    }
+  },
+  "xr": {
+    "enabled": true,
+    "ar": {
+      "enabled": true,
+      "features": ["dom-overlay", "hit-test"],
+      "domOverlay": true
+    },
+    "vr": {
+      "enabled": true,
+      "features": ["local-floor", "hand-tracking"],
+      "targetFPS": 60,
+      "performanceOptimization": true
+    },
+    "handTracking": {
+      "enabled": true,
+      "gestureDetection": true
+    },
+    "voiceCommands": {
+      "enabled": true,
+      "language": "en-US",
+      "continuousListening": false
+    },
+    "passthrough": {
+      "enabled": true,
+      "blendMode": "additive"
+    }
+  },
+  "sharing": {
+    "enabled": true,
+    "shortURLService": "https://api.example.com/shorten",
+    "maxShareLinkExpiry": 30,
+    "defaultShareExpiry": 7,
+    "encryptionEnabled": true,
+    "qrCodeEnabled": true,
+    "deepLinkSupport": true,
+    "socialSharing": {
+      "whatsapp": true,
+      "email": true,
+      "facebook": true,
+      "twitter": true,
+      "linkedin": false
+    },
+    "viewOnly": {
+      "disableInteraction": true,
+      "disableMeasurement": true,
+      "disableSelection": false,
+      "disableNavigation": false
+    },
+    "passwordProtection": {
+      "enabled": true,
+      "required": false,
+      "algorithm": "sha256"
+    }
+  },
+  "analytics": {
+    "enabled": true,
+    "analyticsEndpoint": "/api/analytics",
+    "sessionTracking": true,
+    "eventBatching": {
+      "enabled": true,
+      "batchSize": 50,
+      "flushIntervalMs": 30000
+    },
+    "heatmapping": {
+      "enabled": true,
+      "trackPlotInteractions": true
+    },
+    "performanceMonitoring": {
+      "enabled": true,
+      "trackFPS": true,
+      "trackMemory": true,
+      "trackNetworkLatency": true,
+      "coreWebVitals": true
+    },
+    "errorTracking": {
+      "enabled": true,
+      "captureStackTrace": true,
+      "maxErrorsTracked": 100
+    },
+    "offlineSupport": {
+      "enabled": true,
+      "localStorageQueue": true,
+      "maxQueueSize": 1000
+    },
+    "gdpr": {
+      "requireConsent": true,
+      "respectDoNotTrack": true,
+      "anonymousSessionIds": true,
+      "dataRetentionDays": 90
+    }
+  },
+  "gamification": {
+    "enabled": true,
+    "userId": null,
+    "achievements": {
+      "enabled": true,
+      "displayNotifications": true,
+      "confetti": true
+    },
+    "points": {
+      "enabled": true,
+      "levelUpThreshold": 1000,
+      "rules": {
+        "viewPlot": 10,
+        "addFavorite": 25,
+        "shareLink": 50,
+        "completeTour": 100,
+        "measurement": 30,
+        "useVR": 150,
+        "useAR": 120
+      }
+    },
+    "leaderboard": {
+      "enabled": true,
+      "updateFrequency": "hourly",
+      "displayTop": 10,
+      "timeFrame": "all-time"
+    },
+    "challenges": {
+      "enabled": true,
+      "dailyChallenges": true,
+      "weeklyChallenges": true
+    },
+    "tiers": {
+      "enabled": true,
+      "rewards": true,
+      "exclusive": ["vip-support", "exclusive-listings", "priority-support"]
+    }
+  },
+  "notifications": {
+    "enabled": true,
+    "pushNotifications": {
+      "enabled": true,
+      "serviceWorkerUrl": "/service-worker.js"
+    },
+    "toasts": {
+      "enabled": true,
+      "position": "top-right",
+      "maxStack": 5,
+      "defaultDuration": 3000
+    },
+    "preferences": {
+      "enableToasts": true,
+      "enablePush": false,
+      "pushFrequency": "daily",
+      "enablePlotAlerts": true,
+      "enablePriceAlerts": true,
+      "enableTourAlerts": true,
+      "enableSystemAlerts": true
+    },
+    "alertTypes": {
+      "plotUpdates": {
+        "enabled": true,
+        "displayAsToast": true,
+        "displayAsPush": true
+      },
+      "priceChanges": {
+        "enabled": true,
+        "displayAsToast": true,
+        "displayAsPush": true
+      },
+      "tourReminders": {
+        "enabled": true,
+        "displayAsToast": true,
+        "displayAsPush": true,
+        "minutesBeforeTour": 15
+      },
+      "systemAlerts": {
+        "enabled": true,
+        "displayAsToast": true,
+        "displayAsPush": false
+      }
+    },
+    "history": {
+      "enabled": true,
+      "maxLength": 50,
+      "persistToStorage": true
+    },
+    "soundNotification": {
+      "enabled": false,
+      "soundUrl": "/sounds/notification.mp3"
+    }
+  },
+  "integrations": {
+    "spatialAI": {
+      "enableNotifications": true,
+      "displayResponses": true
+    },
+    "photoSimulation": {
+      "enableSharing": true,
+      "trackViews": true
+    },
+    "measurements": {
+      "enableSaving": true,
+      "enableSharing": true,
+      "trackUsage": true
+    },
+    "whatsapp": {
+      "enabled": true,
+      "apiEndpoint": "https://api.example.com/whatsapp",
+      "useDefaultLink": true
+    }
+  },
+  "monetization": {
+    "agentLeaderboard": {
+      "enabled": true,
+      "displayStats": ["fastest-close-time", "customer-satisfaction", "views"],
+      "rewardTop": 3
+    },
+    "premiumFeatures": {
+      "advancedMeasurements": false,
+      "unlimitedShareLinks": false,
+      "customBranding": false,
+      "advancedAnalytics": false
+    }
+  },
+  "version": "1.0",
+  "lastUpdated": "2026-09-14"
+}

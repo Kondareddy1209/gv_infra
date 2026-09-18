@@ -200,7 +200,8 @@ const GV_DATA = (() => {
           price: area * pricePerSqft,
           pricePerSqft,
           bookingAmount: 100000,
-          status: pickStatus(rand),
+          status: plotNo === 101 ? "sold" : pickStatus(rand),
+          owner: plotNo === 101 ? "Lokesh" : null,
           lastUpdated: "2026-08-20",
         });
       }
@@ -208,7 +209,7 @@ const GV_DATA = (() => {
     return plots;
   }
 
-  const STORAGE_KEY = "gv_infra_plots_v1";
+  const STORAGE_KEY = "gv_infra_plots_v2";
 
   function sanitizePlotPrices(plots) {
     // Guard against corrupted price values (e.g., INR-formatted strings, NaN, Infinity)
