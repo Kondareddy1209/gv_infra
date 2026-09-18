@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stambadri Enclave — 3D Real Estate Viewer</title>
+  <meta name="description" content="Explore Stambadri Enclave's 48-plot development in immersive 3D. View terrain, check availability, calculate EMI, and inquire on WhatsApp.">
+
+  <!-- Cesium CSS -->
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #0f172a;
+      color: #1f2937;
+      overflow: hidden;
+    }
+
+    #cesium-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    /* HUD Overlay */
+    .hud-overlay {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 20px;
+      color: white;
+      z-index: 100;
+      min-width: 280px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .hud-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hud-stat {
+      margin: 8px 0;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .hud-stat strong {
+      color: #10b981;
+    }
+
+    .hud-buttons {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .hud-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: #10b981;
+      color: white;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .hud-btn:hover {
+      background: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Plot Detail Drawer */
+    #plot-detail-drawer {
+      position: absolute;
+      right: -360px;
+      top: 0;
+      width: 360px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      z-index: 99;
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+    }
+
+    #plot-detail-drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+
+    .drawer-header h3 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .close-btn:hover {
+      opacity: 1;
+    }
+
+    .drawer-content {
+      padding: 20px;
+    }
+
+    .info-group {
+      margin-bottom: 16px;
+    }
+
+    .info-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .info-group p {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .price-highlight {
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      padding: 12px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+    .price {
+      font-size: 24px !important;
+      font-weight: 700 !important;
+      color: #10b981 !important;
+    }
+
+    .price-per-unit {
+      font-size: 12px !important;
+      opacity: 0.7;
+    }
+
+    .emi-amount {
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      color: #f59e0b !important;
+    }
+
+    .emi-note {
+      font-size: 11px !important;
+      opacity: 0.6;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-available {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-reserved {
+      background: #fef3c7;
+      color: #78350f;
+    }
+
+    .status-sold {
+      background: #fee2e2;
+      color: #7f1d1d;
+    }
+
+    .status-hold {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .amenities-group {
+      margin: 20px 0;
+    }
+
+    .amenities-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .amenity-tag {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .drawer-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+    }
+
+    .btn-whatsapp:hover {
+      background: #1ead50;
+      transform: translateY(-2px);
+    }
+
+    .btn-call {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-call:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    /* Filter Panel */
+    .filter-panel {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 20px;
+      color: white;
+      z-index: 100;
+      min-width: 250px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .filter-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .filter-group {
+      margin-bottom: 12px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      opacity: 0.9;
+    }
+
+    .filter-group select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .filter-group select option {
+      background: #1f2937;
+      color: white;
+    }
+
+    /* Status Legend */
+    .legend {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 16px;
+      color: white;
+      z-index: 100;
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .hud-overlay,
+      .filter-panel,
+      .legend {
+        display: none;
+      }
+
+      #plot-detail-drawer {
+        width: 100%;
+        right: -100%;
+      }
+    }
+
+    /* Loading indicator */
+    .loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(17, 24, 39, 0.9);
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 16px;
+      color: white;
+      z-index: 999;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid #10b981;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cesium 3D Container -->
+  <div id="cesium-container"></div>
+
+  <!-- HUD Overlay -->
+  <div class="hud-overlay">
+    <div class="hud-title">🏢 Stambadri Enclave</div>
+    <div class="hud-stat">Gurralapadu, Khammam</div>
+    <div class="hud-stat">📍 <strong>48 plots</strong> • <strong>302-plot master plan</strong></div>
+    <div class="hud-stat">✅ DTCP Sanctioned (TLP No. 3147/2020/0378)</div>
+    <div class="hud-buttons">
+      <button class="hud-btn" id="start-tour-btn">🎬 Fly Over</button>
+    </div>
+  </div>
+
+  <!-- Filter Panel -->
+  <div class="filter-panel">
+    <div class="filter-title">🔍 Filter Plots</div>
+
+    <div class="filter-group">
+      <label>Facing Direction</label>
+      <select id="filter-facing">
+        <option value="all">All Facings</option>
+        <option value="East">East 🧭</option>
+        <option value="West">West 🧭</option>
+        <option value="North">North 🧭</option>
+        <option value="South">South 🧭</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Status</label>
+      <select id="filter-status">
+        <option value="all">All Status</option>
+        <option value="available">Available ✓</option>
+        <option value="reserved">Reserved ⧖</option>
+        <option value="sold">Sold ✗</option>
+        <option value="hold">On Hold ⏸</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Max Price (₹/sq.yard)</label>
+      <select id="filter-price">
+        <option value="">All Prices</option>
+        <option value="2200">Up to ₹2,200</option>
+        <option value="2300">Up to ₹2,300</option>
+        <option value="2400">Up to ₹2,400</option>
+        <option value="2500">Up to ₹2,500</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Status Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #16A34A;"></div>
+      <span>Available (28)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #EAB308;"></div>
+      <span>Reserved (8)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #DC2626;"></div>
+      <span>Sold (8)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #4B5563;"></div>
+      <span>On Hold (4)</span>
+    </div>
+  </div>
+
+  <!-- Plot Detail Drawer -->
+  <div id="plot-detail-drawer"></div>
+
+  <!-- Loading Indicator -->
+  <div class="loading" id="loading-indicator">
+    <div class="spinner"></div>
+    <div>Loading Khammam 3D Viewer...</div>
+  </div>
+
+  <!-- Cesium JS -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Cesium.js"></script>
+
+  <!-- Khammam GIS App -->
+  <script src="js/khammam-3d-demo.js"></script>
+
+  <script>
+    // Hide loading indicator when ready
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading-indicator').style.display = 'none';
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1447 @@
+{
+  "type": "FeatureCollection",
+  "name": "Stambadri Enclave - 48 Sample Plots",
+  "crs": { "type": "name", "properties": { "name": "EPSG:4326" } },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "plot_id": 1,
+        "plot_number": "P001",
+        "survey_number": "45-A-1",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Main Road Access", "Park Nearby"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.24700],
+          [80.14245, 17.24700],
+          [80.14245, 17.24750],
+          [80.14200, 17.24750],
+          [80.14200, 17.24700]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "plot_id": 2,
+        "plot_number": "P002",
+        "survey_number": "45-A-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "North",
+        "status": "available",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Corner Plot", "Highway Access"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.24700],
+          [80.14350, 17.24700],
+          [80.14350, 17.24750],
+          [80.14300, 17.24750],
+          [80.14300, 17.24700]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "plot_id": 3,
+        "plot_number": "P003",
+        "survey_number": "45-A-3",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "West",
+        "status": "reserved",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Park View", "School Nearby"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.24700],
+          [80.14445, 17.24700],
+          [80.14445, 17.24750],
+          [80.14400, 17.24750],
+          [80.14400, 17.24700]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "plot_id": 4,
+        "plot_number": "P004",
+        "survey_number": "45-A-4",
+        "area_sqyards": 2400,
+        "area_sqft": 21600,
+        "facing": "South",
+        "status": "sold",
+        "price_per_sqyard": 2300,
+        "total_price": 5520000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Hospital Access", "Main Road"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.24700],
+          [80.14550, 17.24700],
+          [80.14550, 17.24750],
+          [80.14500, 17.24750],
+          [80.14500, 17.24700]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "plot_id": 5,
+        "plot_number": "P005",
+        "survey_number": "45-A-5",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Park Access", "Solar Ready"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.24700],
+          [80.14650, 17.24700],
+          [80.14650, 17.24750],
+          [80.14600, 17.24750],
+          [80.14600, 17.24700]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "plot_id": 6,
+        "plot_number": "P006",
+        "survey_number": "45-B-1",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "North",
+        "status": "hold",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Main Road", "School Nearby"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.24800],
+          [80.14245, 17.24800],
+          [80.14245, 17.24850],
+          [80.14200, 17.24850],
+          [80.14200, 17.24800]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "plot_id": 7,
+        "plot_number": "P007",
+        "survey_number": "45-B-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Park View", "Water Supply"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.24800],
+          [80.14350, 17.24800],
+          [80.14350, 17.24850],
+          [80.14300, 17.24850],
+          [80.14300, 17.24800]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "plot_id": 8,
+        "plot_number": "P008",
+        "survey_number": "45-B-3",
+        "area_sqyards": 3000,
+        "area_sqft": 27000,
+        "facing": "West",
+        "status": "available",
+        "price_per_sqyard": 2200,
+        "total_price": 6600000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Corner Plot", "Power Supply"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.24800],
+          [80.14450, 17.24800],
+          [80.14450, 17.24850],
+          [80.14400, 17.24850],
+          [80.14400, 17.24800]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "plot_id": 9,
+        "plot_number": "P009",
+        "survey_number": "45-B-4",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "South",
+        "status": "reserved",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Highway Access", "Drainage Ready"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.24800],
+          [80.14550, 17.24800],
+          [80.14550, 17.24850],
+          [80.14500, 17.24850],
+          [80.14500, 17.24800]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "plot_id": 10,
+        "plot_number": "P010",
+        "survey_number": "45-B-5",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "North",
+        "status": "available",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["School Access", "Park View"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.24800],
+          [80.14650, 17.24800],
+          [80.14650, 17.24850],
+          [80.14600, 17.24850],
+          [80.14600, 17.24800]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "plot_id": 11,
+        "plot_number": "P011",
+        "survey_number": "45-C-1",
+        "area_sqyards": 2400,
+        "area_sqft": 21600,
+        "facing": "East",
+        "status": "sold",
+        "price_per_sqyard": 2300,
+        "total_price": 5520000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Main Road", "Hospital Nearby"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.24900],
+          [80.14250, 17.24900],
+          [80.14250, 17.24950],
+          [80.14200, 17.24950],
+          [80.14200, 17.24900]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "plot_id": 12,
+        "plot_number": "P012",
+        "survey_number": "45-C-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "West",
+        "status": "available",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Park Access", "Water Tank"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.24900],
+          [80.14350, 17.24900],
+          [80.14350, 17.24950],
+          [80.14300, 17.24950],
+          [80.14300, 17.24900]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "plot_id": 13,
+        "plot_number": "P013",
+        "survey_number": "45-C-3",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "South",
+        "status": "available",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Vastu Compliant", "Solar Inverter Ready"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.24900],
+          [80.14445, 17.24900],
+          [80.14445, 17.24950],
+          [80.14400, 17.24950],
+          [80.14400, 17.24900]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "plot_id": 14,
+        "plot_number": "P014",
+        "survey_number": "45-C-4",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "North",
+        "status": "hold",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Garden Space", "Fencing Ready"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.24900],
+          [80.14550, 17.24900],
+          [80.14550, 17.24950],
+          [80.14500, 17.24950],
+          [80.14500, 17.24900]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "plot_id": 15,
+        "plot_number": "P015",
+        "survey_number": "45-C-5",
+        "area_sqyards": 3000,
+        "area_sqft": 27000,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2200,
+        "total_price": 6600000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Grand Corner", "Road Abuttal"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.24900],
+          [80.14655, 17.24900],
+          [80.14655, 17.24950],
+          [80.14600, 17.24950],
+          [80.14600, 17.24900]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "plot_id": 16,
+        "plot_number": "P016",
+        "survey_number": "45-D-1",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "West",
+        "status": "reserved",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Utility Box", "Street Light"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.25000],
+          [80.14245, 17.25000],
+          [80.14245, 17.25050],
+          [80.14200, 17.25050],
+          [80.14200, 17.25000]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "plot_id": 17,
+        "plot_number": "P017",
+        "survey_number": "45-D-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "South",
+        "status": "available",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Main Gate Proximity", "Paved Road"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.25000],
+          [80.14350, 17.25000],
+          [80.14350, 17.25050],
+          [80.14300, 17.25050],
+          [80.14300, 17.25000]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "plot_id": 18,
+        "plot_number": "P018",
+        "survey_number": "45-D-3",
+        "area_sqyards": 2400,
+        "area_sqft": 21600,
+        "facing": "North",
+        "status": "sold",
+        "price_per_sqyard": 2300,
+        "total_price": 5520000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Commercial Zoned", "24x7 Security"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.25000],
+          [80.14450, 17.25000],
+          [80.14450, 17.25050],
+          [80.14400, 17.25050],
+          [80.14400, 17.25000]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "plot_id": 19,
+        "plot_number": "P019",
+        "survey_number": "45-D-4",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Park Adjacent", "Best East Light"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.25000],
+          [80.14550, 17.25000],
+          [80.14550, 17.25050],
+          [80.14500, 17.25050],
+          [80.14500, 17.25000]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "properties": {
+        "plot_id": 20,
+        "plot_number": "P020",
+        "survey_number": "45-D-5",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "West",
+        "status": "hold",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Sunset View", "Quiet Zone"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.25000],
+          [80.14645, 17.25000],
+          [80.14645, 17.25050],
+          [80.14600, 17.25050],
+          [80.14600, 17.25000]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21,
+      "properties": {
+        "plot_id": 21,
+        "plot_number": "P021",
+        "survey_number": "46-A-1",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "North",
+        "status": "available",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Modern Layout", "Tree Lined"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.25100],
+          [80.14250, 17.25100],
+          [80.14250, 17.25150],
+          [80.14200, 17.25150],
+          [80.14200, 17.25100]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 22,
+      "properties": {
+        "plot_id": 22,
+        "plot_number": "P022",
+        "survey_number": "46-A-2",
+        "area_sqyards": 3000,
+        "area_sqft": 27000,
+        "facing": "South",
+        "status": "available",
+        "price_per_sqyard": 2200,
+        "total_price": 6600000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Premium Location", "Pool Ready"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.25100],
+          [80.14355, 17.25100],
+          [80.14355, 17.25150],
+          [80.14300, 17.25150],
+          [80.14300, 17.25100]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 23,
+      "properties": {
+        "plot_id": 23,
+        "plot_number": "P023",
+        "survey_number": "46-A-3",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "East",
+        "status": "reserved",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Gym Ready", "Community Center"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.25100],
+          [80.14445, 17.25100],
+          [80.14445, 17.25150],
+          [80.14400, 17.25150],
+          [80.14400, 17.25100]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 24,
+      "properties": {
+        "plot_id": 24,
+        "plot_number": "P024",
+        "survey_number": "46-A-4",
+        "area_sqyards": 2400,
+        "area_sqft": 21600,
+        "facing": "West",
+        "status": "sold",
+        "price_per_sqyard": 2300,
+        "total_price": 5520000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Landscaped", "Gated Community"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.25100],
+          [80.14550, 17.25100],
+          [80.14550, 17.25150],
+          [80.14500, 17.25150],
+          [80.14500, 17.25100]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 25,
+      "properties": {
+        "plot_id": 25,
+        "plot_number": "P025",
+        "survey_number": "46-A-5",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "North",
+        "status": "available",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Golf Course Proximity", "Spa Ready"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.25100],
+          [80.14650, 17.25100],
+          [80.14650, 17.25150],
+          [80.14600, 17.25150],
+          [80.14600, 17.25100]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 26,
+      "properties": {
+        "plot_id": 26,
+        "plot_number": "P026",
+        "survey_number": "46-B-1",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "South",
+        "status": "hold",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Health Club Ready", "Jogging Track"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.25200],
+          [80.14245, 17.25200],
+          [80.14245, 17.25250],
+          [80.14200, 17.25250],
+          [80.14200, 17.25200]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27,
+      "properties": {
+        "plot_id": 27,
+        "plot_number": "P027",
+        "survey_number": "46-B-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Library Ready", "Kids Play Area"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.25200],
+          [80.14350, 17.25200],
+          [80.14350, 17.25250],
+          [80.14300, 17.25250],
+          [80.14300, 17.25200]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28,
+      "properties": {
+        "plot_id": 28,
+        "plot_number": "P028",
+        "survey_number": "46-B-3",
+        "area_sqyards": 3000,
+        "area_sqft": 27000,
+        "facing": "West",
+        "status": "available",
+        "price_per_sqyard": 2200,
+        "total_price": 6600000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Business Center", "Event Space"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.25200],
+          [80.14455, 17.25200],
+          [80.14455, 17.25250],
+          [80.14400, 17.25250],
+          [80.14400, 17.25200]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 29,
+      "properties": {
+        "plot_id": 29,
+        "plot_number": "P029",
+        "survey_number": "46-B-4",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "North",
+        "status": "reserved",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Café Ready", "Tech Park"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.25200],
+          [80.14550, 17.25200],
+          [80.14550, 17.25250],
+          [80.14500, 17.25250],
+          [80.14500, 17.25200]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30,
+      "properties": {
+        "plot_id": 30,
+        "plot_number": "P030",
+        "survey_number": "46-B-5",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "South",
+        "status": "sold",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Luxury Ready", "Heritage Zone"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.25200],
+          [80.14645, 17.25200],
+          [80.14645, 17.25250],
+          [80.14600, 17.25250],
+          [80.14600, 17.25200]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 31,
+      "properties": {
+        "plot_id": 31,
+        "plot_number": "P031",
+        "survey_number": "46-C-1",
+        "area_sqyards": 2400,
+        "area_sqft": 21600,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2300,
+        "total_price": 5520000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Prime Location", "Transit Hub"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.25300],
+          [80.14250, 17.25300],
+          [80.14250, 17.25350],
+          [80.14200, 17.25350],
+          [80.14200, 17.25300]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 32,
+      "properties": {
+        "plot_id": 32,
+        "plot_number": "P032",
+        "survey_number": "46-C-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "West",
+        "status": "hold",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Wellness Center", "Meditation Spot"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.25300],
+          [80.14350, 17.25300],
+          [80.14350, 17.25350],
+          [80.14300, 17.25350],
+          [80.14300, 17.25300]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 33,
+      "properties": {
+        "plot_id": 33,
+        "plot_number": "P033",
+        "survey_number": "46-C-3",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "North",
+        "status": "available",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Nature Trail", "Organic Farm"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.25300],
+          [80.14445, 17.25300],
+          [80.14445, 17.25350],
+          [80.14400, 17.25350],
+          [80.14400, 17.25300]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 34,
+      "properties": {
+        "plot_id": 34,
+        "plot_number": "P034",
+        "survey_number": "46-C-4",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "South",
+        "status": "reserved",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Rooftop Terrace", "Smart Home"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.25300],
+          [80.14550, 17.25300],
+          [80.14550, 17.25350],
+          [80.14500, 17.25350],
+          [80.14500, 17.25300]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 35,
+      "properties": {
+        "plot_id": 35,
+        "plot_number": "P035",
+        "survey_number": "46-C-5",
+        "area_sqyards": 3000,
+        "area_sqft": 27000,
+        "facing": "East",
+        "status": "sold",
+        "price_per_sqyard": 2200,
+        "total_price": 6600000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Home Theater", "Wine Cellar"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.25300],
+          [80.14655, 17.25300],
+          [80.14655, 17.25350],
+          [80.14600, 17.25350],
+          [80.14600, 17.25300]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 36,
+      "properties": {
+        "plot_id": 36,
+        "plot_number": "P036",
+        "survey_number": "46-D-1",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "West",
+        "status": "available",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Guest House", "Observation Deck"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.25400],
+          [80.14245, 17.25400],
+          [80.14245, 17.25450],
+          [80.14200, 17.25450],
+          [80.14200, 17.25400]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 37,
+      "properties": {
+        "plot_id": 37,
+        "plot_number": "P037",
+        "survey_number": "46-D-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "North",
+        "status": "hold",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Music Room", "Art Studio"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.25400],
+          [80.14350, 17.25400],
+          [80.14350, 17.25450],
+          [80.14300, 17.25450],
+          [80.14300, 17.25400]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 38,
+      "properties": {
+        "plot_id": 38,
+        "plot_number": "P038",
+        "survey_number": "46-D-3",
+        "area_sqyards": 2400,
+        "area_sqft": 21600,
+        "facing": "South",
+        "status": "available",
+        "price_per_sqyard": 2300,
+        "total_price": 5520000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Workshop", "Studio Space"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.25400],
+          [80.14450, 17.25400],
+          [80.14450, 17.25450],
+          [80.14400, 17.25450],
+          [80.14400, 17.25400]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 39,
+      "properties": {
+        "plot_id": 39,
+        "plot_number": "P039",
+        "survey_number": "46-D-4",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "East",
+        "status": "reserved",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Cyber Lounge", "Innovation Hub"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.25400],
+          [80.14550, 17.25400],
+          [80.14550, 17.25450],
+          [80.14500, 17.25450],
+          [80.14500, 17.25400]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 40,
+      "properties": {
+        "plot_id": 40,
+        "plot_number": "P040",
+        "survey_number": "46-D-5",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "West",
+        "status": "sold",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Pavilion", "Amphitheater"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.25400],
+          [80.14645, 17.25400],
+          [80.14645, 17.25450],
+          [80.14600, 17.25450],
+          [80.14600, 17.25400]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 41,
+      "properties": {
+        "plot_id": 41,
+        "plot_number": "P041",
+        "survey_number": "47-A-1",
+        "area_sqyards": 3000,
+        "area_sqft": 27000,
+        "facing": "North",
+        "status": "available",
+        "price_per_sqyard": 2200,
+        "total_price": 6600000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Convention Center", "Banquet Hall"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.25500],
+          [80.14255, 17.25500],
+          [80.14255, 17.25550],
+          [80.14200, 17.25550],
+          [80.14200, 17.25500]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 42,
+      "properties": {
+        "plot_id": 42,
+        "plot_number": "P042",
+        "survey_number": "47-A-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "South",
+        "status": "hold",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Boutique Hotel", "Fine Dining"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.25500],
+          [80.14350, 17.25500],
+          [80.14350, 17.25550],
+          [80.14300, 17.25550],
+          [80.14300, 17.25500]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 43,
+      "properties": {
+        "plot_id": 43,
+        "plot_number": "P043",
+        "survey_number": "47-A-3",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "East",
+        "status": "available",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Culinary Institute", "Cooking School"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.25500],
+          [80.14445, 17.25500],
+          [80.14445, 17.25550],
+          [80.14400, 17.25550],
+          [80.14400, 17.25500]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 44,
+      "properties": {
+        "plot_id": 44,
+        "plot_number": "P044",
+        "survey_number": "47-A-4",
+        "area_sqyards": 2100,
+        "area_sqft": 18900,
+        "facing": "West",
+        "status": "reserved",
+        "price_per_sqyard": 2450,
+        "total_price": 5145000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Artisan Quarter", "Gallery Space"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14500, 17.25500],
+          [80.14550, 17.25500],
+          [80.14550, 17.25550],
+          [80.14500, 17.25550],
+          [80.14500, 17.25500]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 45,
+      "properties": {
+        "plot_id": 45,
+        "plot_number": "P045",
+        "survey_number": "47-A-5",
+        "area_sqyards": 2400,
+        "area_sqft": 21600,
+        "facing": "North",
+        "status": "sold",
+        "price_per_sqyard": 2300,
+        "total_price": 5520000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Marketplace", "Vendor Stalls"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14600, 17.25500],
+          [80.14650, 17.25500],
+          [80.14650, 17.25550],
+          [80.14600, 17.25550],
+          [80.14600, 17.25500]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 46,
+      "properties": {
+        "plot_id": 46,
+        "plot_number": "P046",
+        "survey_number": "47-B-1",
+        "area_sqyards": 1800,
+        "area_sqft": 16200,
+        "facing": "South",
+        "status": "available",
+        "price_per_sqyard": 2500,
+        "total_price": 4500000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Enterprise Zone", "Incubator"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14200, 17.25600],
+          [80.14245, 17.25600],
+          [80.14245, 17.25650],
+          [80.14200, 17.25650],
+          [80.14200, 17.25600]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 47,
+      "properties": {
+        "plot_id": 47,
+        "plot_number": "P047",
+        "survey_number": "47-B-2",
+        "area_sqyards": 2000,
+        "area_sqft": 18000,
+        "facing": "East",
+        "status": "hold",
+        "price_per_sqyard": 2400,
+        "total_price": 4800000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Tech Campus", "Data Center"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14300, 17.25600],
+          [80.14350, 17.25600],
+          [80.14350, 17.25650],
+          [80.14300, 17.25650],
+          [80.14300, 17.25600]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 48,
+      "properties": {
+        "plot_id": 48,
+        "plot_number": "P048",
+        "survey_number": "47-B-3",
+        "area_sqyards": 3000,
+        "area_sqft": 27000,
+        "facing": "West",
+        "status": "available",
+        "price_per_sqyard": 2200,
+        "total_price": 6600000,
+        "contact_agent": "+91 93928 87268",
+        "developer": "GV Infra Projects",
+        "project": "Stambadri Enclave",
+        "amenities": ["Innovation Park", "Startup Hub"],
+        "classification": "Residential Plot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [80.14400, 17.25600],
+          [80.14455, 17.25600],
+          [80.14455, 17.25650],
+          [80.14400, 17.25650],
+          [80.14400, 17.25600]
+        ]]
+      }
+    }
+  ]
+}
