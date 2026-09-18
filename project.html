@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stambadri Enclave — 3D Masterplan &amp; Inventory | GV Infra Projects</title>
 <meta name="description" content="Explore Stambadri Enclave's plot layout in realistic 3D — rotate, inspect road carriageways, walk street view, select a plot, and review real-time availability, price and Vastu orientation.">
+<link rel="icon" href="img/real/gv-infra-logo.png">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <link rel="stylesheet" href="css/land-map.css">
@@ -25,9 +26,65 @@
 <link rel="stylesheet" href="css/chatbot.css">
 <link rel="stylesheet" href="css/account-modal.css">
 <script src="js/language.js"></script>
-<script src="js/telangana-gis.js"></script>
+<script src="js/telangana-gis.js?v=20260914_v10"></script>
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Cesium.js"></script>
-<script src="js/cesium-3d.js"></script>
+<!-- Config & Logging -->
+<script src="js/cesium/logger.js"></script>
+
+<!-- Phase 2A-2D: Real terrain + photorealistic tiles -->
+<script src="js/cesium/reality-layer.js"></script>
+
+<!-- Phase 1: Real 3D Core (dependency order) -->
+<script src="js/cesium/map-stack.js"></script>
+<script src="js/cesium/terrain.js"></script>
+<script src="js/cesium/camera-director.js"></script>
+<script src="js/cesium/plot-tracking.js"></script>
+<script src="js/cesium/project-layer.js"></script>
+<script src="js/cesium/cinematic-tour.js"></script>
+<script src="js/cesium/measurement.js"></script>
+<script src="js/cesium/cesium-3d-core.js"></script> <!-- Bootstrap orchestrator -->
+
+<!-- Cesium 3D Viewer Initialization -->
+<script src="js/cesium-init.js"></script>
+
+<!-- Phase 2: AI (conditional) -->
+<script src="js/ai/scene-context.js" data-phase="2"></script>
+<script src="js/ai/spatial-tools.js" data-phase="2"></script>
+<script src="js/ai/voice-agent.js" data-phase="2"></script>
+
+<!-- Phase 3: Visualization (conditional) -->
+<script src="js/visualization/hud.js" data-phase="3"></script>
+<script src="js/visualization/effects.js" data-phase="3"></script>
+<script src="js/visualization/annotations.js" data-phase="3"></script>
+
+<!-- Phase 4: Advanced (conditional, Phase 4 optional) -->
+<script src="js/cesium/advanced-experiences.js" data-phase="4"></script>
+
+<script>
+// Wait for cesium-3d-core.js to load
+document.addEventListener('cesium3d:ready', () => {
+  // Legacy API compatibility for existing tour controls
+  window.cesiumViewer = {
+    playCinematicTour: () => window.Cesium3DViewer?.cinematicTour?.playPresetTour?.('project-overview'),
+    toggleTourPause: () => {
+      const status = window.Cesium3DViewer?.cinematicTour?.getStatus?.();
+      if (status?.isPlaying && !status?.isPaused) {
+        window.Cesium3DViewer.cinematicTour.pause();
+      } else if (status?.isPaused) {
+        window.Cesium3DViewer.cinematicTour.resume();
+      }
+    },
+    skipTourWaypoint: () => {
+      const status = window.Cesium3DViewer?.cinematicTour?.getStatus?.();
+      if (status) {
+        window.Cesium3DViewer.cinematicTour.jumpToStep(status.currentStep + 1);
+      }
+    },
+    exitTour: () => window.Cesium3DViewer?.cinematicTour?.stop?.()
+  };
+  console.log('[Compat] Legacy cesiumViewer shim activated');
+});
+</script>
 </head>
 <body>
 
@@ -194,11 +251,54 @@
     </div>
   </div>
 
+  <script>
+    window.switchGVView = function(view) {
+      console.log('[switchGVView] Toggling view to:', view);
+      var sections = { land: 'land-explorer', model: 'layout-explorer', showcase: 'plot-showcase', cesium: 'cesium-explorer' };
+      var buttons = { land: 'view-land', model: 'view-model', showcase: 'view-showcase', cesium: 'view-cesium' };
+
+      Object.keys(sections).forEach(function(key) {
+        var id = sections[key];
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (key === view) {
+          el.removeAttribute('hidden');
+          el.style.display = (key === 'model') ? 'grid' : 'block';
+        } else {
+          el.setAttribute('hidden', '');
+          el.style.display = 'none';
+        }
+      });
+
+      Object.keys(buttons).forEach(function(key) {
+        var id = buttons[key];
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (key === view) {
+          el.classList.add('active');
+          el.setAttribute('aria-pressed', 'true');
+        } else {
+          el.classList.remove('active');
+          el.setAttribute('aria-pressed', 'false');
+        }
+      });
+
+      var target = document.getElementById(sections[view]);
+      if (target && view !== 'model') {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      if (window.GV_LAND_ENGINE && typeof window.GV_LAND_ENGINE.onViewSwitched === 'function') {
+        window.GV_LAND_ENGINE.onViewSwitched(view);
+      }
+    };
+  </script>
+
   <div class="land-view-switch" role="group" aria-label="Property viewer">
-    <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer">3D Layout</button>
-    <button id="view-land" aria-pressed="false" aria-controls="land-explorer">Real Satellite Map</button>
-    <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase">Plot Cards</button>
-    <button id="view-cesium" aria-pressed="false" aria-controls="cesium-explorer">Terrain Globe</button>
+    <button id="view-model" class="active" aria-pressed="true" aria-controls="layout-explorer" onclick="window.switchGVView('model')">3D Layout</button>
+    <button id="view-land" aria-pressed="false" aria-controls="land-explorer" onclick="window.switchGVView('land')">Real Satellite Map</button>
+    <button id="view-showcase" aria-pressed="false" aria-controls="plot-showcase" onclick="window.switchGVView('showcase')">Plot Cards</button>
+    <button id="view-cesium" aria-pressed="false" aria-controls="cesium-explorer" onclick="window.switchGVView('cesium')">Terrain Globe</button>
     <span>3D model · satellite context · Vastu · direct booking</span>
   </div>
   <p id="layout-loading" role="status" hidden></p>
@@ -481,11 +581,43 @@
 
   <!-- CESIUMJS 3D GLOBE & PHOTOREALISTIC TERRAIN SECTION -->
   <section id="cesium-explorer" class="land-explorer" aria-label="Cesium 3D Globe & Photorealistic Terrain" hidden>
-    <div class="land-map-heading">
+    <div class="land-map-heading" style="display:flex; justify-content: space-between; align-items: flex-end;">
       <div><span class="land-eyebrow">CESIUM 3D GLOBE &amp; TERRAIN</span><h2>Real 3D Land &amp; Photorealistic Terrain</h2><p>Gurralapadu, Khammam Region · World Terrain Elevation &amp; 3D Extruded Parcels</p></div>
+      <button id="start-tour-btn" onclick="if(window.cesiumViewer) window.cesiumViewer.playCinematicTour()" style="background: #111827; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.2rem;">🎥</span> Fly Over Stambadri
+      </button>
     </div>
     <div style="width:100%; height:600px; border-radius:16px; overflow:hidden; border:1px solid #cbd5e1; position:relative;">
       <div id="cesium-container" style="width:100%; height:100%;"></div>
+      
+      <!-- Phase 2: AI Mic Button -->
+      <button id="ai-mic-btn" class="cesium-button" data-phase="2" style="display:none; position:absolute; bottom:90px; right:30px; z-index:10; background:#2563eb; color:white; border:none; padding:12px 24px; border-radius:30px; font-weight:600; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2);">🎙️ Voice Commands</button>
+
+      <!-- Phase 3: HUD Overlay -->
+      <div id="cesium-hud" class="cesium-overlay" data-phase="3" style="display:none; position:absolute; top:30px; left:30px; z-index:10; background:rgba(17,24,39,0.85); backdrop-filter:blur(8px); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); color:white; width:280px;"></div>
+
+      <!-- Phase 3: Annotation Toolbar -->
+      <div id="annotation-toolbar" class="annotation-controls" data-phase="3" style="display:none; position:absolute; top:30px; right:30px; z-index:10; background:rgba(17,24,39,0.85); backdrop-filter:blur(8px); padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); gap:8px;">
+        <button id="annotation-draw-btn" style="background:transparent; color:white; border:none; cursor:pointer;">✏️ Draw</button>
+        <button id="annotation-clear-btn" style="background:transparent; color:white; border:none; cursor:pointer;">🗑️ Clear</button>
+      </div>
+
+      <!-- Phase 3: Annotation Canvas -->
+      <canvas id="annotation-canvas" class="annotation-overlay" data-phase="3" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9;"></canvas>
+      
+      <!-- Cinematic Tour Controls Overlay -->
+      <div id="tour-controls" style="display:none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); gap: 16px; align-items: center; z-index: 10;">
+        <button onclick="if(window.cesiumViewer) window.cesiumViewer.toggleTourPause()" id="tour-pause-btn" style="background:transparent; color:white; border:none; font-weight:bold; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">⏸ Pause</button>
+        <div style="width:1px; height:16px; background:rgba(255,255,255,0.2);"></div>
+        <button onclick="if(window.cesiumViewer) window.cesiumViewer.skipTourWaypoint()" style="background:transparent; color:white; border:none; font-weight:bold; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">⏭ Skip</button>
+        <div style="width:1px; height:16px; background:rgba(255,255,255,0.2);"></div>
+        <button onclick="if(window.cesiumViewer) window.cesiumViewer.exitTour()" style="background:transparent; color:#f87171; border:none; font-weight:bold; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">✕ Exit</button>
+      </div>
+
+      <!-- Replay Overlay -->
+      <div id="tour-replay" style="display:none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10;">
+        <button onclick="if(window.cesiumViewer) window.cesiumViewer.playCinematicTour()" style="background: #16a34a; color:white; border:none; padding: 12px 24px; border-radius: 30px; font-weight:600; cursor:pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:8px;">🔄 Replay Tour</button>
+      </div>
     </div>
   </section>
 
@@ -750,11 +882,11 @@
   }
 }
 </script>
-<script src="js/data.js"></script>
-<script src="js/auth.js"></script>
+<script src="js/data.js?v=20260914_v20"></script>
+<script src="js/auth.js?v=20260914_v20"></script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-<script type="module" src="js/land-map.js?v=layout1"></script>
-<script src="js/main.js"></script>
-<script src="js/chatbot.js"></script>
+<script type="module" src="js/land-map.js?v=20260914_v20"></script>
+<script src="js/main.js?v=20260914_v20"></script>
+<script src="js/chatbot.js?v=20260914_v20"></script>
 </body>
 </html>
