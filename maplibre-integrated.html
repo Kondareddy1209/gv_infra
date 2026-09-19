@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GV Infra MapLibre 2D/3D Integrated Viewer</title>
+  <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; }
+    #map { width: 100%; height: 100%; }
+    .glassmorphism {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+  </style>
+</head>
+<body class="relative bg-slate-950 text-slate-100">
+
+  <!-- TOP HEADER -->
+  <header class="absolute top-4 left-4 z-20 flex items-center gap-3">
+    <div class="glassmorphism rounded-xl px-4 py-3 flex items-center gap-3 shadow-2xl">
+      <div class="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-lg">🗺️</div>
+      <div>
+        <h1 class="font-bold text-sm tracking-wide">GV INFRA PROJECTS — MAPLIBRE 2D/3D</h1>
+        <p class="text-xs text-slate-400"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>Peacock Valley • Stambadri Enclave</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOP RIGHT: MODE TOGGLE -->
+  <div class="absolute top-4 right-4 z-20 flex flex-col gap-2.5">
+    <div class="glassmorphism p-1.5 rounded-xl flex items-center shadow-2xl">
+      <button id="btn2D" onclick="setViewMode('2D')" class="px-4 py-2 text-xs font-semibold rounded-lg transition-all text-slate-300 hover:text-white">
+        <i class="fa-regular fa-map mr-1.5"></i>2D
+      </button>
+      <button id="btn3D" onclick="setViewMode('3D')" class="px-4 py-2 text-xs font-semibold rounded-lg transition-all bg-emerald-500 text-white shadow-md">
+        <i class="fa-solid fa-cube mr-1.5"></i>3D
+      </button>
+    </div>
+  </div>
+
+  <!-- LEFT: LAYER CONTROLS -->
+  <div class="absolute bottom-6 left-4 z-20 glassmorphism p-4 rounded-2xl w-72 shadow-2xl">
+    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🎨 Map Layers</h3>
+    <div class="space-y-2.5 text-xs font-medium">
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-emerald-400">
+          <i class="fa-solid fa-border-all text-emerald-400 w-4"></i> Plot Boundaries
+        </span>
+        <input type="checkbox" id="togglePlots" checked onchange="toggleLayer('plots')" class="w-4 h-4 accent-emerald-500 rounded">
+      </label>
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-sky-400">
+          <i class="fa-solid fa-road text-sky-400 w-4"></i> Roads & Streets
+        </span>
+        <input type="checkbox" id="toggleRoads" checked onchange="toggleLayer('roads')" class="w-4 h-4 accent-sky-500 rounded">
+      </label>
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-amber-400">
+          <i class="fa-solid fa-building text-amber-400 w-4"></i> 3D Buildings
+        </span>
+        <input type="checkbox" id="toggleBuildings" checked onchange="toggleLayer('buildings')" class="w-4 h-4 accent-amber-500 rounded">
+      </label>
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-cyan-400">
+          <i class="fa-solid fa-faucet-drip text-cyan-400 w-4"></i> Utilities
+        </span>
+        <input type="checkbox" id="toggleUtilities" checked onchange="toggleLayer('utilities')" class="w-4 h-4 accent-cyan-500 rounded">
+      </label>
+    </div>
+  </div>
+
+  <!-- PLOT INSPECTION CARD -->
+  <div id="plotCard" class="hidden absolute bottom-6 right-4 z-20 glassmorphism p-5 rounded-2xl w-80 shadow-2xl">
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <span id="cardStatus" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Available</span>
+        <h2 id="cardTitle" class="text-base font-bold text-white mt-2">Plot #001</h2>
+      </div>
+      <button onclick="closeCard()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="grid grid-cols-2 gap-2 text-xs mb-4">
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">📏 Area</div>
+        <div id="cardArea" class="font-bold text-slate-100 mt-0.5">1800 Sq.Yds</div>
+      </div>
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">🧭 Facing</div>
+        <div id="cardFacing" class="font-bold text-slate-100 mt-0.5">East</div>
+      </div>
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">📐 Dimensions</div>
+        <div id="cardDim" class="font-bold text-slate-100 mt-0.5">45' x 40'</div>
+      </div>
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">💰 Price</div>
+        <div id="cardPrice" class="font-bold text-emerald-400 mt-0.5">₹35.1 L</div>
+      </div>
+    </div>
+    <button class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 font-semibold text-xs rounded-xl transition">
+      📞 Inquire Now
+    </button>
+  </div>
+
+  <!-- MAP -->
+  <div id="map"></div>
+
+  <script>
+    const CENTER = [80.1365, 17.2480];
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+      center: CENTER,
+      zoom: 17,
+      pitch: 45,
+      bearing: -35,
+      antialias: true
+    });
+
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+    // Sample plots (ACTUAL Khammam coordinates)
+    const plotsData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "PV-001",
+            "name": "Plot #001",
+            "area": "1800 Sq.Yds",
+            "dim": "45' x 40'",
+            "facing": "East Facing",
+            "status": "Available",
+            "price": "₹35.1 Lakhs",
+            "color": "#10b981",
+            "height": 1.0
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[[80.1360, 17.2485], [80.1365, 17.2485], [80.1365, 17.2480], [80.1360, 17.2480], [80.1360, 17.2485]]]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "PV-002",
+            "name": "Plot #002",
+            "area": "1800 Sq.Yds",
+            "dim": "45' x 40'",
+            "facing": "East Facing",
+            "status": "Reserved",
+            "price": "₹35.1 Lakhs",
+            "color": "#f59e0b",
+            "height": 1.0
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[[80.1366, 17.2485], [80.1371, 17.2485], [80.1371, 17.2480], [80.1366, 17.2480], [80.1366, 17.2485]]]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "PV-003",
+            "name": "Plot #003",
+            "area": "1800 Sq.Yds",
+            "dim": "45' x 40'",
+            "facing": "North Facing",
+            "status": "Sold",
+            "price": "₹35.1 Lakhs",
+            "color": "#f43f5e",
+            "height": 1.0
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[[80.1360, 17.2475], [80.1365, 17.2475], [80.1365, 17.2470], [80.1360, 17.2470], [80.1360, 17.2475]]]
+          }
+        }
+      ]
+    };
+
+    const buildingsData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "height": 9.5, "name": "Villa A" },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1368, 17.2485], [80.1373, 17.2485], [80.1373, 17.2480], [80.1368, 17.2480], [80.1368, 17.2485]]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "height": 12.0, "name": "Clubhouse" },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1375, 17.2480], [80.1382, 17.2480], [80.1382, 17.2472], [80.1375, 17.2472], [80.1375, 17.2480]]] }
+        }
+      ]
+    };
+
+    const roadsData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "name": "Main Avenue" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1355, 17.2480], [80.1385, 17.2480]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "name": "Cross Road" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1370, 17.2490], [80.1370, 17.2465]] }
+        }
+      ]
+    };
+
+    const utilitiesData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "type": "Water Main" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1355, 17.2481], [80.1385, 17.2481]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "type": "Sewer" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1355, 17.2479], [80.1385, 17.2479]] }
+        }
+      ]
+    };
+
+    map.on('load', () => {
+      // Roads
+      map.addSource('roads-src', { type: 'geojson', data: roadsData });
+      map.addLayer({ id: 'roads', type: 'line', source: 'roads-src', paint: { 'line-color': '#334155', 'line-width': 8 } });
+
+      // Utilities
+      map.addSource('utilities-src', { type: 'geojson', data: utilitiesData });
+      map.addLayer({ id: 'utilities', type: 'line', source: 'utilities-src', paint: { 'line-color': '#06b6d4', 'line-width': 2, 'line-dasharray': [1, 2] } });
+
+      // Plots
+      map.addSource('plots-src', { type: 'geojson', data: plotsData });
+      map.addLayer({
+        id: 'plots',
+        type: 'fill-extrusion',
+        source: 'plots-src',
+        paint: {
+          'fill-extrusion-color': ['get', 'color'],
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-opacity': 0.8
+        }
+      });
+
+      // Buildings
+      map.addSource('buildings-src', { type: 'geojson', data: buildingsData });
+      map.addLayer({
+        id: 'buildings',
+        type: 'fill-extrusion',
+        source: 'buildings-src',
+        paint: {
+          'fill-extrusion-color': '#0ea5e9',
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-opacity': 0.9
+        }
+      });
+
+      // Click on plots
+      map.on('click', 'plots', (e) => {
+        const p = e.features[0].properties;
+        document.getElementById('cardTitle').innerText = p.name;
+        document.getElementById('cardArea').innerText = p.area;
+        document.getElementById('cardFacing').innerText = p.facing;
+        document.getElementById('cardDim').innerText = p.dim;
+        document.getElementById('cardPrice').innerText = p.price;
+        document.getElementById('cardStatus').innerText = p.status;
+        document.getElementById('plotCard').classList.remove('hidden');
+      });
+
+      map.on('mouseenter', 'plots', () => map.getCanvas().style.cursor = 'pointer');
+      map.on('mouseleave', 'plots', () => map.getCanvas().style.cursor = '');
+    });
+
+    function setViewMode(mode) {
+      if (mode === '2D') {
+        map.easeTo({ pitch: 0, bearing: 0, duration: 1200 });
+        document.getElementById('btn2D').className = 'px-4 py-2 text-xs font-semibold rounded-lg transition-all bg-emerald-500 text-white shadow-md';
+        document.getElementById('btn3D').className = 'px-4 py-2 text-xs font-semibold rounded-lg transition-all text-slate-300';
+      } else {
+        map.easeTo({ pitch: 45, bearing: -35, duration: 1200 });
+        document.getElementById('btn3D').className = 'px-4 py-2 text-xs font-semibold rounded-lg transition-all bg-emerald-500 text-white shadow-md';
+        document.getElementById('btn2D').className = 'px-4 py-2 text-xs font-semibold rounded-lg transition-all text-slate-300';
+      }
+    }
+
+    function toggleLayer(type) {
+      const visibility = map.getLayoutProperty(type, 'visibility') === 'visible' ? 'none' : 'visible';
+      map.setLayoutProperty(type, 'visibility', visibility);
+    }
+
+    function closeCard() {
+      document.getElementById('plotCard').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

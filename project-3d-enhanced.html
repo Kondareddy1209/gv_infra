@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GV Infra 3D Enhanced — Realistic + Controls</title>
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css">
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Cesium.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+    #cesium-container { width: 100%; height: 100%; }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+  <div id="cesium-container"></div>
+
+  <!-- Header -->
+  <header class="absolute top-4 left-4 z-20 pointer-events-none">
+    <div class="glass-panel rounded-xl px-4 py-3 flex items-center gap-3 pointer-events-auto shadow-2xl">
+      <div class="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-lg">🌍</div>
+      <div>
+        <h1 class="font-bold text-sm">GV INFRA 3D ENHANCED</h1>
+        <p class="text-xs text-slate-400">Realistic Ground-Level + Full Controls</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Layer Controls -->
+  <aside class="absolute bottom-6 left-4 z-20 glass-panel p-4 rounded-xl w-72 pointer-events-auto shadow-2xl">
+    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">🎨 Layer Controls</h3>
+    <div class="space-y-2 text-xs">
+      <label class="flex items-center justify-between cursor-pointer">
+        <span class="text-slate-200">Plot Boundaries</span>
+        <input type="checkbox" checked class="w-4 h-4 accent-emerald-500">
+      </label>
+      <label class="flex items-center justify-between cursor-pointer">
+        <span class="text-slate-200">3D Buildings</span>
+        <input type="checkbox" checked class="w-4 h-4 accent-emerald-500">
+      </label>
+      <label class="flex items-center justify-between cursor-pointer">
+        <span class="text-slate-200">Terrain Overlay</span>
+        <input type="checkbox" checked class="w-4 h-4 accent-emerald-500">
+      </label>
+    </div>
+  </aside>
+
+  <!-- Camera Presets -->
+  <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 pointer-events-none">
+    <div class="glass-panel p-2 rounded-xl flex gap-1 pointer-events-auto shadow-2xl">
+      <button onclick="cameraPreset('top')" class="px-3 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 transition"><i class="fa-solid fa-angles-up mr-1"></i>Top</button>
+      <button onclick="cameraPreset('iso')" class="px-3 py-2 text-xs font-semibold rounded-lg bg-emerald-500 text-white"><i class="fa-solid fa-cube mr-1"></i>ISO</button>
+      <button onclick="cameraPreset('side')" class="px-3 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 transition"><i class="fa-solid fa-arrows-left-right mr-1"></i>Side</button>
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById('cesium-container');
+    const map = new Cesium.Viewer(container, {
+      imageryProvider: new Cesium.UrlTemplateImageryProvider({
+        url: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+        subdomains: ['0', '1', '2', '3']
+      }),
+      scene3DOnly: true,
+      animation: false,
+      timeline: false,
+      baseLayerPicker: false,
+      fullscreenButton: true,
+      navigationHelpButton: false,
+      geocoder: false,
+      homeButton: false,
+      sceneModePicker: false
+    });
+
+    // Setup terrain
+    try {
+      if (typeof Cesium.createWorldTerrainAsync === 'function') {
+        Cesium.createWorldTerrainAsync().then(terrain => {
+          map.terrainProvider = terrain;
+        });
+      }
+    } catch (e) {
+      console.warn('Terrain unavailable:', e);
+    }
+
+    map.scene.globe.depthTestAgainstTerrain = true;
+    map.scene.globe.enableLighting = true;
+
+    // Camera presets
+    function cameraPreset(mode) {
+      const center = Cesium.Cartesian3.fromDegrees(80.1365, 17.2480, 800);
+      if (mode === 'top') {
+        map.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(80.1365, 17.2480, 1200), orientation: { heading: 0, pitch: -90, roll: 0 } });
+      } else if (mode === 'iso') {
+        map.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(80.1365, 17.2480, 800), orientation: { heading: 0, pitch: -45, roll: 0 } });
+      } else if (mode === 'side') {
+        map.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(80.1500, 17.2480, 600), orientation: { heading: 90, pitch: -35, roll: 0 } });
+      }
+    }
+
+    // Default view
+    cameraPreset('iso');
+  </script>
+</body>
+</html>

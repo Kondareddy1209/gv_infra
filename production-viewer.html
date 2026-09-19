@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GV Infra Production Viewer — 2D/3D/Stratification</title>
+  <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; }
+    #map-container, #canvas-container { width: 100%; height: 100%; }
+    .glass { background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+  <!-- Map Container (MapLibre) -->
+  <div id="map-container"></div>
+
+  <!-- Canvas Container (Three.js - Hidden by default) -->
+  <canvas id="canvas-container" class="hidden absolute top-0 left-0 w-full h-full"></canvas>
+
+  <!-- TOP HEADER -->
+  <header class="absolute top-4 left-4 z-30 pointer-events-none">
+    <div class="glass rounded-xl px-4 py-3 flex items-center gap-3 pointer-events-auto shadow-2xl">
+      <div class="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-lg">🏗️</div>
+      <div>
+        <h1 class="font-bold text-sm tracking-wide">GV INFRA PRODUCTION VIEWER</h1>
+        <p class="text-xs text-slate-400"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1"></span>2D MapLibre • 3D Cesium • Stratification</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOP RIGHT: VIEW MODE TOGGLE -->
+  <div class="absolute top-4 right-4 z-30 flex flex-col gap-2">
+    <div class="glass p-1.5 rounded-xl flex pointer-events-auto shadow-2xl">
+      <button id="btn-2d" onclick="switchView('2d')" class="px-4 py-2 text-xs font-bold rounded-lg transition text-slate-300 hover:text-white">
+        <i class="fa-regular fa-map mr-1"></i>2D MAP
+      </button>
+      <button id="btn-3d" onclick="switchView('3d')" class="px-4 py-2 text-xs font-bold rounded-lg transition text-slate-300 hover:text-white">
+        <i class="fa-solid fa-cube mr-1"></i>3D CESIUM
+      </button>
+      <button id="btn-strat" onclick="switchView('strat')" class="px-4 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-white shadow-md">
+        <i class="fa-solid fa-layer-group mr-1"></i>STRATIFY
+      </button>
+    </div>
+  </div>
+
+  <!-- LEFT PANEL: CONTROLS -->
+  <aside class="absolute bottom-6 left-4 z-30 glass p-4 rounded-2xl w-72 pointer-events-auto shadow-2xl max-h-[75vh] overflow-y-auto">
+    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">⚙️ Controls</h3>
+
+    <!-- View Mode Indicators -->
+    <div class="mb-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+      <p id="mode-label" class="text-xs font-bold text-emerald-400">🗺️ 2D MapLibre View Active</p>
+    </div>
+
+    <!-- Layer Toggles -->
+    <div class="mb-4">
+      <h4 class="text-xs font-semibold text-slate-400 mb-2.5">📍 Map Layers</h4>
+      <div class="space-y-2 text-xs">
+        <label class="flex items-center justify-between cursor-pointer">
+          <span class="text-slate-200">Plot Boundaries</span>
+          <input type="checkbox" id="layer-plots" checked class="w-4 h-4 accent-emerald-500">
+        </label>
+        <label class="flex items-center justify-between cursor-pointer">
+          <span class="text-slate-200">Roads & Streets</span>
+          <input type="checkbox" id="layer-roads" checked class="w-4 h-4 accent-sky-500">
+        </label>
+        <label class="flex items-center justify-between cursor-pointer">
+          <span class="text-slate-200">3D Buildings</span>
+          <input type="checkbox" id="layer-buildings" checked class="w-4 h-4 accent-amber-500">
+        </label>
+        <label class="flex items-center justify-between cursor-pointer">
+          <span class="text-slate-200">Underground Utilities</span>
+          <input type="checkbox" id="layer-utilities" checked class="w-4 h-4 accent-cyan-500">
+        </label>
+      </div>
+    </div>
+
+    <!-- Stratification Slider (Visible only in Stratify view) -->
+    <div id="strat-controls" class="hidden mb-4">
+      <h4 class="text-xs font-semibold text-slate-400 mb-2.5">📊 Stratification Depth</h4>
+      <input id="strat-slider" type="range" min="0" max="100" value="0" class="w-full">
+      <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+        <span>Surface</span>
+        <span id="strat-value" class="text-emerald-400 font-bold">0%</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-4 pt-4 border-t border-slate-700/50 space-y-2">
+      <button onclick="exportData()" class="w-full py-2 px-3 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/30 text-sky-300 rounded-lg text-xs font-semibold transition">
+        📥 Export GeoJSON
+      </button>
+      <button onclick="resetView()" class="w-full py-2 px-3 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-xs font-semibold transition">
+        🔄 Reset View
+      </button>
+    </div>
+  </aside>
+
+  <!-- Plot Details Card -->
+  <div id="plot-card" class="hidden absolute bottom-6 right-4 z-30 glass p-5 rounded-2xl w-80 pointer-events-auto shadow-2xl">
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <span id="plot-status" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Available</span>
+        <h2 id="plot-name" class="text-base font-bold text-white mt-2">Plot #001</h2>
+      </div>
+      <button onclick="closePlotCard()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="grid grid-cols-2 gap-2 text-xs mb-4">
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">📏 Area</div>
+        <div id="plot-area" class="font-bold text-slate-100 mt-0.5">1800 Sq.Yds</div>
+      </div>
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">🧭 Facing</div>
+        <div id="plot-facing" class="font-bold text-slate-100 mt-0.5">East</div>
+      </div>
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">📐 Dimensions</div>
+        <div id="plot-dim" class="font-bold text-slate-100 mt-0.5">45' x 40'</div>
+      </div>
+      <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+        <div class="text-slate-400 text-[10px]">💰 Price</div>
+        <div id="plot-price" class="font-bold text-emerald-400 mt-0.5">₹35.1 L</div>
+      </div>
+    </div>
+    <button class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 font-semibold text-xs rounded-xl transition">
+      📞 Inquire Now
+    </button>
+  </div>
+
+  <script>
+    const CENTER = [80.1365, 17.2480];
+    let currentView = 'strat'; // Start with stratification
+    let map = null;
+
+    // Initialize MapLibre
+    function initMapLibre() {
+      map = new maplibregl.Map({
+        container: 'map-container',
+        style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        center: CENTER,
+        zoom: 17,
+        pitch: 45,
+        bearing: -35
+      });
+
+      map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+      const plotsData = {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": { "id": "PV-001", "name": "Plot #001", "area": "1800 Sq.Yds", "dim": "45' x 40'", "facing": "East", "status": "Available", "price": "₹35.1 L", "color": "#10b981", "height": 1.0 },
+            "geometry": { "type": "Polygon", "coordinates": [[[80.1360, 17.2485], [80.1365, 17.2485], [80.1365, 17.2480], [80.1360, 17.2480], [80.1360, 17.2485]]] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "id": "PV-002", "name": "Plot #002", "area": "1800 Sq.Yds", "dim": "45' x 40'", "facing": "East", "status": "Reserved", "price": "₹35.1 L", "color": "#f59e0b", "height": 1.0 },
+            "geometry": { "type": "Polygon", "coordinates": [[[80.1366, 17.2485], [80.1371, 17.2485], [80.1371, 17.2480], [80.1366, 17.2480], [80.1366, 17.2485]]] }
+          },
+          {
+            "type": "Feature",
+            "properties": { "id": "PV-003", "name": "Plot #003", "area": "1800 Sq.Yds", "dim": "45' x 40'", "facing": "North", "status": "Sold", "price": "₹35.1 L", "color": "#f43f5e", "height": 1.0 },
+            "geometry": { "type": "Polygon", "coordinates": [[[80.1360, 17.2475], [80.1365, 17.2475], [80.1365, 17.2470], [80.1360, 17.2470], [80.1360, 17.2475]]] }
+          }
+        ]
+      };
+
+      const buildingsData = {
+        "type": "FeatureCollection",
+        "features": [
+          { "type": "Feature", "properties": { "height": 9.5 }, "geometry": { "type": "Polygon", "coordinates": [[[80.1368, 17.2485], [80.1373, 17.2485], [80.1373, 17.2480], [80.1368, 17.2480], [80.1368, 17.2485]]] } },
+          { "type": "Feature", "properties": { "height": 12.0 }, "geometry": { "type": "Polygon", "coordinates": [[[80.1375, 17.2480], [80.1382, 17.2480], [80.1382, 17.2472], [80.1375, 17.2472], [80.1375, 17.2480]]] } }
+        ]
+      };
+
+      const roadsData = {
+        "type": "FeatureCollection",
+        "features": [
+          { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[80.1355, 17.2480], [80.1385, 17.2480]] } },
+          { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[80.1370, 17.2490], [80.1370, 17.2465]] } }
+        ]
+      };
+
+      const utilitiesData = {
+        "type": "FeatureCollection",
+        "features": [
+          { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[80.1355, 17.2481], [80.1385, 17.2481]] } },
+          { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [[80.1355, 17.2479], [80.1385, 17.2479]] } }
+        ]
+      };
+
+      map.on('load', () => {
+        map.addSource('roads-src', { type: 'geojson', data: roadsData });
+        map.addLayer({ id: 'roads', type: 'line', source: 'roads-src', paint: { 'line-color': '#334155', 'line-width': 8 } });
+
+        map.addSource('utilities-src', { type: 'geojson', data: utilitiesData });
+        map.addLayer({ id: 'utilities', type: 'line', source: 'utilities-src', paint: { 'line-color': '#06b6d4', 'line-width': 2, 'line-dasharray': [1, 2] } });
+
+        map.addSource('plots-src', { type: 'geojson', data: plotsData });
+        map.addLayer({ id: 'plots', type: 'fill-extrusion', source: 'plots-src', paint: { 'fill-extrusion-color': ['get', 'color'], 'fill-extrusion-height': ['get', 'height'], 'fill-extrusion-opacity': 0.8 } });
+
+        map.addSource('buildings-src', { type: 'geojson', data: buildingsData });
+        map.addLayer({ id: 'buildings', type: 'fill-extrusion', source: 'buildings-src', paint: { 'fill-extrusion-color': '#0ea5e9', 'fill-extrusion-height': ['get', 'height'], 'fill-extrusion-opacity': 0.9 } });
+
+        map.on('click', 'plots', (e) => {
+          const p = e.features[0].properties;
+          document.getElementById('plot-name').innerText = p.name;
+          document.getElementById('plot-area').innerText = p.area;
+          document.getElementById('plot-facing').innerText = p.facing;
+          document.getElementById('plot-dim').innerText = p.dim;
+          document.getElementById('plot-price').innerText = p.price;
+          document.getElementById('plot-status').innerText = p.status;
+          document.getElementById('plot-card').classList.remove('hidden');
+        });
+
+        map.on('mouseenter', 'plots', () => map.getCanvas().style.cursor = 'pointer');
+        map.on('mouseleave', 'plots', () => map.getCanvas().style.cursor = '');
+      });
+    }
+
+    function switchView(mode) {
+      currentView = mode;
+      document.getElementById('map-container').classList.toggle('hidden', mode !== '2d');
+      document.getElementById('canvas-container').classList.toggle('hidden', mode !== 'strat');
+      document.getElementById('strat-controls').classList.toggle('hidden', mode !== 'strat');
+
+      const buttons = ['btn-2d', 'btn-3d', 'btn-strat'];
+      buttons.forEach(b => document.getElementById(b).classList.remove('bg-emerald-500', 'text-white', 'shadow-md'));
+      document.getElementById('btn-' + mode).classList.add('bg-emerald-500', 'text-white', 'shadow-md');
+
+      const labels = { '2d': '🗺️ 2D MapLibre View', '3d': '🎬 3D Cesium View', 'strat': '📊 Stratification Analysis' };
+      document.getElementById('mode-label').innerText = labels[mode];
+
+      if (mode === '2d' && !map) {
+        initMapLibre();
+      }
+    }
+
+    function closePlotCard() {
+      document.getElementById('plot-card').classList.add('hidden');
+    }
+
+    function exportData() {
+      alert('📥 Export functionality would generate GeoJSON file with all plots & properties');
+    }
+
+    function resetView() {
+      location.reload();
+    }
+
+    // Start with stratification view
+    document.addEventListener('DOMContentLoaded', () => {
+      switchView('strat');
+    });
+  </script>
+</body>
+</html>
