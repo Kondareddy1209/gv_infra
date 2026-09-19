@@ -74,7 +74,7 @@ class KhammamRealEstateGIS {
     }
 
     // Set Official Cesium Ion Access Token
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImpOSG5tR1R2VlpiakI3N1oiLCJqdGkiOiJlNzQyYjFkYy1mNTFhLTRmNDYtYWZlYS1lMDkzOWQxNTNhNTgiLCJpZCI6NTAwMjQ1LCJpc3MiOiJodHRwczovL2FwaS5jZXNpdW0uY29tIiwiYXVkIjoidW5kZWZpbmVkX2RlZmF1bHQiLCJpYXQiOjE3ODk3NTEyMDB9.afgAZ0_-DypvJYTakxIRlN22zwBQAOAvJTmjnoObJz4';
+    Cesium.Ion.defaultAccessToken = window.CESIUM_ION_TOKEN || '';
 
     // 100% Free High-Res Satellite Imagery (Esri World Imagery)
     const esriImagery = new Cesium.UrlTemplateImageryProvider({
