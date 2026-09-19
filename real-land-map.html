@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GV Infra Projects — Interactive Land Border Editor & Real 3D Satellite Engine</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <!-- Leaflet Draw CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
+  <!-- Cesium CSS for Real 3D Satellite Terrain -->
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0b0f19;
+      color: #f8fafc;
+      overflow: hidden;
+    }
+
+    /* Full-Bleed Satellite Map Canvas */
+    #real-map {
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    /* Top Header Bar */
+    .top-bar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .brand-pill {
+      pointer-events: auto;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .venture-select {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 800;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .venture-select option {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    .brand-pill .subtitle {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .brand-pill .badge {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Quick Nav Buttons */
+    .quick-nav-bar {
+      pointer-events: auto;
+      display: flex;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 6px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .ctrl-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .ctrl-btn:hover, .ctrl-btn.active {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    .ctrl-btn.btn-edit-border {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      font-weight: 800;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+
+    .ctrl-btn.btn-edit-border.editing-now {
+      background: #ef4444;
+      color: #ffffff;
+      animation: pulseEdit 1.5s infinite;
+    }
+
+    .ctrl-btn.btn-gods-eye {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      color: #ffffff;
+      font-weight: 800;
+      border: 1px solid #a78bfa;
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+    }
+
+    .ctrl-btn.btn-gods-eye:hover {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      transform: scale(1.05);
+    }
+
+    .ctrl-btn.btn-telemetry {
+      background: linear-gradient(135deg, #0284c7, #0d9488);
+      color: #ffffff;
+      font-weight: 800;
+      border: 1px solid #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+
+    .ctrl-btn.btn-telemetry.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+    }
+
+    /* God's Eye Real-Time HUD Panel */
+    .gods-eye-hud-panel {
+      position: absolute;
+      top: 84px;
+      right: 16px;
+      width: 380px;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(18px);
+      border: 1px solid #38bdf8;
+      border-radius: 16px;
+      padding: 16px;
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    }
+
+    .telemetry-toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.04);
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .telemetry-toggle-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .telemetry-toggle-sub {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .switch-toggle {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 22px;
+    }
+
+    .switch-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: rgba(255,255,255,0.2);
+      transition: .3s;
+      border-radius: 22px;
+    }
+
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-toggle {
+      background-color: #10b981;
+    }
+
+    input:checked + .slider-toggle:before {
+      transform: translateX(22px);
+    }
+
+    @keyframes pulseEdit {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+      70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    /* Border Edit Mode Top HUD Banner */
+    .edit-mode-banner {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(14px);
+      border: 2px solid #f59e0b;
+      border-radius: 9999px;
+      padding: 10px 24px;
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+    }
+
+    .edit-banner-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .edit-banner-btn {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: none;
+      font-weight: 800;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-save-border { background: #10b981; color: #042f2e; }
+    .btn-cancel-border { background: rgba(255,255,255,0.15); color: #fff; }
+
+    /* Left Sidebar Drawer Panel */
+    .sidebar {
+      position: absolute;
+      top: 84px;
+      left: 16px;
+      width: 360px;
+      max-height: calc(100vh - 140px);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      padding: 16px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+
+    .sidebar-tabs {
+      display: flex;
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 3px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 6px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-weight: 700;
+      font-size: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .tab-btn.active {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    .editor-banner {
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      color: #fbbf24;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .search-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .plot-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    .plot-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .plot-card:hover {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: #38bdf8;
+      transform: translateX(3px);
+    }
+
+    .plot-num {
+      font-weight: 800;
+      font-size: 14px;
+      color: #f8fafc;
+    }
+
+    .plot-meta {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .status-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-available { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+    .status-reserved { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .status-sold { background: rgba(236, 72, 153, 0.25); color: #f472b6; border: 1px solid #ec4899; }
+    .status-hold { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+    /* Right Detail Drawer */
+    .detail-drawer {
+      position: absolute;
+      top: 84px;
+      right: 16px;
+      width: 360px;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      padding: 22px;
+      z-index: 1000;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+      transform: translateX(420px);
+      transition: transform 0.3s ease;
+    }
+
+    .detail-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .cta-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .cta-whatsapp { background: #25d366; color: #042f1a; }
+    .cta-call { background: #38bdf8; color: #0f172a; }
+    .cta-edit { background: #f59e0b; color: #0f172a; font-weight: 800; }
+    .cta-render-3d { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; }
+
+    /* Real 3D Satellite Modal */
+    .modal-3d-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.92);
+      backdrop-filter: blur(14px);
+      z-index: 3000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-3d-container {
+      width: 100%;
+      max-width: 950px;
+      height: 680px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .modal-3d-header {
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-3d-body {
+      flex: 1;
+      position: relative;
+      background: #000000;
+      min-height: 520px;
+      overflow: hidden;
+    }
+
+    #cesium-modal-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .modal-3d-footer {
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.04);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Competitor Style Map Overlays & Badges */
+    .masterplan-header-badge {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border: 2px solid #38bdf8;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .highway-banner-badge {
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid #ef4444;
+      color: #fca5a5;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+      white-space: nowrap;
+    }
+
+    .entrance-road-badge {
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid #38bdf8;
+      color: #38bdf8;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+      white-space: nowrap;
+    }
+
+    .plot-map-badge {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .plot-badge-available { border-color: #10b981; color: #34d399; }
+    .plot-badge-sold { border-color: #ec4899; color: #f472b6; }
+    .plot-badge-reserved { border-color: #f59e0b; color: #fbbf24; }
+
+    /* Floating Legend & Opacity Control */
+    .map-legend {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 14px;
+      padding: 12px 16px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+
+    .legend-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+
+    .legend-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .opacity-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #94a3b8;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 8px;
+    }
+
+    .opacity-slider-wrap input {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    /* Floating Action Buttons */
+    .floating-actions {
+      position: absolute;
+      bottom: 24px;
+      right: 16px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .fab-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(12px);
+      color: #f8fafc;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      transition: all 0.2s ease;
+    }
+
+    .fab-btn:hover {
+      transform: scale(1.1);
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    .fab-whatsapp {
+      background: #25d366;
+      color: #042f1a;
+    }
+
+    .fab-whatsapp:hover {
+      background: #1eb857;
+      color: #fff;
+    }
+
+    /* Measurement Result Toast */
+    .measure-toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 800;
+      z-index: 2000;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Leaflet Draw Editing Vertex Styles */
+    .leaflet-editing-icon {
+      border-radius: 50% !important;
+      background: #f59e0b !important;
+      border: 2px solid #ffffff !important;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.9) !important;
+    }
+
+    /* Custom Leaflet Draw Styling */
+    .leaflet-draw-toolbar a {
+      background-color: #0f172a !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      color: #fff !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <div class="top-bar">
+    <div class="brand-pill">
+      <div>
+        <select class="venture-select" id="venture-select" onchange="switchVenture(this.value)">
+          <option value="peacock">🦚 Arising Peacock Valley (Kadthal, Srisailam Hwy)</option>
+          <option value="stambadri">🏛️ Stambadri Enclave (Gurralapadu, Khammam)</option>
+        </select>
+        <div class="subtitle" id="venture-subtitle">14 Acre DTCP & TS RERA Approved Project • Kadthal, Srisailam Highway</div>
+      </div>
+      <span class="badge" id="venture-badge">Real 3D GIS</span>
+    </div>
+
+    <!-- Quick Navigation Pills -->
+    <div class="quick-nav-bar">
+      <button class="ctrl-btn btn-edit-border" id="btn-edit-land-border" onclick="toggleLandBorderEditMode()"><i class="fa-solid fa-pen-to-square"></i> EDIT LAND BORDER</button>
+      <button class="ctrl-btn btn-gods-eye" onclick="openGodsEye3DView()"><i class="fa-solid fa-eye"></i> 👁️ GOD'S EYE 3D</button>
+      <button class="ctrl-btn btn-telemetry" id="btn-telemetry" onclick="toggleGodsEyeTelemetry()"><i class="fa-solid fa-radar"></i> 📡 GOD'S EYE REAL-TIME FEEDS</button>
+      <button class="ctrl-btn" style="background:linear-gradient(135deg, #ea4335, #c5221f); color:#fff; font-weight:800; border:1px solid #f28b82; box-shadow:0 0 15px rgba(234,67,53,0.4);" onclick="openStreetViewModal()"><i class="fa-solid fa-person-walking"></i> 🚶 GOOGLE STREET VIEW 360°</button>
+      <button class="ctrl-btn active" id="btn-google-hybrid"><i class="fa-solid fa-satellite"></i> Google Hybrid Satellite</button>
+      <button class="ctrl-btn" id="btn-esri-sat"><i class="fa-solid fa-earth-asia"></i> Esri World Imagery</button>
+      <button class="ctrl-btn" onclick="open3DExtrusionModal()"><i class="fa-solid fa-globe"></i> View Real 3D Satellite Terrain</button>
+      <button class="ctrl-btn" id="btn-toggle-brochure" onclick="toggleBrochureOverlay()"><i class="fa-solid fa-file-image"></i> Brochure Overlay</button>
+      <button class="ctrl-btn" id="btn-measure"><i class="fa-solid fa-ruler-combined"></i> Distance</button>
+      <button class="ctrl-btn" id="btn-share"><i class="fa-solid fa-share-nodes"></i> Share</button>
+      <button class="ctrl-btn" id="btn-directions" onclick="openDirections()"><i class="fa-solid fa-diamond-turn-right"></i> Directions</button>
+    </div>
+  </div>
+
+  <!-- God's Eye Real-Time HUD Panel -->
+  <div class="gods-eye-hud-panel" id="gods-eye-hud-panel">
+    <div style="font-size:14px; font-weight:800; color:#38bdf8; display:flex; justify-space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
+      <span><i class="fa-solid fa-radar"></i> GOD'S EYE COMMAND CENTER</span>
+      <button style="background:transparent; border:none; color:#94a3b8; font-size:18px; cursor:pointer;" onclick="toggleGodsEyeTelemetry()">&times;</button>
+    </div>
+
+    <!-- Live Flights ADS-B Toggle -->
+    <div class="telemetry-toggle-row">
+      <div>
+        <div class="telemetry-toggle-title"><i class="fa-solid fa-plane" style="color:#38bdf8;"></i> Live Flights ADS-B Radar</div>
+        <div class="telemetry-toggle-sub">OpenSky Network • Real-Time Regional Airspace</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-flights" onchange="toggleFlightsLayer(this.checked)">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+
+    <!-- 5G & Wi-Fi Network Coverage Toggle -->
+    <div class="telemetry-toggle-row">
+      <div>
+        <div class="telemetry-toggle-title"><i class="fa-solid fa-wifi" style="color:#10b981;"></i> 5G Towers & Wi-Fi Mesh</div>
+        <div class="telemetry-toggle-sub">Jio 5G / Airtel 5G / Fiber Wi-Fi Coverage</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-telecom" onchange="toggleTelecomLayer(this.checked)">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+
+    <!-- Live Railways & Trains Toggle -->
+    <div class="telemetry-toggle-row">
+      <div>
+        <div class="telemetry-toggle-title"><i class="fa-solid fa-train-subway" style="color:#f472b6;"></i> Live Trains & Railway Tracks</div>
+        <div class="telemetry-toggle-sub">Indian Railways • Live Express Train Tracker</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-trains" onchange="toggleTrainsLayer(this.checked)">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+
+    <!-- Live Highway Traffic Flow Toggle -->
+    <div class="telemetry-toggle-row">
+      <div>
+        <div class="telemetry-toggle-title"><i class="fa-solid fa-car" style="color:#f59e0b;"></i> Live Traffic Speed Flow</div>
+        <div class="telemetry-toggle-sub">Srisailam Hwy (NH-765) & NH-65 Velocity</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-traffic" onchange="toggleTrafficLayer(this.checked)">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+
+    <!-- Live Weather Rain Radar Toggle -->
+    <div class="telemetry-toggle-row">
+      <div>
+        <div class="telemetry-toggle-title"><i class="fa-solid fa-cloud-showers-heavy" style="color:#60a5fa;"></i> Live Rain Radar & Doppler</div>
+        <div class="telemetry-toggle-sub">RainViewer Live Precipitation Imagery</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-weather" onchange="toggleWeatherRadarLayer(this.checked)">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+
+    <!-- Real-Time Solar & Shadows Toggle -->
+    <div class="telemetry-toggle-row">
+      <div>
+        <div class="telemetry-toggle-title"><i class="fa-solid fa-sun" style="color:#fbbf24;"></i> Real-Time Solar & Shadows</div>
+        <div class="telemetry-toggle-sub">Live Sun Position & Terrain Lighting</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-solar" checked onchange="toggleSolarShadows(this.checked)">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+
+    <!-- Nearby Amenities Scan HUD Container -->
+    <div id="nearby-scan-container" style="background:rgba(255,255,255,0.04); border:1px solid rgba(56,189,248,0.3); padding:10px; border-radius:10px; font-size:11px; display:flex; flex-direction:column; gap:6px;">
+      <div style="font-weight:800; color:#38bdf8; display:flex; justify-content:space-between;">
+        <span><i class="fa-solid fa-compass"></i> REAL NEARBY SPATIAL SCAN</span>
+        <span style="font-size:10px; color:#34d399;" id="nearby-radius-tag">Within 5 km</span>
+      </div>
+      <div id="nearby-items-list" style="display:flex; flex-direction:column; gap:4px; max-height:140px; overflow-y:auto;">
+        <span style="color:#94a3b8;">Scanning surrounding infrastructure...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Border Edit Mode Top HUD Banner -->
+  <div class="edit-mode-banner" id="edit-mode-banner">
+    <div class="edit-banner-text">
+      <i class="fa-solid fa-pen-to-square"></i> LAND BORDER EDIT MODE ACTIVE — Drag any corner node on satellite map to reshape boundary
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="edit-banner-btn btn-save-border" onclick="saveEditedLandBorders()"><i class="fa-solid fa-floppy-disk"></i> Save Reshaped Border</button>
+      <button class="edit-banner-btn btn-cancel-border" onclick="toggleLandBorderEditMode()"><i class="fa-solid fa-xmark"></i> Close Edit</button>
+    </div>
+  </div>
+
+  <!-- Left Sidebar Drawer -->
+  <div class="sidebar">
+    <div class="sidebar-tabs">
+      <button class="tab-btn active" id="tab-plots" onclick="switchSidebarTab('plots')"><i class="fa-solid fa-th"></i> Inventory</button>
+      <button class="tab-btn" id="tab-stats" onclick="switchSidebarTab('stats')"><i class="fa-solid fa-chart-pie"></i> Layout Stats</button>
+      <button class="tab-btn" id="tab-intel" onclick="switchSidebarTab('intel')"><i class="fa-solid fa-compass"></i> Land Intel</button>
+    </div>
+
+    <!-- Inventory Tab -->
+    <div id="tab-content-plots" style="display:flex; flex-direction:column; gap:10px; height:100%;">
+      <div class="editor-banner" id="editor-banner">
+        <span style="font-weight:800;"><i class="fa-solid fa-pen-to-square"></i> Land Border Reshaping Enabled</span>
+        <span>Click <b>"EDIT LAND BORDER"</b> at top or tap any plot card to drag corner nodes over physical satellite ground features!</span>
+      </div>
+
+      <input type="text" class="search-box" id="plot-search" placeholder="Search Plot # (e.g. P-01, P-04, East facing)...">
+      <div class="plot-list" id="plot-list-container">
+        <div style="text-align:center; padding:20px; color:#94a3b8;">Loading parcel data...</div>
+      </div>
+    </div>
+
+    <!-- Stats & Analytics Tab -->
+    <div id="tab-content-stats" style="display:none; flex-direction:column; gap:10px; overflow-y:auto;">
+      <div style="font-size:12px; font-weight:800; color:#38bdf8; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">
+        <i class="fa-solid fa-chart-line"></i> VENTURE INVENTORY ANALYTICS
+      </div>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;" id="stats-grid">
+        <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-size:10px; color:#94a3b8;">Total Venture Plots</div>
+          <div style="font-size:18px; font-weight:800; color:#ffffff;" id="stat-total">212 Plots</div>
+        </div>
+        <div style="background:rgba(16, 185, 129, 0.15); padding:10px; border-radius:8px; border:1px solid #10b981;">
+          <div style="font-size:10px; color:#34d399;">Available Plots</div>
+          <div style="font-size:18px; font-weight:800; color:#34d399;" id="stat-avail">142 (67%)</div>
+        </div>
+        <div style="background:rgba(245, 158, 11, 0.15); padding:10px; border-radius:8px; border:1px solid #f59e0b;">
+          <div style="font-size:10px; color:#fbbf24;">Reserved Plots</div>
+          <div style="font-size:18px; font-weight:800; color:#fbbf24;" id="stat-res">45 (21%)</div>
+        </div>
+        <div style="background:rgba(236, 72, 153, 0.15); padding:10px; border-radius:8px; border:1px solid #ec4899;">
+          <div style="font-size:10px; color:#f472b6;">Sold Plots</div>
+          <div style="font-size:18px; font-weight:800; color:#f472b6;" id="stat-sold">25 (12%)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Land Intelligence Tab -->
+    <div id="tab-content-intel" style="display:none; flex-direction:column; gap:10px; overflow-y:auto;">
+      <div style="font-size:12px; font-weight:800; color:#38bdf8; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">
+        <i class="fa-solid fa-compass"></i> LOCATION & GROWTH CORRIDOR HUD
+      </div>
+      <div style="background:rgba(239, 68, 68, 0.12); border:1px solid rgba(239, 68, 68, 0.4); padding:10px; border-radius:8px; font-size:12px;">
+        <div style="color:#fca5a5; font-size:10px; text-transform:uppercase; font-weight:700;">World's Largest Pharma City</div>
+        <div style="font-size:14px; font-weight:800; color:#ffffff;">Adjacent to 19,333 Acres Pharma City</div>
+      </div>
+      <div style="background:rgba(56, 189, 248, 0.12); border:1px solid rgba(56, 189, 248, 0.4); padding:10px; border-radius:8px; font-size:12px;">
+        <div style="color:#38bdf8; font-size:10px; text-transform:uppercase;">Highway Access</div>
+        <div style="font-size:13px; font-weight:800; color:#ffffff;">Just off Srisailam Highway (NH-765)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Drawer -->
+  <div class="detail-drawer" id="detail-drawer">
+    <button class="drawer-close" id="drawer-close">&times;</button>
+    <div id="drawer-content"></div>
+  </div>
+
+  <!-- Floating Legend & Opacity Control -->
+  <div class="map-legend">
+    <div class="legend-row">
+      <div class="legend-item"><div class="legend-box" style="background:#10b981;"></div> Available</div>
+      <div class="legend-item"><div class="legend-box" style="background:#ec4899;"></div> Sold</div>
+      <div class="legend-item"><div class="legend-box" style="background:#f59e0b;"></div> Reserved</div>
+      <div class="legend-item"><div class="legend-box" style="background:#ef4444;"></div> Mortgage</div>
+      <div class="legend-item"><div class="legend-box" style="background:#84cc16;"></div> Park</div>
+    </div>
+    <div class="opacity-slider-wrap">
+      <span><i class="fa-solid fa-eye"></i> Ground Opacity:</span>
+      <input type="range" id="opacity-range" min="0.1" max="0.95" step="0.05" value="0.45">
+    </div>
+  </div>
+
+  <!-- Floating Action Buttons -->
+  <div class="floating-actions">
+    <button class="fab-btn fab-whatsapp" onclick="openWhatsApp()" title="Instant WhatsApp Inquiry">
+      <i class="fa-brands fa-whatsapp"></i>
+    </button>
+    <button class="fab-btn" onclick="openDirections()" title="Get Google Maps Directions">
+      <i class="fa-solid fa-location-arrow"></i>
+    </button>
+    <button class="fab-btn" id="fab-reset" title="Reset View">
+      <i class="fa-solid fa-crosshairs"></i>
+    </button>
+  </div>
+
+  <!-- Measurement Result Toast -->
+  <div class="measure-toast" id="measure-toast">
+    <i class="fa-solid fa-ruler" style="color:#38bdf8;"></i> <span id="measure-text">Distance: 0 meters</span>
+  </div>
+
+  <!-- Real 3D Satellite Terrain Viewer Modal -->
+  <div class="modal-3d-backdrop" id="modal-3d-backdrop">
+    <div class="modal-3d-container">
+      <div class="modal-3d-header">
+        <div style="font-size:15px; font-weight:800; color:#34d399; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-globe"></i> Real 3D Satellite Terrain & Photogrammetry Engine
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button id="btn-mode-puresat" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border:1px solid #34d399; padding:6px 12px; border-radius:9999px; font-size:11px; font-weight:800; cursor:pointer;" onclick="set3DRenderStyle('puresatellite')">
+            <i class="fa-solid fa-camera"></i> 📸 Pure Real Satellite Photo
+          </button>
+          <button id="btn-mode-extruded" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:6px 12px; border-radius:9999px; font-size:11px; font-weight:700; cursor:pointer;" onclick="set3DRenderStyle('extruded')">
+            <i class="fa-solid fa-cube"></i> 🧊 3D Volume Box
+          </button>
+          <button style="background:linear-gradient(135deg, #8b5cf6, #6366f1); color:#fff; border:none; padding:6px 12px; border-radius:9999px; font-size:11px; font-weight:800; cursor:pointer;" onclick="set3DCameraPerspective('godseye')">
+            <i class="fa-solid fa-eye"></i> Overhead God's Eye (90°)
+          </button>
+          <button style="background:rgba(245,158,11,0.2); color:#fbbf24; border:1px solid #f59e0b; padding:6px 12px; border-radius:9999px; font-size:11px; font-weight:800; cursor:pointer;" onclick="toggle3DGodsEyeOrbit()">
+            <i class="fa-solid fa-rotate"></i> 360° Orbit View
+          </button>
+          <button style="background:transparent; border:none; color:#94a3b8; font-size:22px; cursor:pointer; margin-left:8px;" onclick="close3DModal()">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-3d-body">
+        <div id="cesium-modal-canvas"></div>
+      </div>
+
+      <div class="modal-3d-footer">
+        <div style="font-size:12px; color:#cbd5e1; display:flex; align-items:center; gap:10px;">
+          <span>3D Surface: <b>Cesium World Elevation Mesh</b></span> | 
+          <span>Photogrammetry Imagery: <b>Google / Esri Real High-Res Satellite</b></span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button style="background:#10b981; color:#042f2e; border:none; padding:8px 16px; border-radius:8px; font-weight:800; font-size:12px; cursor:pointer;" onclick="renderDraggedShapeIn3D()">
+            <i class="fa-solid fa-sync"></i> Refresh Satellite 3D View
+          </button>
+          <button style="background:rgba(255,255,255,0.1); color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer;" onclick="close3DModal()">
+            Close 3D View
+          </button>
+        </div>
+      </div>
+  <!-- Google Street View 360° Panorama Modal -->
+  <div class="modal-3d-backdrop" id="modal-streetview-backdrop" style="display:none;">
+    <div class="modal-3d-container" style="max-width:1050px; height:720px; border-color:#ea4335;">
+      <div class="modal-3d-header" style="border-bottom:1px solid rgba(234,67,53,0.3);">
+        <div style="font-size:15px; font-weight:800; color:#ea4335; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-person-walking"></i> Google Street View 360° Panorama — Highway & Site Walk
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:6px 14px; border-radius:9999px; font-size:11px; font-weight:700; cursor:pointer;" onclick="openGoogleEarthDirect()">
+            <i class="fa-solid fa-earth-americas"></i> Open Google Earth 3D
+          </button>
+          <button style="background:transparent; border:none; color:#94a3b8; font-size:22px; cursor:pointer; margin-left:8px;" onclick="closeStreetViewModal()">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-3d-body" style="background:#000;">
+        <iframe id="streetview-iframe" style="width:100%; height:100%; border:none;" allowfullscreen loading="lazy"></iframe>
+      </div>
+
+      <div class="modal-3d-footer">
+        <div style="font-size:12px; color:#cbd5e1; display:flex; align-items:center; gap:10px;">
+          <span>Provider: <b>Google Maps Street View 360° Interactive Panorama</b></span>
+        </div>
+        <div>
+          <button style="background:#ea4335; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:800; font-size:12px; cursor:pointer;" onclick="closeStreetViewModal()">
+            Close Street View
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-bleed Map Container -->
+  <div id="real-map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <!-- Leaflet Draw JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+  <!-- Cesium JS for Real 3D Satellite Terrain -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Cesium.js"></script>
+  <!-- Land Intelligence UI Helper -->
+  <script src="js/land-intelligence-ui.js"></script>
+
+  <script>
+    const PROJECTS = {
+      peacock: {
+        id: 'peacock',
+        name: 'Arising Peacock Valley',
+        center: [17.0854, 78.4908],
+        zoom: 17,
+        geojson: 'data/peacock_valley_plots.geojson',
+        subtitle: '14 Acre DTCP & TS RERA Approved Project • Kadthal, Srisailam Highway',
+        headerBadge: 'ARISING PEACOCK VALLEY | DTCP TLP NO: 239/2023/H | RERA: P02400007625 | ₹ 13,999/sq.yd',
+        hwyBadge: '<<< Existing Srisailam Highway (NH-765) >>>',
+        roadBadge: '<<< Proposed 40 ft & 33 ft BT Internal Roads >>>',
+        pricePerSqYd: 13999,
+        destCoords: '17.0854,78.4908',
+        brochureOverlay: 'data/peacock_valley_brochure.jpg',
+        brochureBounds: [[17.0842, 78.4890], [17.0868, 78.4930]]
+      },
+      stambadri: {
+        id: 'stambadri',
+        name: 'Stambadri Enclave',
+        center: [17.2475, 80.1353],
+        zoom: 17,
+        geojson: 'data/sample_plots_complete.geojson',
+        subtitle: 'Gurralapadu, NH-65 Highway, Khammam • LP NO: 45/2026/DTCP',
+        headerBadge: 'GV INFRA — STAMBADRI ENCLAVE | LP NO: 45/2026/DTCP | ₹ 18,500/sq.yd',
+        hwyBadge: '<<< Existing 200\' Khammam - Kodada Highway (NH-65) >>>',
+        roadBadge: '<<< Proposed 40\' Main Entrance Road >>>',
+        pricePerSqYd: 18500,
+        destCoords: '17.2475,80.1353'
+      }
+    };
+
+    let currentProject = PROJECTS.peacock;
+    let map, plotLayer, currentTileLayer, drawControl, drawnItems, brochureImageOverlay;
+    let cesiumModalViewer = null;
+    let latestDrawnGeoJSON = null;
+    let plotsData = [];
+    let isMeasuring = false;
+    let measurePoints = [];
+    let measurePolyline = null;
+    let currentOpacity = 0.45;
+    let isBrochureVisible = false;
+    let isBorderEditActive = false;
+    let activeEditingLayer = null;
+    let headerMarker, highwayMarker, entranceRoadMarker;
+
+    // Telemetry Layers
+    let flightsLayerGroup = null;
+    let telecomLayerGroup = null;
+    let weatherRadarTileLayer = null;
+    let flightPollInterval = null;
+
+    function toggleGodsEyeTelemetry() {
+      const panel = document.getElementById('gods-eye-hud-panel');
+      const btn = document.getElementById('btn-telemetry');
+      if (panel.style.display === 'flex') {
+        panel.style.display = 'none';
+        btn.classList.remove('active');
+      } else {
+        panel.style.display = 'flex';
+        btn.classList.add('active');
+      }
+    }
+
+    /* 1. Live Airspace Flight Tracker Layer (OpenSky ADS-B) */
+    async function toggleFlightsLayer(enabled) {
+      if (!flightsLayerGroup) {
+        flightsLayerGroup = L.layerGroup().addTo(map);
+      }
+
+      if (enabled) {
+        fetchAndRenderFlights();
+        if (!flightPollInterval) {
+          flightPollInterval = setInterval(fetchAndRenderFlights, 5000);
+        }
+      } else {
+        if (flightPollInterval) {
+          clearInterval(flightPollInterval);
+          flightPollInterval = null;
+        }
+        flightsLayerGroup.clearLayers();
+        if (cesiumModalViewer) {
+          // Remove 3D flight entities
+          const flightEntities = cesiumModalViewer.entities.values.filter(e => e.name && e.name.includes('Flight'));
+          flightEntities.forEach(e => cesiumModalViewer.entities.remove(e));
+        }
+      }
+    }
+
+    async function fetchAndRenderFlights() {
+      try {
+        const res = await fetch('/api/v1/live/flights');
+        const json = await res.json();
+        const flights = json.data || [];
+
+        if (flightsLayerGroup) flightsLayerGroup.clearLayers();
+
+        flights.forEach(f => {
+          // 2D Leaflet Animated Plane Marker
+          const planeIcon = L.divIcon({
+            className: '',
+            html: `<div style="transform: rotate(${f.heading}deg); color:#38bdf8; font-size:18px; filter:drop-shadow(0 0 8px #38bdf8);"><i class="fa-solid fa-plane"></i></div>
+                   <div style="font-size:9px; font-weight:800; color:#fff; background:rgba(15,23,42,0.9); padding:2px 4px; border-radius:4px; white-space:nowrap; border:1px solid #38bdf8;">${f.callsign} (${Math.round(f.altitude_m)}m)</div>`,
+            iconSize: [80, 40],
+            iconAnchor: [40, 20]
+          });
+
+          L.marker([f.lat, f.lng], { icon: planeIcon }).addTo(flightsLayerGroup);
+
+          // 3D Cesium Flying Plane Entity
+          if (cesiumModalViewer) {
+            const entityId = `flight-${f.icao24}`;
+            let entity = cesiumModalViewer.entities.getById(entityId);
+            const pos = Cesium.Cartesian3.fromDegrees(f.lng, f.lat, f.altitude_m / 10);
+            
+            if (!entity) {
+              cesiumModalViewer.entities.add({
+                id: entityId,
+                name: `Flight ${f.callsign}`,
+                position: pos,
+                point: { pixelSize: 8, color: Cesium.Color.fromCssColorString('#38bdf8'), outlineColor: Cesium.Color.WHITE, outlineWidth: 2 },
+                label: { text: `✈️ ${f.callsign} (${Math.round(f.altitude_m)}m)`, font: '12px sans-serif', fillColor: Cesium.Color.WHITE, style: Cesium.LabelStyle.FILL_AND_OUTLINE, outlineWidth: 2, verticalOrigin: Cesium.VerticalOrigin.BOTTOM, pixelOffset: new Cesium.Cartesian2(0, -10) }
+              });
+            } else {
+              entity.position = pos;
+            }
+          }
+        });
+      } catch (err) {
+        console.error('Error fetching live flights:', err);
+      }
+    }
+
+    /* 2. Live Telecom 5G & Wi-Fi Coverage Grid */
+    async function toggleTelecomLayer(enabled) {
+      if (!telecomLayerGroup) {
+        telecomLayerGroup = L.layerGroup().addTo(map);
+      }
+
+      if (enabled) {
+        try {
+          const res = await fetch('/api/v1/live/telecom');
+          const json = await res.json();
+          const nodes = json.data || [];
+
+          telecomLayerGroup.clearLayers();
+
+          nodes.forEach(n => {
+            const isWifi = n.type === 'PublicWiFi';
+            const color = isWifi ? '#10b981' : '#38bdf8';
+            const iconSymbol = isWifi ? 'fa-wifi' : 'fa-tower-cell';
+
+            const nodeIcon = L.divIcon({
+              className: '',
+              html: `<div style="background:${color}; color:#0f172a; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 0 15px ${color};"><i class="fa-solid ${iconSymbol}"></i></div>`,
+              iconSize: [30, 30],
+              iconAnchor: [15, 15]
+            });
+
+            // Marker
+            const marker = L.marker([n.lat, n.lng], { icon: nodeIcon }).addTo(telecomLayerGroup);
+            marker.bindPopup(`<b>${n.provider}</b><br>Frequency: ${n.band}<br>Status: ${n.status}<br>Power: ${n.power_dbm} dBm`);
+
+            // Coverage Radius Circle
+            L.circle([n.lat, n.lng], {
+              radius: n.radius_m,
+              color: color,
+              weight: 1,
+              fillColor: color,
+              fillOpacity: 0.15
+            }).addTo(telecomLayerGroup);
+          });
+        } catch (err) {
+          console.error('Error fetching telecom nodes:', err);
+        }
+      } else {
+        telecomLayerGroup.clearLayers();
+      }
+    }
+
+    /* 3. Live Weather Rain Radar Layer */
+    function toggleWeatherRadarLayer(enabled) {
+      if (enabled) {
+        if (weatherRadarTileLayer) map.removeLayer(weatherRadarTileLayer);
+        // RainViewer Tile Layer
+        weatherRadarTileLayer = L.tileLayer('https://tilecache.rainviewer.com/v2/radar/nowcast/256/{z}/{x}/{y}/2/1_1.png', {
+          opacity: 0.6,
+          maxZoom: 18,
+          attribution: 'RainViewer Real-Time Radar'
+        }).addTo(map);
+      } else {
+        if (weatherRadarTileLayer) {
+          map.removeLayer(weatherRadarTileLayer);
+          weatherRadarTileLayer = null;
+        }
+      }
+    }
+
+    /* 4. Live Trains & Railway Tracks Layer */
+    let trainsLayerGroup = null;
+    let trainPollInterval = null;
+
+    async function toggleTrainsLayer(enabled) {
+      if (!trainsLayerGroup) {
+        trainsLayerGroup = L.layerGroup().addTo(map);
+      }
+
+      if (enabled) {
+        fetchAndRenderTrains();
+        if (!trainPollInterval) {
+          trainPollInterval = setInterval(fetchAndRenderTrains, 6000);
+        }
+      } else {
+        if (trainPollInterval) {
+          clearInterval(trainPollInterval);
+          trainPollInterval = null;
+        }
+        trainsLayerGroup.clearLayers();
+      }
+    }
+
+    async function fetchAndRenderTrains() {
+      try {
+        const res = await fetch('/api/v1/live/trains');
+        const json = await res.json();
+        const trains = json.trains || [];
+        const tracks = json.tracks || [];
+
+        if (trainsLayerGroup) trainsLayerGroup.clearLayers();
+
+        // Render Railway Track Lines
+        tracks.forEach(tr => {
+          L.polyline(tr.coords, { color: '#f472b6', weight: 4, dashArray: '8, 8' }).addTo(trainsLayerGroup);
+        });
+
+        // Render Live Train Markers
+        trains.forEach(t => {
+          const trainIcon = L.divIcon({
+            className: '',
+            html: `<div style="background:#f472b6; color:#0f172a; padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; box-shadow:0 0 15px #f472b6; white-space:nowrap; border:1px solid #ffffff;">
+                    <i class="fa-solid fa-train"></i> ${t.train_number} (${t.speed_kmh} km/h)
+                   </div>`,
+            iconSize: [120, 30],
+            iconAnchor: [60, 15]
+          });
+          const marker = L.marker([t.lat, t.lng], { icon: trainIcon }).addTo(trainsLayerGroup);
+          marker.bindPopup(`<b>${t.name}</b><br>Speed: ${t.speed_kmh} km/h<br>Next Stop: ${t.next_station}`);
+        });
+      } catch (err) {
+        console.error('Error fetching live trains:', err);
+      }
+    }
+
+    /* 5. Live Traffic Speed Flow Layer */
+    let trafficLayerGroup = null;
+
+    async function toggleTrafficLayer(enabled) {
+      if (!trafficLayerGroup) {
+        trafficLayerGroup = L.layerGroup().addTo(map);
+      }
+
+      if (enabled) {
+        try {
+          const res = await fetch('/api/v1/live/traffic');
+          const json = await res.json();
+          const segments = json.data || [];
+
+          trafficLayerGroup.clearLayers();
+
+          segments.forEach(s => {
+            L.polyline(s.coords, { color: s.color, weight: 6, opacity: 0.85 }).addTo(trafficLayerGroup);
+          });
+        } catch (err) {
+          console.error('Error fetching traffic flow:', err);
+        }
+      } else {
+        trafficLayerGroup.clearLayers();
+      }
+    }
+
+    /* 6. Dynamic Nearby Infrastructure Radial Scan */
+    async function fetchNearbyFeatures(lat, lng) {
+      const container = document.getElementById('nearby-items-list');
+      if (!container) return;
+
+      container.innerHTML = '<span style="color:#94a3b8;">Scanning nearby streets, schools & healthcare...</span>';
+
+      try {
+        const res = await fetch(`/api/v1/nearby/features?lat=${lat}&lng=${lng}&radius=10000`);
+        const json = await res.json();
+        const items = json.data || [];
+
+        if (items.length === 0) {
+          container.innerHTML = '<span style="color:#94a3b8;">No major infrastructure within 10km.</span>';
+          return;
+        }
+
+        container.innerHTML = '';
+        items.forEach(item => {
+          let icon = 'fa-location-dot';
+          let color = '#38bdf8';
+          if (item.category === 'highway') { icon = 'fa-road'; color = '#ef4444'; }
+          if (item.category === 'industrial') { icon = 'fa-industry'; color = '#f59e0b'; }
+          if (item.category === 'school') { icon = 'fa-school'; color = '#84cc16'; }
+          if (item.category === 'hospital') { icon = 'fa-hospital'; color = '#ec4899'; }
+          if (item.category === 'fuel') { icon = 'fa-gas-pump'; color = '#a855f7'; }
+
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:4px 8px; border-radius:6px;';
+          row.innerHTML = `
+            <span style="color:#f8fafc; font-weight:700;"><i class="fa-solid ${icon}" style="color:${color};"></i> ${item.name}</span>
+            <span style="color:${color}; font-weight:800;">${item.distance_text}</span>
+          `;
+          container.appendChild(row);
+        });
+      } catch (err) {
+        console.error('Error in nearby scan:', err);
+      }
+    }
+
+    /* 7. Real-Time Solar & Lighting */
+    function toggleSolarShadows(enabled) {
+      if (cesiumModalViewer) {
+        cesiumModalViewer.scene.globe.enableLighting = enabled;
+      }
+    }
+
+    const tileProviders = {
+      googleHybrid: L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+        subdomains: ['0', '1', '2', '3'],
+        maxZoom: 21,
+        maxNativeZoom: 20,
+        attribution: '© Google Satellite'
+      }),
+      esriSatellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 21,
+        maxNativeZoom: 18,
+        attribution: 'Esri, Maxar | © Earthstar Geographics'
+      })
+    };
+
+    function initMap() {
+      map = L.map('real-map', {
+        center: currentProject.center,
+        zoom: currentProject.zoom,
+        zoomControl: false
+      });
+
+      currentTileLayer = tileProviders.googleHybrid.addTo(map);
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      drawnItems = new L.FeatureGroup().addTo(map);
+
+      drawControl = new L.Control.Draw({
+        draw: {
+          polygon: {
+            allowIntersection: false,
+            showArea: true,
+            drawError: { color: '#ef4444', timeout: 1000 },
+            shapeOptions: { color: '#10b981', weight: 3, fillColor: '#10b981', fillOpacity: 0.5 }
+          },
+          polyline: false, circle: false, rectangle: false, marker: false, circlemarker: false
+        },
+        edit: { featureGroup: drawnItems, remove: true }
+      });
+      map.addControl(drawControl);
+
+      map.on(L.Draw.Event.CREATED, (e) => {
+        const layer = e.layer;
+        drawnItems.addLayer(layer);
+        latestDrawnGeoJSON = layer.toGeoJSON();
+
+        if (confirm('Custom Land Area Drawn!\nWould you like to view this area draped over Real 3D Satellite Terrain?')) {
+          open3DExtrusionModal(latestDrawnGeoJSON);
+        }
+      });
+
+      addMasterplanHeaderOverlays();
+      loadPlotsData();
+
+      document.getElementById('btn-google-hybrid').addEventListener('click', (e) => switchMapLayer('googleHybrid', e.target));
+      document.getElementById('btn-esri-sat').addEventListener('click', (e) => switchMapLayer('esriSatellite', e.target));
+      document.getElementById('btn-measure').addEventListener('click', toggleMeasurementMode);
+      document.getElementById('btn-share').addEventListener('click', shareVenture);
+      document.getElementById('fab-reset').addEventListener('click', () => map.flyTo(currentProject.center, currentProject.zoom));
+      document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+      document.getElementById('plot-search').addEventListener('input', (e) => filterPlots(e.target.value));
+
+      document.getElementById('opacity-range').addEventListener('input', (e) => {
+        currentOpacity = parseFloat(e.target.value);
+        if (plotLayer) plotLayer.setStyle({ fillOpacity: currentOpacity });
+        if (brochureImageOverlay) brochureImageOverlay.setOpacity(currentOpacity);
+      });
+
+      map.on('click', handleMapMeasurementClick);
+    }
+
+    /* LAND BORDER EDIT ENGINE */
+    function toggleLandBorderEditMode() {
+      isBorderEditActive = !isBorderEditActive;
+      const editBtn = document.getElementById('btn-edit-land-border');
+      const editBanner = document.getElementById('edit-mode-banner');
+
+      if (isBorderEditActive) {
+        editBtn.classList.add('editing-now');
+        editBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> EXIT EDIT MODE';
+        editBanner.style.display = 'flex';
+
+        // Enable vertex dragging handles for all plot layers
+        if (plotLayer) {
+          plotLayer.eachLayer(layer => {
+            if (layer.editing) {
+              layer.editing.enable();
+              layer.on('edit', () => handleBorderVertexDrag(layer));
+            }
+          });
+        }
+        alert('✏️ LAND BORDER EDIT MODE ACTIVE!\n\nCircular vertex drag handles are now displayed on every plot corner over the satellite map.\nClick and drag any corner node to reshape the land boundary!');
+      } else {
+        editBtn.classList.remove('editing-now');
+        editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> EDIT LAND BORDER';
+        editBanner.style.display = 'none';
+
+        if (plotLayer) {
+          plotLayer.eachLayer(layer => {
+            if (layer.editing) layer.editing.disable();
+          });
+        }
+      }
+    }
+
+    let activeDraggedGeoJSON = null;
+    let isGodsEyeOrbitActive = false;
+    let orbitRemoveListener = null;
+
+    function handleBorderVertexDrag(layer) {
+      activeDraggedGeoJSON = layer.toGeoJSON();
+      const props = layer.feature.properties || {};
+      const coords = activeDraggedGeoJSON.geometry.coordinates[0];
+      
+      // Calculate updated area in sq yards
+      let areaM2 = 0;
+      if (typeof L.GeometryUtil !== 'undefined' && L.GeometryUtil.geodesicArea) {
+        areaM2 = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+      } else {
+        areaM2 = coords.length * 150; // fallback calculation
+      }
+      const sqYards = Math.round(areaM2 * 1.19599);
+      const pricePerYd = props.price_per_sqyard || currentProject.pricePerSqYd;
+      const totalPrice = (sqYards * pricePerYd).toLocaleString('en-IN');
+
+      // Auto-trigger nearby spatial intelligence scan around dragged vertex
+      fetchNearbyFeatures(coords[0][1], coords[0][0]);
+
+      const toast = document.getElementById('measure-toast');
+      toast.style.display = 'flex';
+      document.getElementById('measure-text').innerHTML = `
+        <span style="font-weight:800; color:#fbbf24;">Plot ${props.plot_number || ''} Reshaped:</span> ${sqYards} sq.yds | Est Price: ₹ ${totalPrice}
+        <button onclick="renderDraggedShapeIn3D()" style="background:linear-gradient(135deg, #10b981, #059669); color:#ffffff; border:none; padding:5px 14px; border-radius:9999px; font-size:11px; font-weight:800; cursor:pointer; margin-left:12px; box-shadow:0 0 12px rgba(16, 185, 129, 0.6); display:inline-flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-cube"></i> VIEW DRAGGED LAND IN 3D SATELLITE
+        </button>
+      `;
+    }
+
+    function renderDraggedShapeIn3D() {
+      if (!activeDraggedGeoJSON) {
+        alert('Please drag a land border corner vertex or draw a polygon first!');
+        return;
+      }
+      open3DExtrusionModal(activeDraggedGeoJSON, false);
+    }
+
+    function openGodsEye3DView() {
+      const targetFeature = activeDraggedGeoJSON || (plotsData.length > 0 ? plotsData[0] : null);
+      open3DExtrusionModal(targetFeature, true);
+    }
+
+    function saveEditedLandBorders() {
+      const allFeatures = [];
+      plotLayer.eachLayer(layer => {
+        allFeatures.push(layer.toGeoJSON());
+      });
+      const featureCollection = { type: 'FeatureCollection', features: allFeatures };
+      console.log('Saved Reshaped Land Borders:', featureCollection);
+      alert('✅ Reshaped Land Borders Saved Successfully!\nTotal Parcels Calibrated: ' + allFeatures.length);
+      toggleLandBorderEditMode();
+    }
+
+    let current3DRenderStyle = 'puresatellite';
+
+    function set3DRenderStyle(style) {
+      current3DRenderStyle = style;
+      const btnPure = document.getElementById('btn-mode-puresat');
+      const btnExt = document.getElementById('btn-mode-extruded');
+      if (btnPure && btnExt) {
+        if (style === 'puresatellite') {
+          btnPure.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+          btnPure.style.border = '1px solid #34d399';
+          btnExt.style.background = 'rgba(255,255,255,0.1)';
+          btnExt.style.border = '1px solid rgba(255,255,255,0.2)';
+        } else {
+          btnExt.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+          btnExt.style.border = '1px solid #fbbf24';
+          btnPure.style.background = 'rgba(255,255,255,0.1)';
+          btnPure.style.border = '1px solid rgba(255,255,255,0.2)';
+        }
+      }
+      open3DExtrusionModal(activeDraggedGeoJSON, false);
+    }
+
+    /* REAL 3D SATELLITE TERRAIN & PHOTOGRAMMETRY RENDERER */
+    async function open3DExtrusionModal(customGeoJSON = null, isGodsEyeMode = false) {
+      const modal = document.getElementById('modal-3d-backdrop');
+      modal.style.display = 'flex';
+
+      const targetFeature = customGeoJSON || activeDraggedGeoJSON || (plotsData.length > 0 ? plotsData[0] : null);
+      if (!targetFeature) return;
+
+      const coords = targetFeature.geometry.coordinates[0];
+      const flatCoords = coords.flatMap(([lng, lat]) => [lng, lat]);
+
+      // Calculate centroid
+      let sumLng = 0, sumLat = 0;
+      coords.forEach(([lng, lat]) => { sumLng += lng; sumLat += lat; });
+      const centerLng = sumLng / coords.length;
+      const centerLat = sumLat / coords.length;
+
+      if (!cesiumModalViewer) {
+        Cesium.Ion.defaultAccessToken = window.CESIUM_ION_TOKEN || '';
+
+        // High-Resolution Google Hybrid Satellite Imagery Provider (Satellite Photos + Real Roads + Street Names)
+        const googleSatelliteProvider = new Cesium.UrlTemplateImageryProvider({
+          url: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+          subdomains: ['0', '1', '2', '3'],
+          credit: '© Google Satellite & Street Maps',
+          maximumLevel: 20
+        });
+
+        cesiumModalViewer = new Cesium.Viewer('cesium-modal-canvas', {
+          imageryProvider: googleSatelliteProvider,
+          scene3DOnly: true,
+          animation: false,
+          timeline: false,
+          baseLayerPicker: false,
+          fullscreenButton: false,
+          infoBox: false,
+          selectionIndicator: false,
+          navigationHelpButton: false,
+          geocoder: false,
+          homeButton: false,
+          sceneModePicker: false
+        });
+
+        // Set globe base color to dark slate so tiles blend naturally
+        cesiumModalViewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0f172a');
+
+        try {
+          if (typeof Cesium.createWorldTerrainAsync === 'function') {
+            const worldTerrain = await Cesium.createWorldTerrainAsync();
+            cesiumModalViewer.terrainProvider = worldTerrain;
+          }
+        } catch (e) {
+          console.warn('World terrain fallback:', e);
+          cesiumModalViewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+        }
+
+        cesiumModalViewer.scene.globe.depthTestAgainstTerrain = false;
+        cesiumModalViewer.scene.globe.enableLighting = true;
+
+        // Glowing Blue 3D Earth Atmosphere & Space Horizon
+        if (cesiumModalViewer.scene.skyAtmosphere) {
+          cesiumModalViewer.scene.skyAtmosphere.show = true;
+          cesiumModalViewer.scene.skyAtmosphere.brightnessShift = 0.1;
+        }
+        cesiumModalViewer.scene.globe.showGroundAtmosphere = true;
+        if (cesiumModalViewer.scene.fog) {
+          cesiumModalViewer.scene.fog.enabled = true;
+          cesiumModalViewer.scene.fog.density = 0.00015;
+        }
+      }
+
+      if (orbitRemoveListener) {
+        orbitRemoveListener();
+        orbitRemoveListener = null;
+        isGodsEyeOrbitActive = false;
+      }
+
+      cesiumModalViewer.entities.removeAll();
+
+      // Render background venture plot outlines in thin transparent line
+      plotsData.forEach(p => {
+        try {
+          const pCoords = p.geometry.coordinates[0];
+          const pFlat = pCoords.flatMap(([lng, lat]) => [lng, lat]);
+          cesiumModalViewer.entities.add({
+            polygon: {
+              hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(pFlat)),
+              material: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.04),
+              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+              outline: true,
+              outlineColor: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.4),
+              outlineWidth: 1
+            }
+          });
+        } catch (err) {}
+      });
+
+      const hierarchy = new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(flatCoords));
+
+      if (current3DRenderStyle === 'puresatellite') {
+        // 1. PURE REAL SATELLITE VIEW (Zero Opaque Color Boxes - 100% Raw Satellite Imagery Visible!)
+        cesiumModalViewer.entities.add({
+          name: 'Real Photorealistic 3D Satellite Ground',
+          polygon: {
+            hierarchy: hierarchy,
+            material: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.04), // 96% transparent so original satellite photo, trees & soil render naturally!
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString('#34d399'),
+            outlineWidth: 4
+          }
+        });
+
+        // Glowing Laser Boundary Line
+        cesiumModalViewer.entities.add({
+          name: 'Laser Boundary Line',
+          polyline: {
+            positions: Cesium.Cartesian3.fromDegreesArray(flatCoords),
+            width: 4,
+            material: new Cesium.PolylineGlowMaterialProperty({
+              glowPower: 0.2,
+              color: Cesium.Color.fromCssColorString('#10b981')
+            }),
+            clampToGround: true
+          }
+        });
+      } else {
+        // 2. 3D EXTRUDED VOLUME BOX VIEW
+        cesiumModalViewer.entities.add({
+          name: '3D Extruded Dragged Parcel Volume',
+          polygon: {
+            hierarchy: hierarchy,
+            extrudedHeight: 12,
+            material: Cesium.Color.fromCssColorString('#f59e0b').withAlpha(0.65),
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString('#fbbf24'),
+            outlineWidth: 2
+          }
+        });
+      }
+
+      // Ensure canvas resizes to exact viewport dimensions
+      setTimeout(() => {
+        if (cesiumModalViewer) {
+          cesiumModalViewer.resize();
+          cesiumModalViewer.scene.requestRender();
+        }
+      }, 80);
+
+      // Bulletproof camera flyTo centered over (centerLng, centerLat)
+      const altitude = isGodsEyeMode ? 250 : 320;
+      const pitchDeg = isGodsEyeMode ? -85 : -35;
+      const headingDeg = isGodsEyeMode ? 0 : 45;
+
+      cesiumModalViewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(centerLng, centerLat, altitude),
+        orientation: {
+          heading: Cesium.Math.toRadians(headingDeg),
+          pitch: Cesium.Math.toRadians(pitchDeg),
+          roll: 0
+        },
+        duration: 1.0
+      });
+    }
+
+    function set3DCameraPerspective(mode) {
+      if (!cesiumModalViewer) return;
+
+      if (orbitRemoveListener) {
+        orbitRemoveListener();
+        orbitRemoveListener = null;
+        isGodsEyeOrbitActive = false;
+      }
+
+      const targetLng = currentProject.center[1];
+      const targetLat = currentProject.center[0];
+
+      if (mode === 'godseye') {
+        cesiumModalViewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(targetLng, targetLat, 250),
+          orientation: {
+            heading: Cesium.Math.toRadians(0),
+            pitch: Cesium.Math.toRadians(-85),
+            roll: 0
+          },
+          duration: 1.0
+        });
+      } else if (mode === 'isometric') {
+        cesiumModalViewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(targetLng, targetLat, 320),
+          orientation: {
+            heading: Cesium.Math.toRadians(45),
+            pitch: Cesium.Math.toRadians(-35),
+            roll: 0
+          },
+          duration: 1.0
+        });
+      }
+    }
+
+    function toggle3DGodsEyeOrbit() {
+      if (!cesiumModalViewer) return;
+      
+      if (isGodsEyeOrbitActive) {
+        if (orbitRemoveListener) {
+          orbitRemoveListener();
+          orbitRemoveListener = null;
+        }
+        isGodsEyeOrbitActive = false;
+        alert('360° Orbit Flythrough Paused.');
+      } else {
+        isGodsEyeOrbitActive = true;
+        let heading = 0;
+        orbitRemoveListener = cesiumModalViewer.clock.onTick.addEventListener(() => {
+          heading += 0.005;
+          if (heading > Math.PI * 2) heading = 0;
+          cesiumModalViewer.camera.setView({
+            orientation: {
+              heading: heading,
+              pitch: Cesium.Math.toRadians(-40),
+              roll: 0
+            }
+          });
+        });
+      }
+    }
+
+    function close3DModal() {
+      if (orbitRemoveListener) {
+        orbitRemoveListener();
+        orbitRemoveListener = null;
+        isGodsEyeOrbitActive = false;
+      }
+      document.getElementById('modal-3d-backdrop').style.display = 'none';
+    }
+
+    function switchVenture(key) {
+      if (!PROJECTS[key]) return;
+      currentProject = PROJECTS[key];
+      document.getElementById('venture-subtitle').innerText = currentProject.subtitle;
+
+      if (brochureImageOverlay) {
+        map.removeLayer(brochureImageOverlay);
+        brochureImageOverlay = null;
+        isBrochureVisible = false;
+      }
+
+      map.flyTo(currentProject.center, currentProject.zoom, { duration: 1.5 });
+      addMasterplanHeaderOverlays();
+      loadPlotsData();
+    }
+
+    function switchMapLayer(layerKey, btn) {
+      document.querySelectorAll('.quick-nav-bar .ctrl-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      if (currentTileLayer) map.removeLayer(currentTileLayer);
+      currentTileLayer = tileProviders[layerKey].addTo(map);
+    }
+
+    function toggleBrochureOverlay() {
+      const btn = document.getElementById('btn-toggle-brochure');
+      if (!currentProject.brochureOverlay) {
+        alert('Brochure ground overlay is available for Peacock Valley venture.');
+        return;
+      }
+
+      if (isBrochureVisible) {
+        if (brochureImageOverlay) map.removeLayer(brochureImageOverlay);
+        isBrochureVisible = false;
+        btn.classList.remove('active');
+      } else {
+        brochureImageOverlay = L.imageOverlay(currentProject.brochureOverlay, currentProject.brochureBounds, {
+          opacity: currentOpacity
+        }).addTo(map);
+        isBrochureVisible = true;
+        btn.classList.add('active');
+        alert('Brochure Masterplan Ground Overlay Activated!\nUse the Ground Opacity slider at bottom left to blend with satellite imagery.');
+      }
+    }
+
+    function switchSidebarTab(tabName) {
+      document.getElementById('tab-plots').classList.toggle('active', tabName === 'plots');
+      document.getElementById('tab-stats').classList.toggle('active', tabName === 'stats');
+      document.getElementById('tab-intel').classList.toggle('active', tabName === 'intel');
+
+      document.getElementById('tab-content-plots').style.display = tabName === 'plots' ? 'flex' : 'none';
+      document.getElementById('tab-content-stats').style.display = tabName === 'stats' ? 'flex' : 'none';
+      document.getElementById('tab-content-intel').style.display = tabName === 'intel' ? 'flex' : 'none';
+    }
+
+    function addMasterplanHeaderOverlays() {
+      if (headerMarker) map.removeLayer(headerMarker);
+      if (highwayMarker) map.removeLayer(highwayMarker);
+      if (entranceRoadMarker) map.removeLayer(entranceRoadMarker);
+
+      const lat = currentProject.center[0];
+      const lng = currentProject.center[1];
+
+      headerMarker = L.marker([lat + 0.0011, lng + 0.0001], {
+        icon: L.divIcon({
+          className: '',
+          html: `<div class="masterplan-header-badge"><i class="fa-solid fa-crown" style="color:#fbbf24;"></i> ${currentProject.headerBadge}</div>`,
+          iconSize: [420, 40],
+          iconAnchor: [210, 20]
+        })
+      }).addTo(map);
+
+      highwayMarker = L.marker([lat - 0.0008, lng - 0.0009], {
+        icon: L.divIcon({
+          className: '',
+          html: `<div class="highway-banner-badge"><i class="fa-solid fa-road"></i> ${currentProject.hwyBadge}</div>`,
+          iconSize: [360, 32],
+          iconAnchor: [180, 16]
+        })
+      }).addTo(map);
+
+      entranceRoadMarker = L.marker([lat - 0.0004, lng - 0.0004], {
+        icon: L.divIcon({
+          className: '',
+          html: `<div class="entrance-road-badge"><i class="fa-solid fa-route"></i> ${currentProject.roadBadge}</div>`,
+          iconSize: [320, 28],
+          iconAnchor: [160, 14]
+        })
+      }).addTo(map);
+    }
+
+    async function loadPlotsData() {
+      try {
+        const response = await fetch(currentProject.geojson);
+        const data = await response.json();
+        plotsData = data.features || [];
+
+        renderCustomPlotsOnMap(data);
+        renderPlotList(plotsData);
+      } catch (err) {
+        console.error('Error loading plot data:', err);
+      }
+    }
+
+    function renderCustomPlotsOnMap(geojsonData) {
+      if (plotLayer) map.removeLayer(plotLayer);
+
+      plotLayer = L.geoJSON(geojsonData, {
+        style: (feature) => {
+          const status = (feature.properties.status || 'available').toLowerCase();
+          let color = '#10b981';
+          if (status === 'reserved') color = '#f59e0b';
+          if (status === 'sold') color = '#ec4899';
+          if (status === 'hold') color = '#ef4444';
+
+          return {
+            color: color,
+            weight: 2,
+            opacity: 0.9,
+            fillColor: color,
+            fillOpacity: currentOpacity
+          };
+        },
+        onEachFeature: (feature, layer) => {
+          const props = feature.properties;
+          const status = (props.status || 'available').toLowerCase();
+
+          layer.bindTooltip(`<b>${props.plot_number}</b>`, {
+            permanent: true,
+            direction: 'center',
+            className: `plot-map-badge plot-badge-${status}`
+          });
+
+          layer.on({
+            mouseover: (e) => e.target.setStyle({ fillOpacity: 0.8, weight: 3 }),
+            mouseout: (e) => plotLayer.resetStyle(e.target),
+            click: () => selectPlot(feature, layer)
+          });
+
+          drawnItems.addLayer(layer);
+        }
+      }).addTo(map);
+
+      if (plotLayer.getBounds().isValid()) {
+        map.fitBounds(plotLayer.getBounds(), { padding: [60, 60] });
+      }
+    }
+
+    function renderPlotList(plots) {
+      const container = document.getElementById('plot-list-container');
+      container.innerHTML = '';
+
+      plots.forEach(p => {
+        const props = p.properties;
+        const status = (props.status || 'available').toLowerCase();
+        
+        const card = document.createElement('div');
+        card.className = 'plot-card';
+        card.innerHTML = `
+          <div>
+            <div class="plot-num">${props.plot_number}</div>
+            <div class="plot-meta">${props.size || props.extent_sqyards} sq.yds • ${props.facing} Facing</div>
+          </div>
+          <span class="status-tag status-${status}">${status}</span>
+        `;
+        card.addEventListener('click', () => {
+          selectPlot(p);
+          plotLayer.eachLayer(layer => {
+            if (layer.feature.properties.plot_id === props.plot_id) {
+              map.flyTo(layer.getBounds().getCenter(), 19, { duration: 1 });
+            }
+          });
+        });
+        container.appendChild(card);
+      });
+    }
+
+    function selectPlot(feature, layer) {
+      const props = feature.properties;
+      const drawer = document.getElementById('detail-drawer');
+      const content = document.getElementById('drawer-content');
+      const pricePerYd = props.price_per_sqyard || currentProject.pricePerSqYd;
+      const totalPrice = props.total_price ? props.total_price.toLocaleString('en-IN') : ((props.size || 183) * pricePerYd).toLocaleString('en-IN');
+      const status = (props.status || 'available').toUpperCase();
+
+      content.innerHTML = `
+        <div style="font-size:11px; text-transform:uppercase; color:#38bdf8; font-weight:800; letter-spacing:0.5px;">${currentProject.name} Masterplan</div>
+        <h2 style="font-size:22px; font-weight:800; margin:4px 0 14px 0;">Plot ${props.plot_number}</h2>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+          <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px;">
+            <div style="font-size:10px; color:#94a3b8;">Survey Number</div>
+            <div style="font-size:13px; font-weight:700;">${props.survey_number || '33/34'}</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px;">
+            <div style="font-size:10px; color:#94a3b8;">Status</div>
+            <div style="font-size:13px; font-weight:800; color:#34d399;">${status}</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px;">
+            <div style="font-size:10px; color:#94a3b8;">Plot Extent</div>
+            <div style="font-size:13px; font-weight:700; color:#34d399;">${props.size || props.extent_sqyards} sq.yds</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px;">
+            <div style="font-size:10px; color:#94a3b8;">Facing</div>
+            <div style="font-size:13px; font-weight:700;">${props.facing}</div>
+          </div>
+        </div>
+
+        <div style="background:rgba(16, 185, 129, 0.12); border:1px solid rgba(16, 185, 129, 0.4); padding:14px; border-radius:10px; margin-bottom:14px;">
+          <div style="font-size:10px; color:#94a3b8; text-transform:uppercase; font-weight:700;">Investment Amount</div>
+          <div style="font-size:24px; font-weight:800; color:#34d399;">₹ ${totalPrice}</div>
+          <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Offer Rate: ₹ ${pricePerYd.toLocaleString('en-IN')} / sq.yd</div>
+        </div>
+
+        <button class="cta-btn cta-edit" onclick="toggleLandBorderEditMode()">
+          <i class="fa-solid fa-pen-to-square"></i> Reshape Corner Vertices
+        </button>
+        <button class="cta-btn cta-render-3d" onclick="open3DExtrusionModal()">
+          <i class="fa-solid fa-globe"></i> View Real 3D Satellite Terrain Surface
+        </button>
+        <button class="cta-btn" style="background:linear-gradient(135deg, #ea4335, #c5221f); color:#ffffff; font-weight:800;" onclick="openStreetViewModal()">
+          <i class="fa-solid fa-person-walking"></i> Walk 360° Google Street View
+        </button>
+        <button class="cta-btn cta-whatsapp" onclick="window.open('https://wa.me/919392887268?text=Inquiring%20about%20Plot%20${props.plot_number}%20at%20${encodeURIComponent(currentProject.name)}','_blank')">
+          <i class="fa-brands fa-whatsapp"></i> Inquire on WhatsApp
+        </button>
+      `;
+
+      drawer.classList.add('open');
+    }
+
+    /* GOOGLE STREET VIEW 360° & EARTH ENGINE HANDLERS */
+    let currentStreetViewCoords = null;
+
+    function openStreetViewModal(lat = null, lng = null) {
+      const targetLat = lat || currentProject.center[0];
+      const targetLng = lng || currentProject.center[1];
+      currentStreetViewCoords = { lat: targetLat, lng: targetLng };
+
+      const modal = document.getElementById('modal-streetview-backdrop');
+      const iframe = document.getElementById('streetview-iframe');
+
+      // Embedded Google Street View 360 Panorama URL
+      iframe.src = `https://maps.google.com/maps?q=${targetLat},${targetLng}&layer=c&cbll=${targetLat},${targetLng}&cbp=12,0,0,0,0&output=embed`;
+      modal.style.display = 'flex';
+    }
+
+    function closeStreetViewModal() {
+      const modal = document.getElementById('modal-streetview-backdrop');
+      const iframe = document.getElementById('streetview-iframe');
+      iframe.src = 'about:blank';
+      modal.style.display = 'none';
+    }
+
+    function openGoogleEarthDirect() {
+      const targetLat = currentStreetViewCoords ? currentStreetViewCoords.lat : currentProject.center[0];
+      const targetLng = currentStreetViewCoords ? currentStreetViewCoords.lng : currentProject.center[1];
+      window.open(`https://earth.google.com/web/@${targetLat},${targetLng},300a,800d,35y,0h,45t,0r`, '_blank');
+    }
+
+    function toggleMeasurementMode() {
+      isMeasuring = !isMeasuring;
+      const btn = document.getElementById('btn-measure');
+      const toast = document.getElementById('measure-toast');
+
+      if (isMeasuring) {
+        btn.classList.add('active');
+        toast.style.display = 'flex';
+        document.getElementById('measure-text').innerText = 'Click 2 points on map to measure distance...';
+        measurePoints = [];
+        if (measurePolyline) map.removeLayer(measurePolyline);
+      } else {
+        btn.classList.remove('active');
+        toast.style.display = 'none';
+        if (measurePolyline) map.removeLayer(measurePolyline);
+        measurePoints = [];
+      }
+    }
+
+    function handleMapMeasurementClick(e) {
+      if (!isMeasuring) return;
+
+      measurePoints.push(e.latlng);
+
+      if (measurePolyline) map.removeLayer(measurePolyline);
+      measurePolyline = L.polyline(measurePoints, { color: '#38bdf8', weight: 4, dashArray: '6, 6' }).addTo(map);
+
+      if (measurePoints.length >= 2) {
+        let totalMeters = 0;
+        for (let i = 0; i < measurePoints.length - 1; i++) {
+          totalMeters += measurePoints[i].distanceTo(measurePoints[i+1]);
+        }
+        const feet = (totalMeters * 3.28084).toFixed(1);
+        const yards = (totalMeters * 1.09361).toFixed(1);
+        document.getElementById('measure-text').innerText = `Distance: ${totalMeters.toFixed(1)}m | ${feet}ft | ${yards}yds`;
+      }
+    }
+
+    function openWhatsApp() {
+      window.open(`https://wa.me/919392887268?text=Hi%20GV%20Infra,%20I%20am%20exploring%20${encodeURIComponent(currentProject.name)}%20on%20the%20live%20satellite%20map.`, "_blank");
+    }
+
+    function openDirections() {
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${currentProject.destCoords}`, "_blank");
+    }
+
+    function shareVenture() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+        alert(`${currentProject.name} Real Map Link Copied!\nShare on WhatsApp or SMS.`);
+      }
+    }
+
+    function filterPlots(query) {
+      const q = query.toLowerCase();
+      const filtered = plotsData.filter(p => {
+        const props = p.properties;
+        return (
+          props.plot_number.toLowerCase().includes(q) ||
+          (props.survey_number && props.survey_number.toLowerCase().includes(q)) ||
+          props.facing.toLowerCase().includes(q)
+        );
+      });
+      renderPlotList(filtered);
+    }
+
+    function closeDrawer() {
+      document.getElementById('detail-drawer').classList.remove('open');
+    }
+
+    window.addEventListener('load', initMap);
+  </script>
+</body>
+</html>

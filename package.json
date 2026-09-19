@@ -5,13 +5,22 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "test:gis": "node --test tests/osm-pipeline.test.js",
     "test:ai": "node scripts/test-ai-gateway.js",
-    "start:ai-server": "node server/server.js"
+    "start:ai-server": "node server/server.js",
+    "start:gis": "node server/server.js",
+    "import:osm": "node scripts/import-osm.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
+  "dependencies": {
+    "@designcodeio/threeui": "^1.2.0",
+    "dotenv": "^18.0.1",
+    "express": "^5.2.1",
+    "pg": "^8.23.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.63.0"
   }

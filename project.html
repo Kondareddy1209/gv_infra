@@ -171,9 +171,9 @@ document.addEventListener('cesium3d:ready', () => {
     <span class="eyebrow"><span class="eyebrow-dot"></span> GURRALAPADU, KHAMMAM-KODADA HIGHWAY · DTCP SANCTIONED</span>
     <h1 style="font-size: clamp(2.6rem, 4.2vw, 3.8rem); max-width: 24ch; margin-top:8px; font-weight:500; line-height:1.1;">Stambadri Enclave.<br><span class="gold-text">Real land, visible online.</span></h1>
     <p style="margin-top:16px; color:var(--ink-body); max-width:66ch; font-size:1.05rem; line-height:1.7;">Start with the Khammam satellite land view, then move into the 3D plot model to compare availability, road access, Vastu orientation, EMI estimates, and direct sales contact from one screen.</p>
-    <div class="project-hero-actions">
-      <a href="#layout-explorer" class="btn btn-primary">Inspect 3D Layout</a>
-      <a href="#land-explorer" class="btn btn-outline" id="hero-open-land">Open Satellite Map</a>
+    <div class="project-hero-actions" style="display:flex; gap:12px; flex-wrap:wrap; margin-top:20px;">
+      <a href="real-land-map.html" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0d9488); border:none; box-shadow:0 4px 15px rgba(2,132,199,0.4); font-weight:800;">🛰️ Launch Real Satellite GIS & God's Eye Map</a>
+      <a href="#layout-explorer" class="btn btn-outline" onclick="window.switchGVView('model')">Inspect 3D Layout</a>
       <a href="https://wa.me/919392887268?text=Hi%20GV%20Infra%2C%20I%20want%20to%20book%20a%20site%20visit%20for%20Stambadri%20Enclave%20in%20Khammam." target="_blank" rel="noopener" class="btn btn-whatsapp">Book on WhatsApp</a>
     </div>
   </div>
@@ -539,96 +539,33 @@ document.addEventListener('cesium3d:ready', () => {
 
 <!-- SATELLITE LAND MAP -->
 <section id="land-explorer" class="wrap land-explorer" aria-label="Satellite land explorer" hidden style="padding:0; border:none; margin-top:24px;">
-  <div class="land-map-heading">
+  <div class="land-map-heading" style="margin-bottom:16px;">
     <div>
-      <span class="land-eyebrow">REGIONAL GEOSPATIAL VIEW</span>
-      <h2>Land &amp; surroundings</h2>
-      <p>Khammam regional satellite imagery · Site GPS coordinate mapping · boundary-ready workflow</p>
+      <span class="land-eyebrow">REAL GEOSPATIAL GIS & GOD'S EYE COMMAND CENTER</span>
+      <h2>Real Satellite Land &amp; Surroundings</h2>
+      <p>Interactive multi-venture satellite map · Land border vertex drag editor · Live ADS-B flight radar · 5G & Wi-Fi coverage grid · Live trains & highway traffic</p>
     </div>
-    <a id="land-external" href="https://www.google.com/maps/@17.24767,80.14368,13z/data=!3m1!1e3" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+    <a id="land-external" href="real-land-map.html" target="_blank" rel="noopener" style="background:#0284c7; color:#ffffff; padding:10px 18px; border-radius:9999px; text-decoration:none; font-weight:800; font-size:0.88rem; box-shadow:0 4px 15px rgba(2,132,199,0.4);">Open Full Screen Map ↗</a>
   </div>
-  <div class="land-map-stage" id="land-map-stage">
-    <div id="land-map" role="region" aria-label="Interactive satellite map"></div>
-    <div class="map-mode-switcher" role="group" aria-label="Map presentation mode">
-      <button id="land-2d" class="active" aria-pressed="true" title="True top-down 2D site plan view">2D</button>
-      <button id="land-3d" aria-pressed="false" title="Elevated 3D aerial perspective">3D</button>
-    </div>
-    <div class="land-map-tools" role="group" aria-label="Map display">
-      <button id="land-labels" class="active" aria-pressed="true">Road Labels</button>
-      <button id="land-reset">Reset View</button>
-    </div>
-    <div class="land-map-compass" id="land-compass" role="button" aria-label="Reset bearing to north" title="Click to reset bearing to north">
-      <div class="land-map-compass-dial" id="land-compass-dial">
-        <span class="land-map-compass-n">N</span>
-      </div>
-    </div>
-    <div class="land-map-status" id="land-map-status" role="status" aria-live="polite">Loading satellite imagery…</div>
-    <div class="land-map-caption">SATELLITE IMAGERY <span>Not live footage or surveyed boundaries</span></div>
-    <div class="land-map-proof-panel">
-      <div><strong>GPS Ready</strong><span>Enter exact site pin when survey coordinates are available.</span></div>
-      <div><strong>Boundary Ready</strong><span>Verified GeoJSON boundary can be added without redesign.</span></div>
-      <div><strong>Buyer Safe</strong><span>Imagery is context, not legal proof or ownership record.</span></div>
-    </div>
-  </div>
-  <div class="land-map-footer">
-    <form id="land-coordinate-form">
-      <label for="land-coordinates">Have the site GPS pin?</label>
-      <div class="land-coordinate-input">
-        <input id="land-coordinates" placeholder="e.g. 17.24767, 80.14368 or paste Google Maps link" aria-describedby="land-location-note">
-        <button type="submit">Go to pin ↗</button>
-      </div>
-      <div class="land-preset-chips" style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
-        <button type="button" class="chip btn-preset-pin" data-pin="17.24767, 80.14368" style="padding:4px 10px; font-size:0.75rem; border-radius:4px; cursor:pointer;">📍 Stambadri Enclave (Khammam)</button>
-        <button type="button" class="chip btn-preset-pin" data-pin="17.66298, 80.87154" style="padding:4px 10px; font-size:0.75rem; border-radius:4px; cursor:pointer;">📍 Bhadrachalam</button>
-        <button type="button" class="chip btn-preset-pin" data-pin="17.33120, 78.56010" style="padding:4px 10px; font-size:0.75rem; border-radius:4px; cursor:pointer;">📍 Hyderabad HQ</button>
-      </div>
-    </form>
-    <div>
-      <strong id="land-center">17.24767° N, 80.14368° E</strong>
-      <p id="land-location-note">Regional view only. Enter site coordinates to inspect your land. Plot boundaries require a verified survey.</p>
-    </div>
+  <div class="land-map-stage" id="land-map-stage" style="height: 760px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.6);">
+    <iframe src="real-land-map.html" style="width: 100%; height: 100%; border: none;" title="GV Infra Real Land Map & 3D God's Eye Engine"></iframe>
   </div>
 </section>
 
   <!-- CESIUMJS 3D GLOBE & PHOTOREALISTIC TERRAIN SECTION -->
   <section id="cesium-explorer" class="land-explorer" aria-label="Cesium 3D Globe & Photorealistic Terrain" hidden>
-    <div class="land-map-heading" style="display:flex; justify-content: space-between; align-items: flex-end;">
-      <div><span class="land-eyebrow">CESIUM 3D GLOBE &amp; TERRAIN</span><h2>Real 3D Land &amp; Photorealistic Terrain</h2><p>Gurralapadu, Khammam Region · World Terrain Elevation &amp; 3D Extruded Parcels</p></div>
-      <button id="start-tour-btn" onclick="if(window.cesiumViewer) window.cesiumViewer.playCinematicTour()" style="background: #111827; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 1.2rem;">🎥</span> Fly Over Stambadri
-      </button>
+    <div class="land-map-heading" style="display:flex; justify-content: space-between; align-items: flex-end; margin-bottom:16px;">
+      <div>
+        <span class="land-eyebrow">CESIUM 3D GLOBE &amp; TERRAIN</span>
+        <h2>Pure Photorealistic 3D Satellite Terrain</h2>
+        <p>Arising Peacock Valley (Kadthal) &amp; Stambadri Enclave (Khammam) · World Elevation Mesh · 90° Overhead God's Eye · 360° Orbit Flythrough</p>
+      </div>
+      <a href="real-land-map.html" target="_blank" style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 800; border: none; cursor: pointer; text-decoration: none; box-shadow: 0 4px 12px rgba(16,185,129,0.3); display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.2rem;">🌐</span> Launch 3D God's Eye Viewer
+      </a>
     </div>
-    <div style="width:100%; height:600px; border-radius:16px; overflow:hidden; border:1px solid #cbd5e1; position:relative;">
-      <div id="cesium-container" style="width:100%; height:100%;"></div>
-      
-      <!-- Phase 2: AI Mic Button -->
-      <button id="ai-mic-btn" class="cesium-button" data-phase="2" style="display:none; position:absolute; bottom:90px; right:30px; z-index:10; background:#2563eb; color:white; border:none; padding:12px 24px; border-radius:30px; font-weight:600; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2);">🎙️ Voice Commands</button>
-
-      <!-- Phase 3: HUD Overlay -->
-      <div id="cesium-hud" class="cesium-overlay" data-phase="3" style="display:none; position:absolute; top:30px; left:30px; z-index:10; background:rgba(17,24,39,0.85); backdrop-filter:blur(8px); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); color:white; width:280px;"></div>
-
-      <!-- Phase 3: Annotation Toolbar -->
-      <div id="annotation-toolbar" class="annotation-controls" data-phase="3" style="display:none; position:absolute; top:30px; right:30px; z-index:10; background:rgba(17,24,39,0.85); backdrop-filter:blur(8px); padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); gap:8px;">
-        <button id="annotation-draw-btn" style="background:transparent; color:white; border:none; cursor:pointer;">✏️ Draw</button>
-        <button id="annotation-clear-btn" style="background:transparent; color:white; border:none; cursor:pointer;">🗑️ Clear</button>
-      </div>
-
-      <!-- Phase 3: Annotation Canvas -->
-      <canvas id="annotation-canvas" class="annotation-overlay" data-phase="3" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9;"></canvas>
-      
-      <!-- Cinematic Tour Controls Overlay -->
-      <div id="tour-controls" style="display:none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); gap: 16px; align-items: center; z-index: 10;">
-        <button onclick="if(window.cesiumViewer) window.cesiumViewer.toggleTourPause()" id="tour-pause-btn" style="background:transparent; color:white; border:none; font-weight:bold; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">⏸ Pause</button>
-        <div style="width:1px; height:16px; background:rgba(255,255,255,0.2);"></div>
-        <button onclick="if(window.cesiumViewer) window.cesiumViewer.skipTourWaypoint()" style="background:transparent; color:white; border:none; font-weight:bold; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">⏭ Skip</button>
-        <div style="width:1px; height:16px; background:rgba(255,255,255,0.2);"></div>
-        <button onclick="if(window.cesiumViewer) window.cesiumViewer.exitTour()" style="background:transparent; color:#f87171; border:none; font-weight:bold; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">✕ Exit</button>
-      </div>
-
-      <!-- Replay Overlay -->
-      <div id="tour-replay" style="display:none; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10;">
-        <button onclick="if(window.cesiumViewer) window.cesiumViewer.playCinematicTour()" style="background: #16a34a; color:white; border:none; padding: 12px 24px; border-radius: 30px; font-weight:600; cursor:pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:8px;">🔄 Replay Tour</button>
-      </div>
+    <div style="width:100%; height:760px; border-radius:16px; overflow:hidden; border:1px solid #cbd5e1; position:relative; box-shadow: 0 15px 40px rgba(0,0,0,0.6);">
+      <iframe src="real-land-map.html" style="width: 100%; height: 100%; border: none;" title="Cesium 3D Satellite Terrain Viewer"></iframe>
     </div>
   </section>
 

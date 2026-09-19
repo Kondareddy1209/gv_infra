@@ -76,15 +76,16 @@ class KhammamRealEstateGIS {
     // Set Official Cesium Ion Access Token
     Cesium.Ion.defaultAccessToken = window.CESIUM_ION_TOKEN || '';
 
-    // 100% Free High-Res Satellite Imagery (Esri World Imagery)
-    const esriImagery = new Cesium.UrlTemplateImageryProvider({
-      url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      credit: 'Esri, Maxar, Earthstar Geographics',
-      maximumLevel: 19
+    // High-Resolution Google Hybrid Satellite Imagery (Satellite Photos + Roads + Street Labels)
+    const googleSatelliteImagery = new Cesium.UrlTemplateImageryProvider({
+      url: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+      subdomains: ['0', '1', '2', '3'],
+      credit: '© Google Satellite & Street Maps',
+      maximumLevel: 20
     });
 
     this.viewer = new Cesium.Viewer(container, {
-      imageryProvider: esriImagery,
+      imageryProvider: googleSatelliteImagery,
       scene3DOnly: true,
       animation: false,
       timeline: false,

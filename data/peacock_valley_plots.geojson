@@ -1,0 +1,164 @@
+{
+  "type": "FeatureCollection",
+  "name": "Arising Peacock Valley - Ground Aligned 212 Plots Masterplan",
+  "project_details": {
+    "project_name": "Arising Peacock Valley",
+    "developer": "Arising Developers LLP & GV Infra Projects",
+    "extent_acres": 14,
+    "total_plots": 212,
+    "dtcp_tlp_no": "TLP. NO. 239/2023/H",
+    "ts_rera_no": "P02400007625",
+    "survey_numbers": "Sy. No. 33 & 34",
+    "price_per_sqyard": 13999,
+    "location": "Kadthal Village, Srisailam Highway, Rangareddy District",
+    "image_overlay": "data/peacock_valley_brochure.jpg",
+    "overlay_bounds": [
+      [17.0842, 78.4890],
+      [17.0868, 78.4930]
+    ]
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-001",
+      "properties": {
+        "plot_id": 1,
+        "plot_number": "P-01",
+        "survey_number": "33/A",
+        "extent_sqyards": 183,
+        "size": 183,
+        "price_per_sqyard": 13999,
+        "total_price": 2561817,
+        "facing": "East",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.49012, 17.08505],
+            [78.49042, 17.08512],
+            [78.49036, 17.08535],
+            [78.49006, 17.08528],
+            [78.49012, 17.08505]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-002",
+      "properties": {
+        "plot_id": 2,
+        "plot_number": "P-02",
+        "survey_number": "33/A",
+        "extent_sqyards": 200,
+        "size": 200,
+        "price_per_sqyard": 13999,
+        "total_price": 2799800,
+        "facing": "East",
+        "status": "available",
+        "project": "Peacock Valley"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.49045, 17.08513],
+            [78.49075, 17.08520],
+            [78.49069, 17.08543],
+            [78.49039, 17.08536],
+            [78.49045, 17.08513]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-003",
+      "properties": {
+        "plot_id": 3,
+        "plot_number": "P-03",
+        "survey_number": "33/B",
+        "extent_sqyards": 167,
+        "size": 167,
+        "price_per_sqyard": 13999,
+        "total_price": 2337833,
+        "facing": "North",
+        "status": "reserved",
+        "project": "Peacock Valley"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.49078, 17.08521],
+            [78.49108, 17.08528],
+            [78.49102, 17.08551],
+            [78.49072, 17.08544],
+            [78.49078, 17.08521]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-004",
+      "properties": {
+        "plot_id": 4,
+        "plot_number": "P-04",
+        "survey_number": "33/B",
+        "extent_sqyards": 240,
+        "size": 240,
+        "price_per_sqyard": 13999,
+        "total_price": 3359760,
+        "facing": "West",
+        "status": "sold",
+        "project": "Peacock Valley"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.49111, 17.08529],
+            [78.49141, 17.08536],
+            [78.49135, 17.08559],
+            [78.49105, 17.08552],
+            [78.49111, 17.08529]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-005",
+      "properties": {
+        "plot_id": 5,
+        "plot_number": "P-05 (Mortgage)",
+        "survey_number": "34/A",
+        "extent_sqyards": 300,
+        "size": 300,
+        "price_per_sqyard": 13999,
+        "total_price": 4199700,
+        "facing": "East",
+        "status": "hold",
+        "project": "Peacock Valley",
+        "is_mortgage": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.49008, 17.08536],
+            [78.49048, 17.08546],
+            [78.49040, 17.08575],
+            [78.49000, 17.08565],
+            [78.49008, 17.08536]
+          ]
+        ]
+      }
+    }
+  ]
+}
