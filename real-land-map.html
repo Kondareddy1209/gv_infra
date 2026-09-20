@@ -1067,7 +1067,16 @@
     const originalWarn = console.warn;
     console.warn = function(...args) {
       const msg = args[0]?.toString?.() || '';
-      if (!msg.includes('FLIP_Y') && !msg.includes('PREMULTIPLY_ALPHA')) {
+      const suppressedPatterns = [
+        'FLIP_Y', 'PREMULTIPLY_ALPHA',
+        'Entity geometry outlines',
+        'Entity corridor, ellipse',
+        'heightReference will be ignored',
+        'World terrain fallback',
+        'Invalid access token'
+      ];
+      const shouldSuppress = suppressedPatterns.some(p => msg.includes(p));
+      if (!shouldSuppress) {
         originalWarn.apply(console, args);
       }
     };
@@ -1632,42 +1641,52 @@
       const centerLat = sumLat / coords.length;
 
       if (!cesiumModalViewer) {
-        Cesium.Ion.defaultAccessToken = window.CESIUM_ION_TOKEN || '';
-
-        // High-Resolution Google Hybrid Satellite Imagery Provider (Satellite Photos + Real Roads + Street Names)
-        const googleSatelliteProvider = new Cesium.UrlTemplateImageryProvider({
-          url: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-          subdomains: ['0', '1', '2', '3'],
-          credit: '© Google Satellite & Street Maps',
-          maximumLevel: 20
-        });
-
-        cesiumModalViewer = new Cesium.Viewer('cesium-modal-canvas', {
-          imageryProvider: googleSatelliteProvider,
-          scene3DOnly: true,
-          animation: false,
-          timeline: false,
-          baseLayerPicker: false,
-          fullscreenButton: false,
-          infoBox: false,
-          selectionIndicator: false,
-          navigationHelpButton: false,
-          geocoder: false,
-          homeButton: false,
-          sceneModePicker: false
-        });
-
-        // Set globe base color to dark slate so tiles blend naturally
-        cesiumModalViewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0f172a');
-
         try {
-          if (typeof Cesium.createWorldTerrainAsync === 'function') {
-            const worldTerrain = await Cesium.createWorldTerrainAsync();
-            cesiumModalViewer.terrainProvider = worldTerrain;
+          // Set token if available, otherwise use defaults
+          if (window.CESIUM_ION_TOKEN) {
+            Cesium.Ion.defaultAccessToken = window.CESIUM_ION_TOKEN;
+          }
+
+          // High-Resolution Google Hybrid Satellite Imagery Provider (Satellite Photos + Real Roads + Street Names)
+          const googleSatelliteProvider = new Cesium.UrlTemplateImageryProvider({
+            url: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+            subdomains: ['0', '1', '2', '3'],
+            credit: '© Google Satellite & Street Maps',
+            maximumLevel: 20
+          });
+
+          cesiumModalViewer = new Cesium.Viewer('cesium-modal-canvas', {
+            imageryProvider: googleSatelliteProvider,
+            scene3DOnly: true,
+            animation: false,
+            timeline: false,
+            baseLayerPicker: false,
+            fullscreenButton: false,
+            infoBox: false,
+            selectionIndicator: false,
+            navigationHelpButton: false,
+            geocoder: false,
+            homeButton: false,
+            sceneModePicker: false
+          });
+
+          // Set globe base color to dark slate so tiles blend naturally
+          cesiumModalViewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0f172a');
+
+          // Attempt to load world terrain, fallback to ellipsoid
+          if (window.CESIUM_ION_TOKEN && typeof Cesium.createWorldTerrainAsync === 'function') {
+            try {
+              const worldTerrain = await Cesium.createWorldTerrainAsync();
+              cesiumModalViewer.terrainProvider = worldTerrain;
+            } catch (e) {
+              cesiumModalViewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+            }
+          } else {
+            cesiumModalViewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
           }
         } catch (e) {
-          console.warn('World terrain fallback:', e);
-          cesiumModalViewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+          console.error('[Cesium] Initialization failed:', e);
+          return;
         }
 
         cesiumModalViewer.scene.globe.depthTestAgainstTerrain = false;
