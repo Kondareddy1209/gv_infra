@@ -55,30 +55,40 @@
     }
 
     /* Navigation Menu */
+    .top-nav-cluster {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .nav-menu {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 6px;
       align-items: center;
-      pointer-events: auto;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 4px 8px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
 
     .nav-link {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.2);
       color: #cbd5e1;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
       text-decoration: none;
-      cursor: pointer;
-      transition: all 200ms;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .nav-link:hover {
       background: rgba(56, 189, 248, 0.2);
-      border-color: rgba(56, 189, 248, 0.5);
       color: #38bdf8;
     }
 
@@ -93,7 +103,7 @@
       align-items: center;
       z-index: 1000;
       pointer-events: none;
-      gap: 16px;
+      gap: 12px;
     }
 
     .brand-pill {
@@ -142,29 +152,84 @@
       letter-spacing: 0.5px;
     }
 
-    /* Quick Nav Buttons */
+    /* Map Tools Master Toggle */
+    .toolbar-toggle-btn {
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px rgba(2, 132, 199, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    .toolbar-toggle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.7);
+    }
+
+    /* Quick Nav Floating Tool Palette (Slide Out from Right) */
     .quick-nav-bar {
       pointer-events: auto;
+      position: absolute;
+      top: 74px;
+      right: 16px;
+      width: 300px;
+      max-height: calc(100vh - 120px);
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.8);
       display: flex;
-      gap: 8px;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 10px 12px;
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      z-index: 1100;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .quick-nav-bar.hidden {
+      transform: translateX(340px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .tool-group-title {
+      font-size: 10px;
+      font-weight: 800;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: flex;
       align-items: center;
+      gap: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .tool-group-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
     }
 
     .ctrl-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #cbd5e1;
-      padding: 8px 14px;
-      border-radius: 9999px;
-      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -172,22 +237,74 @@
       gap: 6px;
       transition: all 0.2s ease;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .ctrl-btn:hover {
       background: rgba(56, 189, 248, 0.2);
-      border-color: rgba(56, 189, 248, 0.5);
-      color: #38bdf8;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateY(-1px);
     }
 
     .ctrl-btn.active {
-      background: rgba(139, 92, 246, 0.25);
-      border-color: rgba(139, 92, 246, 0.6);
-      color: #c4b5fd;
-      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: #34d399;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
     }
+
+    .ctrl-btn.btn-edit-border {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .ctrl-btn.btn-gods-eye {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    /* Collapsible Sidebar Controls */
+    .sidebar {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-400px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .sidebar-expand-pill {
+      position: absolute;
+      top: 84px;
+      left: 16px;
+      z-index: 999;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(14px);
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-expand-pill:hover {
+      background: #38bdf8;
+      color: #0f172a;
+      transform: scale(1.04);
+    }
+
 
     .ctrl-btn.btn-edit-border {
       background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -811,31 +928,70 @@
       <span class="badge" id="venture-badge">Real 3D GIS</span>
     </div>
 
-    <!-- Top Navigation Menu -->
-    <div class="nav-menu">
-      <a href="index.html" class="nav-link">🏠 Home</a>
-      <a href="project.html" class="nav-link">📊 3D Masterplan</a>
-      <a href="exploded-3d.html" class="nav-link">💥 Exploded 3D</a>
-      <a href="admin.html" class="nav-link">⚙️ Admin</a>
-    </div>
+    <!-- Top Navigation & Tools Trigger -->
+    <div class="top-nav-cluster">
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="project.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> 3D Masterplan</a>
+        <a href="exploded-3d.html" class="nav-link"><i class="fa-solid fa-cube"></i> Exploded 3D</a>
+        <a href="admin.html" class="nav-link"><i class="fa-solid fa-gear"></i> Admin</a>
+      </div>
 
-    <!-- Quick Navigation Pills -->
-    <div class="quick-nav-bar">
-      <button class="ctrl-btn btn-edit-border" id="btn-edit-land-border" onclick="toggleLandBorderEditMode()"><i class="fa-solid fa-pen-to-square"></i> EDIT LAND BORDER</button>
-      <button class="ctrl-btn btn-gods-eye" onclick="openGodsEye3DView()"><i class="fa-solid fa-eye"></i> 👁️ GOD'S EYE 3D</button>
-      <button class="ctrl-btn btn-telemetry" id="btn-telemetry" onclick="toggleGodsEyeTelemetry()"><i class="fa-solid fa-radar"></i> 📡 GOD'S EYE REAL-TIME FEEDS</button>
-      <button class="ctrl-btn" style="background:linear-gradient(135deg, #ea4335, #c5221f); color:#fff; font-weight:800; border:1px solid #f28b82; box-shadow:0 0 15px rgba(234,67,53,0.4);" onclick="openStreetViewModal()"><i class="fa-solid fa-person-walking"></i> 🚶 GOOGLE STREET VIEW 360°</button>
-      <button class="ctrl-btn" style="background:linear-gradient(135deg, #f97316, #ea580c); color:#fff; font-weight:800; border:1px solid #fbbf24; box-shadow:0 0 15px rgba(249,115,22,0.4);" onclick="openExploded3D()"><i class="fa-solid fa-cube"></i> 💥 EXPLODED 3D VIEW</button>
-      <button class="ctrl-btn" style="background:linear-gradient(135deg, #8b5cf6, #6366f1); color:#fff; font-weight:800; border:1px solid #a78bfa; box-shadow:0 0 15px rgba(139,92,246,0.4);" onclick="toggle3DDEM()"><i class="fa-solid fa-mountain"></i> 🏔️ 3D ELEVATION MODEL</button>
-      <button class="ctrl-btn active" id="btn-google-hybrid"><i class="fa-solid fa-satellite"></i> Google Hybrid Satellite</button>
-      <button class="ctrl-btn" id="btn-esri-sat"><i class="fa-solid fa-earth-asia"></i> Esri World Imagery</button>
-      <button class="ctrl-btn" onclick="open3DExtrusionModal()"><i class="fa-solid fa-globe"></i> View Real 3D Satellite Terrain</button>
-      <button class="ctrl-btn" id="btn-toggle-brochure" onclick="toggleBrochureOverlay()"><i class="fa-solid fa-file-image"></i> Brochure Overlay</button>
-      <button class="ctrl-btn" id="btn-measure"><i class="fa-solid fa-ruler-combined"></i> Distance</button>
-      <button class="ctrl-btn" id="btn-share"><i class="fa-solid fa-share-nodes"></i> Share</button>
-      <button class="ctrl-btn" id="btn-directions" onclick="openDirections()"><i class="fa-solid fa-diamond-turn-right"></i> Directions</button>
+      <button class="toolbar-toggle-btn" id="toolbar-toggle" onclick="toggleToolbar()" title="Toggle Map Tools & 3D Modes">
+        <i class="fa-solid fa-sliders"></i> <span>3D Tools</span>
+      </button>
     </div>
   </div>
+
+  <!-- Floating Expand Button for Left Drawer (Shown when sidebar is collapsed) -->
+  <button class="sidebar-expand-pill" id="sidebar-expand-pill" onclick="toggleSidebar()">
+    <i class="fa-solid fa-table-cells-large"></i> Parcels & Land Intel
+  </button>
+
+  <!-- Quick Navigation & 3D Tool Palette (Slide Out from Right) -->
+  <div class="quick-nav-bar hidden" id="quick-nav-bar">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
+      <span style="font-size:13px; font-weight:800; color:#38bdf8; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-toolbox"></i> MAP & 3D CONTROLS
+      </span>
+      <button style="background:transparent; border:none; color:#94a3b8; font-size:18px; cursor:pointer;" onclick="toggleToolbar()">&times;</button>
+    </div>
+
+    <!-- 3D Engines & Views -->
+    <div class="tool-group-title"><i class="fa-solid fa-cube"></i> 3D & Virtual Reality</div>
+    <div class="tool-group-grid">
+      <button class="ctrl-btn btn-gods-eye" onclick="openGodsEye3DView()"><i class="fa-solid fa-eye"></i> God's Eye 3D</button>
+      <button class="ctrl-btn" style="background:linear-gradient(135deg, #f97316, #ea580c); color:#fff;" onclick="openExploded3D()"><i class="fa-solid fa-cubes"></i> Exploded 3D</button>
+      <button class="ctrl-btn" style="background:linear-gradient(135deg, #ea4335, #c5221f); color:#fff;" onclick="openStreetViewModal()"><i class="fa-solid fa-person-walking"></i> Street View 360°</button>
+      <button class="ctrl-btn" style="background:linear-gradient(135deg, #8b5cf6, #6366f1); color:#fff;" onclick="toggle3DDEM()"><i class="fa-solid fa-mountain"></i> 3D DEM Terrain</button>
+    </div>
+
+    <!-- Live Feeds & Radar -->
+    <div class="tool-group-title"><i class="fa-solid fa-radar"></i> Live Telemetry Feeds</div>
+    <button class="ctrl-btn" id="btn-telemetry" style="width:100%; background:linear-gradient(135deg, #0284c7, #0d9488); color:#fff; justify-content:center;" onclick="toggleGodsEyeTelemetry()">
+      <i class="fa-solid fa-satellite-dish"></i> Open God's Eye Radar Feeds
+    </button>
+
+    <!-- Satellite Base Layers -->
+    <div class="tool-group-title"><i class="fa-solid fa-layer-group"></i> Satellite Base Map</div>
+    <div class="tool-group-grid">
+      <button class="ctrl-btn active" id="btn-google-hybrid"><i class="fa-solid fa-satellite"></i> Google Hybrid</button>
+      <button class="ctrl-btn" id="btn-esri-sat"><i class="fa-solid fa-earth-asia"></i> Esri Sat</button>
+    </div>
+    <button class="ctrl-btn" id="btn-toggle-brochure" style="width:100%; justify-content:center;" onclick="toggleBrochureOverlay()">
+      <i class="fa-solid fa-file-image"></i> Brochure Masterplan Overlay
+    </button>
+
+    <!-- Boundary & Tools -->
+    <div class="tool-group-title"><i class="fa-solid fa-ruler-combined"></i> Cadastral Tools</div>
+    <div class="tool-group-grid">
+      <button class="ctrl-btn btn-edit-border" id="btn-edit-land-border" onclick="toggleLandBorderEditMode()"><i class="fa-solid fa-pen-to-square"></i> Edit Border</button>
+      <button class="ctrl-btn" id="btn-measure"><i class="fa-solid fa-ruler"></i> Measure</button>
+      <button class="ctrl-btn" id="btn-directions" onclick="openDirections()"><i class="fa-solid fa-diamond-turn-right"></i> Directions</button>
+      <button class="ctrl-btn" id="btn-share"><i class="fa-solid fa-share-nodes"></i> Share</button>
+    </div>
+  </div>
+
 
   <!-- God's Eye Real-Time HUD Panel -->
   <div class="gods-eye-hud-panel" id="gods-eye-hud-panel">
@@ -945,6 +1101,7 @@
       <button class="tab-btn active" id="tab-plots" onclick="switchSidebarTab('plots')"><i class="fa-solid fa-th"></i> Inventory</button>
       <button class="tab-btn" id="tab-stats" onclick="switchSidebarTab('stats')"><i class="fa-solid fa-chart-pie"></i> Layout Stats</button>
       <button class="tab-btn" id="tab-intel" onclick="switchSidebarTab('intel')"><i class="fa-solid fa-compass"></i> Land Intel</button>
+      <button class="tab-btn" onclick="toggleSidebar()" title="Collapse Panel to view full map" style="flex:0 0 32px;"><i class="fa-solid fa-angles-left"></i></button>
     </div>
 
     <!-- Inventory Tab -->
@@ -2781,8 +2938,22 @@
       renderPlotList(filtered);
     }
 
-    function closeDrawer() {
-      document.getElementById('detail-drawer').classList.remove('open');
+    function toggleToolbar() {
+      const bar = document.getElementById('quick-nav-bar');
+      if (bar) bar.classList.toggle('hidden');
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const expandBtn = document.getElementById('sidebar-expand-pill');
+      if (sidebar) sidebar.classList.toggle('collapsed');
+      if (expandBtn && sidebar) {
+        if (sidebar.classList.contains('collapsed')) {
+          expandBtn.style.display = 'flex';
+        } else {
+          expandBtn.style.display = 'none';
+        }
+      }
     }
 
     window.addEventListener('load', initMap);
