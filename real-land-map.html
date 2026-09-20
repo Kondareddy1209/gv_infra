@@ -1435,6 +1435,8 @@
       }
     }
 
+    const MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN';
+
     const tileProviders = {
       googleHybrid: L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
@@ -1446,6 +1448,18 @@
       esriSatellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 18,
         attribution: 'Esri, Maxar | © Earthstar Geographics',
+        crossOrigin: 'anonymous',
+        keepBuffer: 2
+      }),
+      mapboxSatellite: L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`, {
+        maxZoom: 20,
+        attribution: '© Mapbox',
+        crossOrigin: 'anonymous',
+        keepBuffer: 2
+      }),
+      mapboxTerrain: L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`, {
+        maxZoom: 20,
+        attribution: '© Mapbox Terrain',
         crossOrigin: 'anonymous',
         keepBuffer: 2
       }),
@@ -1474,6 +1488,16 @@
 
       // Basic controls
       L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      // Layer switcher for Mapbox + Esri tiles
+      const baseMaps = {
+        '🛰️ Mapbox Satellite': tileProviders.mapboxSatellite,
+        '🏔️ Mapbox Terrain (DEM)': tileProviders.mapboxTerrain,
+        '🌍 Esri Satellite': tileProviders.esriSatellite,
+        '📍 OpenTopo': tileProviders.osmTopo
+      };
+      L.control.layers(baseMaps, null, { position: 'topright', collapsed: true }).addTo(map);
+      console.log('[Map] Layer switcher added (Mapbox + Esri)');
 
       // Drawing tools
       drawnItems = new L.FeatureGroup().addTo(map);
@@ -2169,13 +2193,73 @@
     }
 
     function toggle3DDEM() {
-      alert('🏔️ 3D ELEVATION MODEL\n\nDigital Elevation Model visualization showing:\n✓ Real terrain height data\n✓ Plot volumes as 3D extrusions\n✓ Surrounding topography\n\nLoading 3D terrain layer...');
+      const MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN';
 
+      // Add Mapbox Terrain layer for elevation visualization
+      if (!map.hasLayer(tileProviders.mapboxTerrain)) {
+        map.removeLayer(tileProviders.esriSatellite);
+        tileProviders.mapboxTerrain.addTo(map);
+        console.log('✓ Mapbox Terrain (Elevation) layer loaded');
+      }
+
+      // Fetch elevation profile for map center
+      const { lat, lng } = map.getCenter();
+      const zoom = map.getZoom();
+
+      console.log(`🏔️ DEM: Querying elevation at ${lat.toFixed(4)}, ${lng.toFixed(4)} (zoom ${zoom})`);
+
+      // Mapbox Tilequery API for elevation at point
+      fetch(`https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}`)
+        .then(r => r.json())
+        .then(data => {
+          const elevation = data.features?.[0]?.properties?.ele || 'N/A';
+          const toast = document.getElementById('measure-toast') || createElevationToast();
+          toast.style.display = 'flex';
+          document.getElementById('measure-text').innerText = `📍 Elevation: ${elevation}m | Zoom: ${zoom} | Terrain: Mapbox`;
+          console.log(`✓ Elevation: ${elevation}m`);
+        })
+        .catch(err => {
+          console.warn('Elevation query unavailable:', err.message);
+          const toast = document.getElementById('measure-toast') || createElevationToast();
+          toast.style.display = 'flex';
+          document.getElementById('measure-text').innerText = `📍 Terrain: Mapbox Enabled | Zoom: ${zoom}`;
+        });
+
+      // Show 3D extrusion modal
       if (cesiumModalViewer) {
         document.getElementById('modal-3d-backdrop').style.display = 'flex';
       } else {
         open3DExtrusionModal();
       }
+    }
+
+    function createElevationToast() {
+      const toast = document.createElement('div');
+      toast.id = 'measure-toast';
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        color: #f8fafc;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        z-index: 900;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      `;
+      document.body.appendChild(toast);
+
+      const text = document.createElement('span');
+      text.id = 'measure-text';
+      toast.appendChild(text);
+
+      return toast;
     }
 
     function toggleMeasurementMode() {
