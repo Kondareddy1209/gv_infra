@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
   <!-- Cesium CSS for Real 3D Satellite Terrain -->
   <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css">
+  <!-- Vastu Architect Generator -->
+  <script src="js/vastu-generator.js"></script>
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Leaflet Heatmap for Elevation Visualization -->
@@ -2183,6 +2185,9 @@
           <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Offer Rate: ₹ ${pricePerYd.toLocaleString('en-IN')} / sq.yd</div>
         </div>
 
+        <button class="cta-btn" style="background:linear-gradient(135deg, #c084fc, #a855f7); color:#ffffff; font-weight:800; border:1px solid #d8b4fe; box-shadow:0 0 15px rgba(168,85,247,0.4);" onclick="showVastuBlueprint(${props.plot_number}, '${props.facing}', ${props.size || '1800'})">
+          <i class="fa-solid fa-gopuram"></i> 🏛️ View Vastu 3D Villa Blueprint
+        </button>
         <button class="cta-btn cta-edit" onclick="toggleLandBorderEditMode()">
           <i class="fa-solid fa-pen-to-square"></i> Reshape Corner Vertices
         </button>
@@ -2221,6 +2226,141 @@
       const iframe = document.getElementById('streetview-iframe');
       iframe.src = 'about:blank';
       modal.style.display = 'none';
+    }
+
+    function showVastuBlueprint(plotNumber, facing, sizeYards) {
+      // Estimate plot dimensions from size (typical aspect ratios for Indian plots)
+      const sizeInSqFt = sizeYards * 9; // 1 sq.yard = 9 sq.ft
+      const aspectRatio = 1.8; // Typical length:width ratio
+      const width = Math.sqrt(sizeInSqFt / aspectRatio);
+      const length = width * aspectRatio;
+
+      // Initialize Vastu generator
+      const vastu = new VastuArchitect({ width, length }, facing);
+      const layout2bhk = vastu.generate2BHK();
+      const layout3bhk = vastu.generate3BHK();
+      const recommendations = vastu.getDirectionalRecommendations();
+
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        overflow-y: auto;
+      `;
+
+      const container = document.createElement('div');
+      container.style.cssText = `
+        background: rgba(15, 23, 42, 0.96);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(168, 85, 247, 0.4);
+        border-radius: 16px;
+        padding: 24px;
+        max-width: 700px;
+        max-height: 90vh;
+        overflow-y: auto;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, sans-serif;
+        margin: 20px;
+      `;
+
+      container.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
+          <h2 style="margin:0; font-size:20px; font-weight:800; color:#d8b4fe;">🏛️ Vastu Architect - Villa Blueprint</h2>
+          <button onclick="this.closest('div').parentElement.parentElement.remove()" style="background:rgba(239,68,68,0.2); border:none; color:#f87171; width:32px; height:32px; border-radius:6px; font-size:18px; cursor:pointer;">×</button>
+        </div>
+
+        <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:14px; border-radius:10px; margin-bottom:20px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; font-size:12px;">
+            <div>
+              <div style="color:#94a3b8; font-size:10px; text-transform:uppercase;">Plot Size</div>
+              <div style="color:#d8b4fe; font-weight:700; font-size:14px;">${sizeYards} sq.yds</div>
+            </div>
+            <div>
+              <div style="color:#94a3b8; font-size:10px; text-transform:uppercase;">Facing</div>
+              <div style="color:#d8b4fe; font-weight:700; font-size:14px;">${facing}</div>
+            </div>
+            <div>
+              <div style="color:#94a3b8; font-size:10px; text-transform:uppercase;">Dimensions</div>
+              <div style="color:#d8b4fe; font-weight:700; font-size:14px;">${Math.round(width)}'×${Math.round(length)}'</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 12px 0;">📋 Directional Recommendations (${facing} Facing)</h3>
+          <div style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.2); padding:12px; border-radius:8px; font-size:12px;">
+            <div style="margin-bottom:8px;"><strong style="color:#d8b4fe;">✓ Ideal Placements:</strong></div>
+            <ul style="margin:0; padding-left:20px; color:#cbd5e1;">
+              ${recommendations.ideal.map(r => `<li>${r}</li>`).join('')}
+            </ul>
+            <div style="margin-top:10px;"><strong style="color:#d8b4fe;">💡 Advantage:</strong> ${recommendations.advantage}</div>
+            <div style="margin-top:8px;"><strong style="color:#fbbf24;">⚠️ Caution:</strong> ${recommendations.caution}</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 12px 0;">2️⃣ 2BHK Layout - ${Math.round(layout2bhk.totalArea)} sq.ft</h3>
+          <div style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.2); padding:14px; border-radius:8px;">
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:12px; font-size:11px;">
+              ${layout2bhk.rooms.map(room => `
+                <div style="background:rgba(${hexToRgb(room.color)}, 0.15); border:1px solid ${room.color}; padding:8px; border-radius:6px;">
+                  <div style="color:${room.color}; font-weight:700; font-size:12px;">${room.name}</div>
+                  <div style="color:#94a3b8; font-size:10px; margin-top:2px;">${room.dimensions.width}'×${room.dimensions.length}'</div>
+                  <div style="color:#cbd5e1; font-size:10px; margin-top:4px;">${room.description}</div>
+                </div>
+              `).join('')}
+            </div>
+            <div style="padding:10px; background:rgba(34,197,94,0.15); border-radius:6px; text-align:center;">
+              <strong style="color:#22c55e; font-size:14px;">Vastu Compliance: ${Math.round(layout2bhk.complianceScore)}%</strong> ✓
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 12px 0;">3️⃣ 3BHK Layout - ${Math.round(layout3bhk.totalArea)} sq.ft</h3>
+          <div style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.2); padding:14px; border-radius:8px;">
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:12px; font-size:11px;">
+              ${layout3bhk.rooms.map(room => `
+                <div style="background:rgba(${hexToRgb(room.color)}, 0.15); border:1px solid ${room.color}; padding:8px; border-radius:6px;">
+                  <div style="color:${room.color}; font-weight:700; font-size:12px;">${room.name}</div>
+                  <div style="color:#94a3b8; font-size:10px; margin-top:2px;">${room.dimensions.width}'×${room.dimensions.length}'</div>
+                  <div style="color:#cbd5e1; font-size:10px; margin-top:4px;">${room.description}</div>
+                </div>
+              `).join('')}
+            </div>
+            <div style="padding:10px; background:rgba(34,197,94,0.15); border-radius:6px; text-align:center;">
+              <strong style="color:#22c55e; font-size:14px;">Vastu Compliance: ${Math.round(layout3bhk.complianceScore)}%</strong> ✓
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:12px; background:rgba(168,85,247,0.1); border-radius:8px; font-size:11px; color:#cbd5e1; line-height:1.6;">
+          <strong style="color:#d8b4fe;">📖 Vastu Shastra Principles Applied:</strong><br>
+          ✓ NE Entrance (Ishanya) - Auspicious entry point<br>
+          ✓ SE Kitchen (Agneya) - Fire element zone<br>
+          ✓ SW Master Bedroom (Nairutya) - Heavy zone<br>
+          ✓ NW Living Area (Vayavya) - Light & air zone<br>
+          ✓ Central Courtyard (Brahmasthan) - Energy center<br>
+          ✓ Gravity-fed drainage (SW→NE slope)<br>
+          ✓ Cross-ventilation (E/N windows)
+        </div>
+      `;
+
+      modal.appendChild(container);
+      document.body.appendChild(modal);
+    }
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '100, 100, 100';
     }
 
     function showEnvironmentalModal(plotNumber) {
