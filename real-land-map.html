@@ -772,6 +772,7 @@
       <button class="ctrl-btn btn-telemetry" id="btn-telemetry" onclick="toggleGodsEyeTelemetry()"><i class="fa-solid fa-radar"></i> 📡 GOD'S EYE REAL-TIME FEEDS</button>
       <button class="ctrl-btn" style="background:linear-gradient(135deg, #ea4335, #c5221f); color:#fff; font-weight:800; border:1px solid #f28b82; box-shadow:0 0 15px rgba(234,67,53,0.4);" onclick="openStreetViewModal()"><i class="fa-solid fa-person-walking"></i> 🚶 GOOGLE STREET VIEW 360°</button>
       <button class="ctrl-btn" style="background:linear-gradient(135deg, #f97316, #ea580c); color:#fff; font-weight:800; border:1px solid #fbbf24; box-shadow:0 0 15px rgba(249,115,22,0.4);" onclick="openExploded3D()"><i class="fa-solid fa-cube"></i> 💥 EXPLODED 3D VIEW</button>
+      <button class="ctrl-btn" style="background:linear-gradient(135deg, #8b5cf6, #6366f1); color:#fff; font-weight:800; border:1px solid #a78bfa; box-shadow:0 0 15px rgba(139,92,246,0.4);" onclick="toggle3DDEM()"><i class="fa-solid fa-mountain"></i> 🏔️ 3D ELEVATION MODEL</button>
       <button class="ctrl-btn active" id="btn-google-hybrid"><i class="fa-solid fa-satellite"></i> Google Hybrid Satellite</button>
       <button class="ctrl-btn" id="btn-esri-sat"><i class="fa-solid fa-earth-asia"></i> Esri World Imagery</button>
       <button class="ctrl-btn" onclick="open3DExtrusionModal()"><i class="fa-solid fa-globe"></i> View Real 3D Satellite Terrain</button>
@@ -2165,6 +2166,16 @@
 
     function openExploded3D() {
       window.location.href = 'exploded-3d.html';
+    }
+
+    function toggle3DDEM() {
+      alert('🏔️ 3D ELEVATION MODEL\n\nDigital Elevation Model visualization showing:\n✓ Real terrain height data\n✓ Plot volumes as 3D extrusions\n✓ Surrounding topography\n\nLoading 3D terrain layer...');
+
+      if (cesiumModalViewer) {
+        document.getElementById('modal-3d-backdrop').style.display = 'flex';
+      } else {
+        open3DExtrusionModal();
+      }
     }
 
     function toggleMeasurementMode() {
