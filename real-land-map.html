@@ -38,6 +38,16 @@
       width: 100vw;
       height: 100vh;
       z-index: 1;
+      background: #0b0f19;
+    }
+
+    /* Ensure Leaflet tiles are visible */
+    #real-map .leaflet-layer,
+    #real-map .leaflet-tile,
+    #real-map .leaflet-pane {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
 
     /* Top Header Bar */
@@ -1450,13 +1460,25 @@
 
         currentTileLayer = tileProviders.esriSatellite.addTo(map);
         console.log('[Map] Satellite map initialized successfully (Esri)');
+        console.log('[Map] Map bounds:', map.getBounds());
+        console.log('[Map] Zoom level:', map.getZoom());
+        console.log('[Map] Container visible:', document.getElementById('real-map').offsetHeight > 0);
 
         // Optimize tile loading with caching
         map.options.zoomAnimation = true;
         map.options.fadeAnimation = true;
 
-        currentTileLayer.on('tileerror', () => {
-          console.warn('[Map] Tile load failed (expected during pan/zoom)');
+        // Debug tile loading
+        let tilesLoaded = 0;
+        currentTileLayer.on('tileload', () => {
+          tilesLoaded++;
+          if (tilesLoaded === 1) {
+            console.log('[Map] First tile loaded successfully');
+          }
+        });
+
+        currentTileLayer.on('tileerror', (err) => {
+          console.debug('[Map] Tile load failed (expected during pan/zoom)', err);
         });
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
