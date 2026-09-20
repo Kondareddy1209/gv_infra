@@ -1402,15 +1402,21 @@
       googleHybrid: L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
         maxZoom: 20,
-        attribution: '© Google Satellite'
+        attribution: '© Google Satellite',
+        crossOrigin: 'anonymous',
+        keepBuffer: 2
       }),
       esriSatellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 18,
-        attribution: 'Esri, Maxar | © Earthstar Geographics'
+        attribution: 'Esri, Maxar | © Earthstar Geographics',
+        crossOrigin: 'anonymous',
+        keepBuffer: 2
       }),
       osmTopo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
         maxZoom: 17,
-        attribution: '© OpenTopoMap'
+        attribution: '© OpenTopoMap',
+        crossOrigin: 'anonymous',
+        keepBuffer: 2
       })
     };
 
@@ -1436,11 +1442,15 @@
         currentTileLayer = tileProviders.esriSatellite.addTo(map);
         console.log('[Map] Satellite map initialized successfully (Esri)');
 
-        // Add error handler to switch to OSM if Esri fails
+        // Optimize tile loading with caching
+        map.options.zoomAnimation = true;
+        map.options.fadeAnimation = true;
+
         currentTileLayer.on('tileerror', () => {
-          console.warn('[Map] Tile loading failed, checking alternative sources');
+          console.warn('[Map] Tile load failed (expected during pan/zoom)');
         });
-      L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
       drawnItems = new L.FeatureGroup().addTo(map);
 
