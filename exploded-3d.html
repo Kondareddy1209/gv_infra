@@ -475,11 +475,12 @@
 
       // Renderer
       const canvas = document.getElementById('canvas-3d');
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
       renderer.setSize(w, h);
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFShadowShadowMap;
+      renderer.debug.checkShaderErrors = false;
 
       // Controls
       controls = new THREE.OrbitControls(camera, canvas);

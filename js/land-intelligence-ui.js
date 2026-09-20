@@ -58,7 +58,10 @@ class LandIntelligenceUI {
         return data;
       }
     } catch (err) {
-      console.warn('[LandIntelligenceUI] Offline mode HUD rendering:', err.message);
+      // Offline mode - silently fall back to cached data
+      if (err.message !== 'Failed to fetch') {
+        console.warn('[LandIntelligenceUI] Offline mode HUD rendering:', err.message);
+      }
       // Fallback local render
       this.renderIntelligenceHUD({
         property: { id: propertyId, propertyCode: 'KM-STAMBADRI-01', verificationStatus: 'VERIFIED' },
