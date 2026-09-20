@@ -12,4 +12,5 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
-
+data/osm_features_cache.json
+data/*.osm
