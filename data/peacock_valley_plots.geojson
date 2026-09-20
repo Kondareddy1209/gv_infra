@@ -1,11 +1,11 @@
 {
   "type": "FeatureCollection",
-  "name": "Arising Peacock Valley - Ground Aligned 212 Plots Masterplan",
+  "name": "Arising Peacock Valley - Ground Aligned 48 Plots Masterplan",
   "project_details": {
     "project_name": "Arising Peacock Valley",
     "developer": "Arising Developers LLP & GV Infra Projects",
     "extent_acres": 14,
-    "total_plots": 212,
+    "total_plots": 48,
     "dtcp_tlp_no": "TLP. NO. 239/2023/H",
     "ts_rera_no": "P02400007625",
     "survey_numbers": "Sy. No. 33 & 34",
@@ -13,8 +13,14 @@
     "location": "Kadthal Village, Srisailam Highway, Rangareddy District",
     "image_overlay": "data/peacock_valley_brochure.jpg",
     "overlay_bounds": [
-      [17.0842, 78.4890],
-      [17.0868, 78.4930]
+      [
+        17.0842,
+        78.489
+      ],
+      [
+        17.0868,
+        78.493
+      ]
     ]
   },
   "features": [
@@ -24,25 +30,41 @@
       "properties": {
         "plot_id": 1,
         "plot_number": "P-01",
-        "survey_number": "33/A",
-        "extent_sqyards": 183,
-        "size": 183,
+        "survey_number": "33/A-1",
+        "extent_sqyards": 197,
+        "size": 197,
         "price_per_sqyard": 13999,
-        "total_price": 2561817,
+        "total_price": 2757803,
         "facing": "East",
         "status": "available",
         "project": "Peacock Valley",
-        "is_corner": true
+        "is_corner": true,
+        "is_mortgage": false
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
-            [78.49012, 17.08505],
-            [78.49042, 17.08512],
-            [78.49036, 17.08535],
-            [78.49006, 17.08528],
-            [78.49012, 17.08505]
+            [
+              78.4895,
+              17.0845
+            ],
+            [
+              78.48985,
+              17.0845
+            ],
+            [
+              78.48985,
+              17.08472
+            ],
+            [
+              78.4895,
+              17.08472
+            ],
+            [
+              78.4895,
+              17.0845
+            ]
           ]
         ]
       }
@@ -53,24 +75,41 @@
       "properties": {
         "plot_id": 2,
         "plot_number": "P-02",
-        "survey_number": "33/A",
-        "extent_sqyards": 200,
-        "size": 200,
+        "survey_number": "33/A-2",
+        "extent_sqyards": 214,
+        "size": 214,
         "price_per_sqyard": 13999,
-        "total_price": 2799800,
-        "facing": "East",
+        "total_price": 2995786,
+        "facing": "West",
         "status": "available",
-        "project": "Peacock Valley"
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
-            [78.49045, 17.08513],
-            [78.49075, 17.08520],
-            [78.49069, 17.08543],
-            [78.49039, 17.08536],
-            [78.49045, 17.08513]
+            [
+              78.49,
+              17.0845
+            ],
+            [
+              78.49035,
+              17.0845
+            ],
+            [
+              78.49035,
+              17.08472
+            ],
+            [
+              78.49,
+              17.08472
+            ],
+            [
+              78.49,
+              17.0845
+            ]
           ]
         ]
       }
@@ -81,24 +120,41 @@
       "properties": {
         "plot_id": 3,
         "plot_number": "P-03",
-        "survey_number": "33/B",
-        "extent_sqyards": 167,
-        "size": 167,
+        "survey_number": "33/A-3",
+        "extent_sqyards": 231,
+        "size": 231,
         "price_per_sqyard": 13999,
-        "total_price": 2337833,
+        "total_price": 3233769,
         "facing": "North",
         "status": "reserved",
-        "project": "Peacock Valley"
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
-            [78.49078, 17.08521],
-            [78.49108, 17.08528],
-            [78.49102, 17.08551],
-            [78.49072, 17.08544],
-            [78.49078, 17.08521]
+            [
+              78.4903,
+              17.0845
+            ],
+            [
+              78.49065,
+              17.0845
+            ],
+            [
+              78.49065,
+              17.08472
+            ],
+            [
+              78.4903,
+              17.08472
+            ],
+            [
+              78.4903,
+              17.0845
+            ]
           ]
         ]
       }
@@ -109,24 +165,41 @@
       "properties": {
         "plot_id": 4,
         "plot_number": "P-04",
-        "survey_number": "33/B",
-        "extent_sqyards": 240,
-        "size": 240,
+        "survey_number": "33/A-4",
+        "extent_sqyards": 248,
+        "size": 248,
         "price_per_sqyard": 13999,
-        "total_price": 3359760,
-        "facing": "West",
-        "status": "sold",
-        "project": "Peacock Valley"
+        "total_price": 3471752,
+        "facing": "South",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
-            [78.49111, 17.08529],
-            [78.49141, 17.08536],
-            [78.49135, 17.08559],
-            [78.49105, 17.08552],
-            [78.49111, 17.08529]
+            [
+              78.491,
+              17.0845
+            ],
+            [
+              78.49135,
+              17.0845
+            ],
+            [
+              78.49135,
+              17.08472
+            ],
+            [
+              78.491,
+              17.08472
+            ],
+            [
+              78.491,
+              17.0845
+            ]
           ]
         ]
       }
@@ -136,26 +209,1977 @@
       "id": "PV-PLOT-005",
       "properties": {
         "plot_id": 5,
-        "plot_number": "P-05 (Mortgage)",
-        "survey_number": "34/A",
-        "extent_sqyards": 300,
-        "size": 300,
+        "plot_number": "P-05",
+        "survey_number": "33/A-5",
+        "extent_sqyards": 265,
+        "size": 265,
         "price_per_sqyard": 13999,
-        "total_price": 4199700,
+        "total_price": 3709735,
         "facing": "East",
+        "status": "sold",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4911,
+              17.0845
+            ],
+            [
+              78.49145,
+              17.0845
+            ],
+            [
+              78.49145,
+              17.08472
+            ],
+            [
+              78.4911,
+              17.08472
+            ],
+            [
+              78.4911,
+              17.0845
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-006",
+      "properties": {
+        "plot_id": 6,
+        "plot_number": "P-06",
+        "survey_number": "33/A-6",
+        "extent_sqyards": 282,
+        "size": 282,
+        "price_per_sqyard": 13999,
+        "total_price": 3947718,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.492,
+              17.0845
+            ],
+            [
+              78.49235,
+              17.0845
+            ],
+            [
+              78.49235,
+              17.08472
+            ],
+            [
+              78.492,
+              17.08472
+            ],
+            [
+              78.492,
+              17.0845
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-007",
+      "properties": {
+        "plot_id": 7,
+        "plot_number": "P-07",
+        "survey_number": "33/A-7",
+        "extent_sqyards": 299,
+        "size": 299,
+        "price_per_sqyard": 13999,
+        "total_price": 4185701,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4919,
+              17.0845
+            ],
+            [
+              78.49225,
+              17.0845
+            ],
+            [
+              78.49225,
+              17.08472
+            ],
+            [
+              78.4919,
+              17.08472
+            ],
+            [
+              78.4919,
+              17.0845
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-008",
+      "properties": {
+        "plot_id": 8,
+        "plot_number": "P-08",
+        "survey_number": "33/A-8",
+        "extent_sqyards": 316,
+        "size": 316,
+        "price_per_sqyard": 13999,
+        "total_price": 4423684,
+        "facing": "West",
         "status": "hold",
         "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.493,
+              17.0845
+            ],
+            [
+              78.49335,
+              17.0845
+            ],
+            [
+              78.49335,
+              17.08472
+            ],
+            [
+              78.493,
+              17.08472
+            ],
+            [
+              78.493,
+              17.0845
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-009",
+      "properties": {
+        "plot_id": 9,
+        "plot_number": "P-09",
+        "survey_number": "33/B-1",
+        "extent_sqyards": 333,
+        "size": 333,
+        "price_per_sqyard": 13999,
+        "total_price": 4661667,
+        "facing": "North",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4895,
+              17.0849
+            ],
+            [
+              78.48985,
+              17.0849
+            ],
+            [
+              78.48985,
+              17.08512
+            ],
+            [
+              78.4895,
+              17.08512
+            ],
+            [
+              78.4895,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-010",
+      "properties": {
+        "plot_id": 10,
+        "plot_number": "P-10",
+        "survey_number": "33/B-2",
+        "extent_sqyards": 180,
+        "size": 180,
+        "price_per_sqyard": 13999,
+        "total_price": 2519820,
+        "facing": "South",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.49,
+              17.0849
+            ],
+            [
+              78.49035,
+              17.0849
+            ],
+            [
+              78.49035,
+              17.08512
+            ],
+            [
+              78.49,
+              17.08512
+            ],
+            [
+              78.49,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-011",
+      "properties": {
+        "plot_id": 11,
+        "plot_number": "P-11",
+        "survey_number": "33/B-3",
+        "extent_sqyards": 197,
+        "size": 197,
+        "price_per_sqyard": 13999,
+        "total_price": 2757803,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4903,
+              17.0849
+            ],
+            [
+              78.49065,
+              17.0849
+            ],
+            [
+              78.49065,
+              17.08512
+            ],
+            [
+              78.4903,
+              17.08512
+            ],
+            [
+              78.4903,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-012",
+      "properties": {
+        "plot_id": 12,
+        "plot_number": "P-12 (Mortgage)",
+        "survey_number": "33/B-4",
+        "extent_sqyards": 214,
+        "size": 214,
+        "price_per_sqyard": 13999,
+        "total_price": 2995786,
+        "facing": "West",
+        "status": "hold",
+        "project": "Peacock Valley",
+        "is_corner": false,
         "is_mortgage": true
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
-            [78.49008, 17.08536],
-            [78.49048, 17.08546],
-            [78.49040, 17.08575],
-            [78.49000, 17.08565],
-            [78.49008, 17.08536]
+            [
+              78.491,
+              17.0849
+            ],
+            [
+              78.49135,
+              17.0849
+            ],
+            [
+              78.49135,
+              17.08512
+            ],
+            [
+              78.491,
+              17.08512
+            ],
+            [
+              78.491,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-013",
+      "properties": {
+        "plot_id": 13,
+        "plot_number": "P-13",
+        "survey_number": "33/B-5",
+        "extent_sqyards": 231,
+        "size": 231,
+        "price_per_sqyard": 13999,
+        "total_price": 3233769,
+        "facing": "East",
+        "status": "sold",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4911,
+              17.0849
+            ],
+            [
+              78.49145,
+              17.0849
+            ],
+            [
+              78.49145,
+              17.08512
+            ],
+            [
+              78.4911,
+              17.08512
+            ],
+            [
+              78.4911,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-014",
+      "properties": {
+        "plot_id": 14,
+        "plot_number": "P-14",
+        "survey_number": "33/B-6",
+        "extent_sqyards": 248,
+        "size": 248,
+        "price_per_sqyard": 13999,
+        "total_price": 3471752,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.492,
+              17.0849
+            ],
+            [
+              78.49235,
+              17.0849
+            ],
+            [
+              78.49235,
+              17.08512
+            ],
+            [
+              78.492,
+              17.08512
+            ],
+            [
+              78.492,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-015",
+      "properties": {
+        "plot_id": 15,
+        "plot_number": "P-15",
+        "survey_number": "33/B-7",
+        "extent_sqyards": 265,
+        "size": 265,
+        "price_per_sqyard": 13999,
+        "total_price": 3709735,
+        "facing": "North",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4919,
+              17.0849
+            ],
+            [
+              78.49225,
+              17.0849
+            ],
+            [
+              78.49225,
+              17.08512
+            ],
+            [
+              78.4919,
+              17.08512
+            ],
+            [
+              78.4919,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-016",
+      "properties": {
+        "plot_id": 16,
+        "plot_number": "P-16",
+        "survey_number": "33/B-8",
+        "extent_sqyards": 282,
+        "size": 282,
+        "price_per_sqyard": 13999,
+        "total_price": 3947718,
+        "facing": "South",
+        "status": "hold",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.493,
+              17.0849
+            ],
+            [
+              78.49335,
+              17.0849
+            ],
+            [
+              78.49335,
+              17.08512
+            ],
+            [
+              78.493,
+              17.08512
+            ],
+            [
+              78.493,
+              17.0849
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-017",
+      "properties": {
+        "plot_id": 17,
+        "plot_number": "P-17",
+        "survey_number": "33/C-1",
+        "extent_sqyards": 299,
+        "size": 299,
+        "price_per_sqyard": 13999,
+        "total_price": 4185701,
+        "facing": "East",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4895,
+              17.08506
+            ],
+            [
+              78.48985,
+              17.08506
+            ],
+            [
+              78.48985,
+              17.08528
+            ],
+            [
+              78.4895,
+              17.08528
+            ],
+            [
+              78.4895,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-018",
+      "properties": {
+        "plot_id": 18,
+        "plot_number": "P-18",
+        "survey_number": "33/C-2",
+        "extent_sqyards": 316,
+        "size": 316,
+        "price_per_sqyard": 13999,
+        "total_price": 4423684,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.49,
+              17.08506
+            ],
+            [
+              78.49035,
+              17.08506
+            ],
+            [
+              78.49035,
+              17.08528
+            ],
+            [
+              78.49,
+              17.08528
+            ],
+            [
+              78.49,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-019",
+      "properties": {
+        "plot_id": 19,
+        "plot_number": "P-19",
+        "survey_number": "33/C-3",
+        "extent_sqyards": 333,
+        "size": 333,
+        "price_per_sqyard": 13999,
+        "total_price": 4661667,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4903,
+              17.08506
+            ],
+            [
+              78.49065,
+              17.08506
+            ],
+            [
+              78.49065,
+              17.08528
+            ],
+            [
+              78.4903,
+              17.08528
+            ],
+            [
+              78.4903,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-020",
+      "properties": {
+        "plot_id": 20,
+        "plot_number": "P-20",
+        "survey_number": "33/C-4",
+        "extent_sqyards": 180,
+        "size": 180,
+        "price_per_sqyard": 13999,
+        "total_price": 2519820,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.491,
+              17.08506
+            ],
+            [
+              78.49135,
+              17.08506
+            ],
+            [
+              78.49135,
+              17.08528
+            ],
+            [
+              78.491,
+              17.08528
+            ],
+            [
+              78.491,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-021",
+      "properties": {
+        "plot_id": 21,
+        "plot_number": "P-21",
+        "survey_number": "33/C-5",
+        "extent_sqyards": 197,
+        "size": 197,
+        "price_per_sqyard": 13999,
+        "total_price": 2757803,
+        "facing": "North",
+        "status": "sold",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4911,
+              17.08506
+            ],
+            [
+              78.49145,
+              17.08506
+            ],
+            [
+              78.49145,
+              17.08528
+            ],
+            [
+              78.4911,
+              17.08528
+            ],
+            [
+              78.4911,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-022",
+      "properties": {
+        "plot_id": 22,
+        "plot_number": "P-22",
+        "survey_number": "33/C-6",
+        "extent_sqyards": 214,
+        "size": 214,
+        "price_per_sqyard": 13999,
+        "total_price": 2995786,
+        "facing": "South",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.492,
+              17.08506
+            ],
+            [
+              78.49235,
+              17.08506
+            ],
+            [
+              78.49235,
+              17.08528
+            ],
+            [
+              78.492,
+              17.08528
+            ],
+            [
+              78.492,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-023",
+      "properties": {
+        "plot_id": 23,
+        "plot_number": "P-23",
+        "survey_number": "33/C-7",
+        "extent_sqyards": 231,
+        "size": 231,
+        "price_per_sqyard": 13999,
+        "total_price": 3233769,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4919,
+              17.08506
+            ],
+            [
+              78.49225,
+              17.08506
+            ],
+            [
+              78.49225,
+              17.08528
+            ],
+            [
+              78.4919,
+              17.08528
+            ],
+            [
+              78.4919,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-024",
+      "properties": {
+        "plot_id": 24,
+        "plot_number": "P-24 (Mortgage)",
+        "survey_number": "33/C-8",
+        "extent_sqyards": 248,
+        "size": 248,
+        "price_per_sqyard": 13999,
+        "total_price": 3471752,
+        "facing": "West",
+        "status": "hold",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.493,
+              17.08506
+            ],
+            [
+              78.49335,
+              17.08506
+            ],
+            [
+              78.49335,
+              17.08528
+            ],
+            [
+              78.493,
+              17.08528
+            ],
+            [
+              78.493,
+              17.08506
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-025",
+      "properties": {
+        "plot_id": 25,
+        "plot_number": "P-25",
+        "survey_number": "33/D-1",
+        "extent_sqyards": 265,
+        "size": 265,
+        "price_per_sqyard": 13999,
+        "total_price": 3709735,
+        "facing": "East",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4895,
+              17.0857
+            ],
+            [
+              78.48985,
+              17.0857
+            ],
+            [
+              78.48985,
+              17.08592
+            ],
+            [
+              78.4895,
+              17.08592
+            ],
+            [
+              78.4895,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-026",
+      "properties": {
+        "plot_id": 26,
+        "plot_number": "P-26",
+        "survey_number": "33/D-2",
+        "extent_sqyards": 282,
+        "size": 282,
+        "price_per_sqyard": 13999,
+        "total_price": 3947718,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.49,
+              17.0857
+            ],
+            [
+              78.49035,
+              17.0857
+            ],
+            [
+              78.49035,
+              17.08592
+            ],
+            [
+              78.49,
+              17.08592
+            ],
+            [
+              78.49,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-027",
+      "properties": {
+        "plot_id": 27,
+        "plot_number": "P-27",
+        "survey_number": "33/D-3",
+        "extent_sqyards": 299,
+        "size": 299,
+        "price_per_sqyard": 13999,
+        "total_price": 4185701,
+        "facing": "North",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4903,
+              17.0857
+            ],
+            [
+              78.49065,
+              17.0857
+            ],
+            [
+              78.49065,
+              17.08592
+            ],
+            [
+              78.4903,
+              17.08592
+            ],
+            [
+              78.4903,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-028",
+      "properties": {
+        "plot_id": 28,
+        "plot_number": "P-28",
+        "survey_number": "33/D-4",
+        "extent_sqyards": 316,
+        "size": 316,
+        "price_per_sqyard": 13999,
+        "total_price": 4423684,
+        "facing": "South",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.491,
+              17.0857
+            ],
+            [
+              78.49135,
+              17.0857
+            ],
+            [
+              78.49135,
+              17.08592
+            ],
+            [
+              78.491,
+              17.08592
+            ],
+            [
+              78.491,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-029",
+      "properties": {
+        "plot_id": 29,
+        "plot_number": "P-29",
+        "survey_number": "33/D-5",
+        "extent_sqyards": 333,
+        "size": 333,
+        "price_per_sqyard": 13999,
+        "total_price": 4661667,
+        "facing": "East",
+        "status": "sold",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4911,
+              17.0857
+            ],
+            [
+              78.49145,
+              17.0857
+            ],
+            [
+              78.49145,
+              17.08592
+            ],
+            [
+              78.4911,
+              17.08592
+            ],
+            [
+              78.4911,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-030",
+      "properties": {
+        "plot_id": 30,
+        "plot_number": "P-30",
+        "survey_number": "33/D-6",
+        "extent_sqyards": 180,
+        "size": 180,
+        "price_per_sqyard": 13999,
+        "total_price": 2519820,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.492,
+              17.0857
+            ],
+            [
+              78.49235,
+              17.0857
+            ],
+            [
+              78.49235,
+              17.08592
+            ],
+            [
+              78.492,
+              17.08592
+            ],
+            [
+              78.492,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-031",
+      "properties": {
+        "plot_id": 31,
+        "plot_number": "P-31",
+        "survey_number": "33/D-7",
+        "extent_sqyards": 197,
+        "size": 197,
+        "price_per_sqyard": 13999,
+        "total_price": 2757803,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4919,
+              17.0857
+            ],
+            [
+              78.49225,
+              17.0857
+            ],
+            [
+              78.49225,
+              17.08592
+            ],
+            [
+              78.4919,
+              17.08592
+            ],
+            [
+              78.4919,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-032",
+      "properties": {
+        "plot_id": 32,
+        "plot_number": "P-32",
+        "survey_number": "33/D-8",
+        "extent_sqyards": 214,
+        "size": 214,
+        "price_per_sqyard": 13999,
+        "total_price": 2995786,
+        "facing": "West",
+        "status": "hold",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.493,
+              17.0857
+            ],
+            [
+              78.49335,
+              17.0857
+            ],
+            [
+              78.49335,
+              17.08592
+            ],
+            [
+              78.493,
+              17.08592
+            ],
+            [
+              78.493,
+              17.0857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-033",
+      "properties": {
+        "plot_id": 33,
+        "plot_number": "P-33",
+        "survey_number": "33/A-1",
+        "extent_sqyards": 231,
+        "size": 231,
+        "price_per_sqyard": 13999,
+        "total_price": 3233769,
+        "facing": "North",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4895,
+              17.08562
+            ],
+            [
+              78.48985,
+              17.08562
+            ],
+            [
+              78.48985,
+              17.08584
+            ],
+            [
+              78.4895,
+              17.08584
+            ],
+            [
+              78.4895,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-034",
+      "properties": {
+        "plot_id": 34,
+        "plot_number": "P-34",
+        "survey_number": "33/A-2",
+        "extent_sqyards": 248,
+        "size": 248,
+        "price_per_sqyard": 13999,
+        "total_price": 3471752,
+        "facing": "South",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.49,
+              17.08562
+            ],
+            [
+              78.49035,
+              17.08562
+            ],
+            [
+              78.49035,
+              17.08584
+            ],
+            [
+              78.49,
+              17.08584
+            ],
+            [
+              78.49,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-035",
+      "properties": {
+        "plot_id": 35,
+        "plot_number": "P-35",
+        "survey_number": "33/A-3",
+        "extent_sqyards": 265,
+        "size": 265,
+        "price_per_sqyard": 13999,
+        "total_price": 3709735,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4903,
+              17.08562
+            ],
+            [
+              78.49065,
+              17.08562
+            ],
+            [
+              78.49065,
+              17.08584
+            ],
+            [
+              78.4903,
+              17.08584
+            ],
+            [
+              78.4903,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-036",
+      "properties": {
+        "plot_id": 36,
+        "plot_number": "P-36",
+        "survey_number": "33/A-4",
+        "extent_sqyards": 282,
+        "size": 282,
+        "price_per_sqyard": 13999,
+        "total_price": 3947718,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.491,
+              17.08562
+            ],
+            [
+              78.49135,
+              17.08562
+            ],
+            [
+              78.49135,
+              17.08584
+            ],
+            [
+              78.491,
+              17.08584
+            ],
+            [
+              78.491,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-037",
+      "properties": {
+        "plot_id": 37,
+        "plot_number": "P-37",
+        "survey_number": "33/A-5",
+        "extent_sqyards": 299,
+        "size": 299,
+        "price_per_sqyard": 13999,
+        "total_price": 4185701,
+        "facing": "East",
+        "status": "sold",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4911,
+              17.08562
+            ],
+            [
+              78.49145,
+              17.08562
+            ],
+            [
+              78.49145,
+              17.08584
+            ],
+            [
+              78.4911,
+              17.08584
+            ],
+            [
+              78.4911,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-038",
+      "properties": {
+        "plot_id": 38,
+        "plot_number": "P-38",
+        "survey_number": "33/A-6",
+        "extent_sqyards": 316,
+        "size": 316,
+        "price_per_sqyard": 13999,
+        "total_price": 4423684,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.492,
+              17.08562
+            ],
+            [
+              78.49235,
+              17.08562
+            ],
+            [
+              78.49235,
+              17.08584
+            ],
+            [
+              78.492,
+              17.08584
+            ],
+            [
+              78.492,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-039",
+      "properties": {
+        "plot_id": 39,
+        "plot_number": "P-39",
+        "survey_number": "33/A-7",
+        "extent_sqyards": 333,
+        "size": 333,
+        "price_per_sqyard": 13999,
+        "total_price": 4661667,
+        "facing": "North",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": false,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4919,
+              17.08562
+            ],
+            [
+              78.49225,
+              17.08562
+            ],
+            [
+              78.49225,
+              17.08584
+            ],
+            [
+              78.4919,
+              17.08584
+            ],
+            [
+              78.4919,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-040",
+      "properties": {
+        "plot_id": 40,
+        "plot_number": "P-40",
+        "survey_number": "33/A-8",
+        "extent_sqyards": 180,
+        "size": 180,
+        "price_per_sqyard": 13999,
+        "total_price": 2519820,
+        "facing": "South",
+        "status": "hold",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.493,
+              17.08562
+            ],
+            [
+              78.49335,
+              17.08562
+            ],
+            [
+              78.49335,
+              17.08584
+            ],
+            [
+              78.493,
+              17.08584
+            ],
+            [
+              78.493,
+              17.08562
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-041",
+      "properties": {
+        "plot_id": 41,
+        "plot_number": "P-41",
+        "survey_number": "33/B-1",
+        "extent_sqyards": 197,
+        "size": 197,
+        "price_per_sqyard": 13999,
+        "total_price": 2757803,
+        "facing": "East",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4895,
+              17.0865
+            ],
+            [
+              78.48985,
+              17.0865
+            ],
+            [
+              78.48985,
+              17.08672
+            ],
+            [
+              78.4895,
+              17.08672
+            ],
+            [
+              78.4895,
+              17.0865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-042",
+      "properties": {
+        "plot_id": 42,
+        "plot_number": "P-42",
+        "survey_number": "33/B-2",
+        "extent_sqyards": 214,
+        "size": 214,
+        "price_per_sqyard": 13999,
+        "total_price": 2995786,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.49,
+              17.0865
+            ],
+            [
+              78.49035,
+              17.0865
+            ],
+            [
+              78.49035,
+              17.08672
+            ],
+            [
+              78.49,
+              17.08672
+            ],
+            [
+              78.49,
+              17.0865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-043",
+      "properties": {
+        "plot_id": 43,
+        "plot_number": "P-43",
+        "survey_number": "33/B-3",
+        "extent_sqyards": 231,
+        "size": 231,
+        "price_per_sqyard": 13999,
+        "total_price": 3233769,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4903,
+              17.0865
+            ],
+            [
+              78.49065,
+              17.0865
+            ],
+            [
+              78.49065,
+              17.08672
+            ],
+            [
+              78.4903,
+              17.08672
+            ],
+            [
+              78.4903,
+              17.0865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-044",
+      "properties": {
+        "plot_id": 44,
+        "plot_number": "P-44",
+        "survey_number": "33/B-4",
+        "extent_sqyards": 248,
+        "size": 248,
+        "price_per_sqyard": 13999,
+        "total_price": 3471752,
+        "facing": "West",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.491,
+              17.0865
+            ],
+            [
+              78.49135,
+              17.0865
+            ],
+            [
+              78.49135,
+              17.08672
+            ],
+            [
+              78.491,
+              17.08672
+            ],
+            [
+              78.491,
+              17.0865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-045",
+      "properties": {
+        "plot_id": 45,
+        "plot_number": "P-45",
+        "survey_number": "33/B-5",
+        "extent_sqyards": 265,
+        "size": 265,
+        "price_per_sqyard": 13999,
+        "total_price": 3709735,
+        "facing": "North",
+        "status": "sold",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4911,
+              17.0865
+            ],
+            [
+              78.49145,
+              17.0865
+            ],
+            [
+              78.49145,
+              17.08672
+            ],
+            [
+              78.4911,
+              17.08672
+            ],
+            [
+              78.4911,
+              17.0865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-046",
+      "properties": {
+        "plot_id": 46,
+        "plot_number": "P-46",
+        "survey_number": "33/B-6",
+        "extent_sqyards": 282,
+        "size": 282,
+        "price_per_sqyard": 13999,
+        "total_price": 3947718,
+        "facing": "South",
+        "status": "available",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.492,
+              17.0865
+            ],
+            [
+              78.49235,
+              17.0865
+            ],
+            [
+              78.49235,
+              17.08672
+            ],
+            [
+              78.492,
+              17.08672
+            ],
+            [
+              78.492,
+              17.0865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-047",
+      "properties": {
+        "plot_id": 47,
+        "plot_number": "P-47",
+        "survey_number": "33/B-7",
+        "extent_sqyards": 299,
+        "size": 299,
+        "price_per_sqyard": 13999,
+        "total_price": 4185701,
+        "facing": "East",
+        "status": "reserved",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.4919,
+              17.0865
+            ],
+            [
+              78.49225,
+              17.0865
+            ],
+            [
+              78.49225,
+              17.08672
+            ],
+            [
+              78.4919,
+              17.08672
+            ],
+            [
+              78.4919,
+              17.0865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PV-PLOT-048",
+      "properties": {
+        "plot_id": 48,
+        "plot_number": "P-48 (Park)",
+        "survey_number": "33/B-8",
+        "extent_sqyards": 316,
+        "size": 316,
+        "price_per_sqyard": 13999,
+        "total_price": 4423684,
+        "facing": "West",
+        "status": "park",
+        "project": "Peacock Valley",
+        "is_corner": true,
+        "is_mortgage": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.493,
+              17.0865
+            ],
+            [
+              78.49335,
+              17.0865
+            ],
+            [
+              78.49335,
+              17.08672
+            ],
+            [
+              78.493,
+              17.08672
+            ],
+            [
+              78.493,
+              17.0865
+            ]
           ]
         ]
       }

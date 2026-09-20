@@ -758,6 +758,7 @@
       <button class="ctrl-btn btn-gods-eye" onclick="openGodsEye3DView()"><i class="fa-solid fa-eye"></i> 👁️ GOD'S EYE 3D</button>
       <button class="ctrl-btn btn-telemetry" id="btn-telemetry" onclick="toggleGodsEyeTelemetry()"><i class="fa-solid fa-radar"></i> 📡 GOD'S EYE REAL-TIME FEEDS</button>
       <button class="ctrl-btn" style="background:linear-gradient(135deg, #ea4335, #c5221f); color:#fff; font-weight:800; border:1px solid #f28b82; box-shadow:0 0 15px rgba(234,67,53,0.4);" onclick="openStreetViewModal()"><i class="fa-solid fa-person-walking"></i> 🚶 GOOGLE STREET VIEW 360°</button>
+      <button class="ctrl-btn" style="background:linear-gradient(135deg, #f97316, #ea580c); color:#fff; font-weight:800; border:1px solid #fbbf24; box-shadow:0 0 15px rgba(249,115,22,0.4);" onclick="openExploded3D()"><i class="fa-solid fa-cube"></i> 💥 EXPLODED 3D VIEW</button>
       <button class="ctrl-btn active" id="btn-google-hybrid"><i class="fa-solid fa-satellite"></i> Google Hybrid Satellite</button>
       <button class="ctrl-btn" id="btn-esri-sat"><i class="fa-solid fa-earth-asia"></i> Esri World Imagery</button>
       <button class="ctrl-btn" onclick="open3DExtrusionModal()"><i class="fa-solid fa-globe"></i> View Real 3D Satellite Terrain</button>
@@ -2061,6 +2062,10 @@
       const targetLat = currentStreetViewCoords ? currentStreetViewCoords.lat : currentProject.center[0];
       const targetLng = currentStreetViewCoords ? currentStreetViewCoords.lng : currentProject.center[1];
       window.open(`https://earth.google.com/web/@${targetLat},${targetLng},300a,800d,35y,0h,45t,0r`, '_blank');
+    }
+
+    function openExploded3D() {
+      window.location.href = 'exploded-3d.html';
     }
 
     function toggleMeasurementMode() {

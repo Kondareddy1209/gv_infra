@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shiva Sai Residential Vista — 2D & 3D Interactive Land Viewer | GV Infra Projects</title>
+  
+  <!-- MapLibre GL CSS & JS (Free Open-Source 3D Engine) -->
+  <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; background-color: #030712; }
+    #map { width: 100%; height: 100%; }
+    .glassmorphism {
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .badge-status {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="relative bg-slate-950 text-slate-100">
+
+  <!-- Top Navigation Header -->
+  <header class="absolute top-4 left-4 z-20 flex items-center gap-3">
+    <div class="glassmorphism rounded-2xl px-5 py-3.5 flex items-center gap-3.5 shadow-2xl">
+      <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shadow-lg">
+        <i class="fa-solid fa-layer-group text-xl"></i>
+      </div>
+      <div>
+        <h1 class="font-black text-sm tracking-wide text-white">SHIVA SAI RESIDENTIAL VISTA</h1>
+        <p class="text-xs text-slate-300 flex items-center gap-1.5 mt-0.5">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Khammam-Wyra Corridor | DTCP & LRS Approved
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Top Right Navigation & 2D/3D Mode Controls -->
+  <div class="absolute top-4 right-4 z-20 flex flex-col items-end gap-2.5">
+    <div class="flex items-center gap-2">
+      <a href="real-land-map.html" class="glassmorphism px-4 py-2.5 rounded-xl text-xs font-bold text-sky-300 hover:text-white flex items-center gap-2 transition shadow-xl">
+        <i class="fa-solid fa-globe"></i> Real 3D Satellite Map ↗
+      </a>
+      <div class="glassmorphism p-1.5 rounded-xl flex items-center shadow-2xl border border-slate-700/60">
+        <button id="btn2D" onclick="setViewMode('2D')" class="px-4 py-2 text-xs font-extrabold rounded-lg transition-all text-slate-300 hover:text-white">
+          <i class="fa-regular fa-map mr-1.5"></i>2D Flat
+        </button>
+        <button id="btn3D" onclick="setViewMode('3D')" class="px-4 py-2 text-xs font-extrabold rounded-lg transition-all bg-emerald-500 text-white shadow-md">
+          <i class="fa-solid fa-cube mr-1.5"></i>3D Vista
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Camera Orbit Control -->
+    <div class="glassmorphism p-2 rounded-xl flex flex-col gap-1 shadow-2xl text-xs w-44">
+      <button onclick="rotateCompass(45)" class="p-2 hover:bg-slate-800/80 rounded-lg text-left text-slate-300 flex items-center justify-between font-semibold">
+        <span>360° Orbit Right</span>
+        <i class="fa-solid fa-rotate-right text-emerald-400"></i>
+      </button>
+      <button onclick="resetNorth()" class="p-2 hover:bg-slate-800/80 rounded-lg text-left text-slate-300 flex items-center justify-between font-semibold">
+        <span>Align North</span>
+        <i class="fa-regular fa-compass text-sky-400"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Left Layer Visibility Controller -->
+  <div class="absolute bottom-6 left-4 z-20 glassmorphism p-4.5 rounded-2xl w-72 shadow-2xl">
+    <div class="flex items-center justify-between mb-3 border-b border-slate-700/60 pb-2">
+      <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+        <i class="fa-solid fa-sliders"></i> Visualizer Layers
+      </h3>
+      <span class="text-[10px] text-slate-400">MapLibre 3D</span>
+    </div>
+    
+    <div class="space-y-3 text-xs font-bold">
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-emerald-400 transition">
+          <i class="fa-solid fa-border-all text-emerald-400 w-4"></i> Plot Demarcations
+        </span>
+        <input type="checkbox" id="togglePlots" checked onchange="toggleLayer('plots')" class="w-4 h-4 accent-emerald-500 rounded cursor-pointer">
+      </label>
+
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-sky-400 transition">
+          <i class="fa-solid fa-road text-sky-400 w-4"></i> Roads & Avenues
+        </span>
+        <input type="checkbox" id="toggleRoads" checked onchange="toggleLayer('roads')" class="w-4 h-4 accent-sky-500 rounded cursor-pointer">
+      </label>
+
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-amber-400 transition">
+          <i class="fa-solid fa-building text-amber-400 w-4"></i> 3D Proposed Villas & Gate
+        </span>
+        <input type="checkbox" id="toggleBuildings" checked onchange="toggleLayer('buildings')" class="w-4 h-4 accent-amber-500 rounded cursor-pointer">
+      </label>
+
+      <label class="flex items-center justify-between cursor-pointer group">
+        <span class="flex items-center gap-2 text-slate-200 group-hover:text-cyan-400 transition">
+          <i class="fa-solid fa-faucet-drip text-cyan-400 w-4"></i> Subsurface Utilities
+        </span>
+        <input type="checkbox" id="toggleUtilities" checked onchange="toggleLayer('utilities')" class="w-4 h-4 accent-cyan-500 rounded cursor-pointer">
+      </label>
+    </div>
+
+    <div class="mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] text-slate-300 font-bold">
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-500 shadow-sm"></span> Available</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-500 shadow-sm"></span> Reserved</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-rose-500 shadow-sm"></span> Sold</span>
+    </div>
+  </div>
+
+  <!-- Interactive Plot Raycast Inspection Card -->
+  <div id="plotCard" class="hidden absolute bottom-6 right-4 z-20 glassmorphism p-5 rounded-2xl w-80 shadow-2xl border-emerald-500/40 transition-all">
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <span id="cardStatus" class="badge-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Available</span>
+        <h2 id="cardTitle" class="text-lg font-black text-white mt-1">Plot #104</h2>
+      </div>
+      <button onclick="closeCard()" class="text-slate-400 hover:text-white p-1 text-base"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2 text-xs mb-4">
+      <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/60">
+        <div class="text-slate-400 text-[10px] uppercase font-bold">Area Size</div>
+        <div id="cardArea" class="font-extrabold text-slate-100 mt-0.5">240 Sq.Yds</div>
+      </div>
+      <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/60">
+        <div class="text-slate-400 text-[10px] uppercase font-bold">Facing</div>
+        <div id="cardFacing" class="font-extrabold text-slate-100 mt-0.5">East Facing</div>
+      </div>
+      <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/60">
+        <div class="text-slate-400 text-[10px] uppercase font-bold">Dimensions</div>
+        <div id="cardDim" class="font-extrabold text-slate-100 mt-0.5">36' x 60'</div>
+      </div>
+      <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/60">
+        <div class="text-slate-400 text-[10px] uppercase font-bold">Offer Price</div>
+        <div id="cardPrice" class="font-extrabold text-emerald-400 mt-0.5">₹ 36.0 Lakhs</div>
+      </div>
+    </div>
+
+    <button onclick="openWhatsAppInquiry()" class="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-600 font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-slate-950">
+      <i class="fa-brands fa-whatsapp text-sm"></i> Inquire / Book Site Visit
+    </button>
+  </div>
+
+  <!-- Map Container -->
+  <div id="map"></div>
+
+  <script>
+    // Center point (Khammam-Wyra Road Growth Corridor)
+    const LAYOUT_CENTER = [80.1750, 17.2420];
+
+    // Initialize MapLibre GL
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+      center: LAYOUT_CENTER,
+      zoom: 17.2,
+      pitch: 62,      // Default 3D perspective
+      bearing: -30,    // Isometric orientation
+      antialias: true
+    });
+
+    // Navigation zoom/pitch controls
+    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+
+    // GeoJSON Data: Real Estate Plots
+    const plotsGeoJSON = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "id": "101", "name": "Plot #101", "area": "200 Sq.Yds", "dim": "30' x 60'", "facing": "East Facing", "status": "Available", "price": "₹30.0 L", "color": "#10b981", "height": 1.2 },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1742, 17.2425], [80.1747, 17.2425], [80.1747, 17.2421], [80.1742, 17.2421], [80.1742, 17.2425]]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "id": "102", "name": "Plot #102", "area": "200 Sq.Yds", "dim": "30' x 60'", "facing": "East Facing", "status": "Available", "price": "₹30.0 L", "color": "#10b981", "height": 1.2 },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1748, 17.2425], [80.1753, 17.2425], [80.1753, 17.2421], [80.1748, 17.2421], [80.1748, 17.2425]]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "id": "103", "name": "Plot #103", "area": "266 Sq.Yds", "dim": "40' x 60'", "facing": "North-East Corner", "status": "Reserved", "price": "₹42.5 L", "color": "#f59e0b", "height": 1.2 },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1754, 17.2425], [80.1760, 17.2425], [80.1760, 17.2421], [80.1754, 17.2421], [80.1754, 17.2425]]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "id": "104", "name": "Plot #104", "area": "240 Sq.Yds", "dim": "36' x 60'", "facing": "North Facing", "status": "Sold", "price": "₹36.0 L", "color": "#f43f5e", "height": 1.2 },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1742, 17.2419], [80.1747, 17.2419], [80.1747, 17.2415], [80.1742, 17.2415], [80.1742, 17.2419]]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "id": "105", "name": "Plot #105 (G+1 Villa)", "area": "300 Sq.Yds", "dim": "45' x 60'", "facing": "North Facing", "status": "Constructed", "price": "₹85.0 L", "color": "#3b82f6", "height": 1.2 },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1748, 17.2419], [80.1755, 17.2419], [80.1755, 17.2415], [80.1748, 17.2415], [80.1748, 17.2419]]] }
+        }
+      ]
+    };
+
+    // GeoJSON: 3D Villa Extrusions & Gatehouse
+    const buildingsGeoJSON = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "height": 8.5, "base_height": 0, "color": "#e2e8f0" },
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1749, 17.24185], [80.1754, 17.24185], [80.1754, 17.24155], [80.1749, 17.24155], [80.1749, 17.24185]]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "height": 11.0, "base_height": 0, "color": "#0ea5e9" }, // Clubhouse
+          "geometry": { "type": "Polygon", "coordinates": [[[80.1762, 17.2425], [80.1770, 17.2425], [80.1770, 17.2418], [80.1762, 17.2418], [80.1762, 17.2425]]] }
+        }
+      ]
+    };
+
+    // GeoJSON: Roads and Avenues
+    const roadsGeoJSON = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "name": "40 Ft Internal Avenue" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1738, 17.2420], [80.1772, 17.2420]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "name": "100 Ft Khammam-Wyra Highway Corridor" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1735, 17.2412], [80.1775, 17.2412]] }
+        }
+      ]
+    };
+
+    // GeoJSON: Underground Utilities
+    const utilitiesGeoJSON = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "type": "Freshwater Main" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1738, 17.24203], [80.1772, 17.24203]] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "type": "Stormwater Drainage & Sewer" },
+          "geometry": { "type": "LineString", "coordinates": [[80.1738, 17.24197], [80.1772, 17.24197]] }
+        }
+      ]
+    };
+
+    map.on('load', () => {
+      // 1. Add Roads Source & Layers
+      map.addSource('roads-source', { type: 'geojson', data: roadsGeoJSON });
+      map.addLayer({
+        'id': 'layer-roads-casing',
+        'type': 'line',
+        'source': 'roads-source',
+        'paint': { 'line-color': '#0f172a', 'line-width': 18 }
+      });
+      map.addLayer({
+        'id': 'layer-roads-surface',
+        'type': 'line',
+        'source': 'roads-source',
+        'paint': { 'line-color': '#334155', 'line-width': 14 }
+      });
+      map.addLayer({
+        'id': 'layer-roads-marking',
+        'type': 'line',
+        'source': 'roads-source',
+        'paint': { 'line-color': '#cbd5e1', 'line-width': 1.5, 'line-dasharray': [2, 3] }
+      });
+
+      // 2. Add Subsurface Utilities
+      map.addSource('utilities-source', { type: 'geojson', data: utilitiesGeoJSON });
+      map.addLayer({
+        'id': 'layer-utilities',
+        'type': 'line',
+        'source': 'utilities-source',
+        'paint': { 'line-color': '#06b6d4', 'line-width': 3, 'line-dasharray': [1, 2] }
+      });
+
+      // 3. Add 3D Extruded Plots
+      map.addSource('plots-source', { type: 'geojson', data: plotsGeoJSON });
+      map.addLayer({
+        'id': 'layer-plots-3d',
+        'type': 'fill-extrusion',
+        'source': 'plots-source',
+        'paint': {
+          'fill-extrusion-color': ['get', 'color'],
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': 0.85
+        }
+      });
+
+      // 4. Add 3D Buildings/Villas Layer
+      map.addSource('buildings-source', { type: 'geojson', data: buildingsGeoJSON });
+      map.addLayer({
+        'id': 'layer-buildings-3d',
+        'type': 'fill-extrusion',
+        'source': 'buildings-source',
+        'paint': {
+          'fill-extrusion-color': ['get', 'color'],
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-base': ['get', 'base_height'],
+          'fill-extrusion-opacity': 0.95
+        }
+      });
+
+      // Plot Click Event (Raycasting)
+      let selectedPlot = null;
+      map.on('click', 'layer-plots-3d', (e) => {
+        if (!e.features.length) return;
+        const p = e.features[0].properties;
+        selectedPlot = p;
+        
+        document.getElementById('cardTitle').innerText = p.name;
+        document.getElementById('cardArea').innerText = p.area;
+        document.getElementById('cardFacing').innerText = p.facing;
+        document.getElementById('cardDim').innerText = p.dim;
+        document.getElementById('cardPrice').innerText = p.price;
+        
+        const badge = document.getElementById('cardStatus');
+        badge.innerText = p.status;
+        if (p.status === 'Available') {
+          badge.className = 'badge-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+        } else if (p.status === 'Reserved') {
+          badge.className = 'badge-status bg-amber-500/20 text-amber-400 border border-amber-500/30';
+        } else {
+          badge.className = 'badge-status bg-rose-500/20 text-rose-400 border border-rose-500/30';
+        }
+
+        document.getElementById('plotCard').classList.remove('hidden');
+      });
+
+      map.on('mouseenter', 'layer-plots-3d', () => map.getCanvas().style.cursor = 'pointer');
+      map.on('mouseleave', 'layer-plots-3d', () => map.getCanvas().style.cursor = '');
+    });
+
+    // 2D <-> 3D Mode Camera Animation
+    function setViewMode(mode) {
+      const btn2D = document.getElementById('btn2D');
+      const btn3D = document.getElementById('btn3D');
+
+      if (mode === '2D') {
+        map.easeTo({
+          pitch: 0,
+          bearing: 0,
+          duration: 1600,
+          essential: true
+        });
+        btn2D.className = 'px-4 py-2 text-xs font-extrabold rounded-lg transition-all bg-emerald-500 text-white shadow-md';
+        btn3D.className = 'px-4 py-2 text-xs font-extrabold rounded-lg transition-all text-slate-300 hover:text-white';
+      } else {
+        map.easeTo({
+          pitch: 62,
+          bearing: -35,
+          duration: 1800,
+          essential: true
+        });
+        btn3D.className = 'px-4 py-2 text-xs font-extrabold rounded-lg transition-all bg-emerald-500 text-white shadow-md';
+        btn2D.className = 'px-4 py-2 text-xs font-extrabold rounded-lg transition-all text-slate-300 hover:text-white';
+      }
+    }
+
+    // Toggle Specific Map Layers
+    function toggleLayer(type) {
+      const setVisibility = (id, show) => map.setLayoutProperty(id, 'visibility', show ? 'visible' : 'none');
+
+      if (type === 'plots') {
+        const checked = document.getElementById('togglePlots').checked;
+        setVisibility('layer-plots-3d', checked);
+      } else if (type === 'roads') {
+        const checked = document.getElementById('toggleRoads').checked;
+        setVisibility('layer-roads-casing', checked);
+        setVisibility('layer-roads-surface', checked);
+        setVisibility('layer-roads-marking', checked);
+      } else if (type === 'buildings') {
+        const checked = document.getElementById('toggleBuildings').checked;
+        setVisibility('layer-buildings-3d', checked);
+      } else if (type === 'utilities') {
+        const checked = document.getElementById('toggleUtilities').checked;
+        setVisibility('layer-utilities', checked);
+      }
+    }
+
+    // Camera Navigation Helpers
+    function rotateCompass(deg) {
+      map.easeTo({ bearing: map.getBearing() + deg, duration: 800 });
+    }
+
+    function resetNorth() {
+      map.easeTo({ bearing: 0, duration: 800 });
+    }
+
+    function closeCard() {
+      document.getElementById('plotCard').classList.add('hidden');
+    }
+
+    function openWhatsAppInquiry() {
+      const title = document.getElementById('cardTitle').innerText || 'Plot';
+      window.open(`https://wa.me/919392887268?text=Inquiring%20about%20${encodeURIComponent(title)}%20at%20Shiva%20Sai%20Residential%20Vista.`, '_blank');
+    }
+  </script>
+</body>
+</html>

@@ -10,10 +10,32 @@
 <link rel="stylesheet" href="css/chatbot.css">
 <link rel="stylesheet" href="css/account-modal.css">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.2.6/swiper-bundle.min.css">
 </head>
 <body>
+
+<!-- 3D Canvas Background -->
+<canvas id="three-canvas" style="position:fixed; top:0; left:0; z-index:1; display:none;"></canvas>
+
+<!-- Land Map Modal -->
+<div id="land-map-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100; display:none; flex-direction:column;">
+  <div style="background:rgba(15,23,42,0.9); padding:1rem; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+    <h2 style="color:#34d399; font-size:18px;"><i class="fa-solid fa-map"></i> Interactive Land Map</h2>
+    <button onclick="closeLandMap()" style="background:none; border:none; color:#cbd5e1; font-size:24px; cursor:pointer;">✕</button>
+  </div>
+  <div id="map-container" style="flex:1; position:relative;"></div>
+  <div style="background:rgba(15,23,42,0.9); padding:1rem; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+    <button onclick="document.getElementById('file-upload').click()" style="background:linear-gradient(135deg, #10b981, #059669); color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fa-solid fa-cloud-arrow-up"></i> Upload File</button>
+    <button onclick="toggleMapLegend()" style="background:rgba(255,255,255,0.05); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1); padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600;">📍 Legend</button>
+    <button onclick="exportLandData()" style="background:rgba(255,255,255,0.05); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1); padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fa-solid fa-download"></i> Export</button>
+  </div>
+</div>
+
+<!-- File Upload Input -->
+<input type="file" id="file-upload" accept=".geojson,.json,.csv,.kml,.gpx,.jpg,.jpeg,.png,.pdf" style="display:none;" onchange="handleFileUpload(event)">
 
 <!-- Global Navigation (Absolute over Hero at Top, Fixed Solid on Scroll) -->
 <nav class="site-nav nav-hero-overlay" id="site-nav">
@@ -35,6 +57,11 @@
     </div>
 
     <div class="nav-actions">
+      <div style="display:flex; gap:6px; align-items:center;">
+        <a href="real-land-map.html" style="background:linear-gradient(135deg, #10b981, #059669); color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px; text-decoration:none; display:flex; align-items:center; gap:4px;" title="Open 2D Interactive Land Map"><i class="fa-solid fa-map"></i> 2D Map</a>
+        <a href="real-land-map.html?tab=showcase" style="background:rgba(249,115,22,0.2); color:#f97316; border:1px solid #f97316; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px; text-decoration:none; display:flex; align-items:center; gap:4px;" title="Open Plot Showcase"><i class="fa-solid fa-th-large"></i> Showcase</a>
+        <a href="exploded-3d.html" style="background:linear-gradient(135deg, #f97316, #ea580c); color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px; text-decoration:none; display:flex; align-items:center; gap:4px;" title="Open Exploded 3D Infrastructure Visualizer"><i class="fa-solid fa-cube"></i> 💥 3D</a>
+      </div>
       <a href="#finder" class="nav-search-btn" aria-label="Search plot inventory">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
@@ -1054,5 +1081,153 @@
 <script type="module" src="js/hero-scene.js"></script>
 <script src="js/main.js"></script>
 <script src="js/chatbot.js"></script>
+
+<!-- Enhanced Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+<script>
+  let map, plotLayer, plotsData = [];
+
+  // Three.js 3D Background
+  function init3DBackground() {
+    const canvas = document.getElementById('three-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0.05);
+    camera.position.z = 5;
+
+    // Animated plot boxes
+    const colors = [0x10b981, 0xf59e0b, 0xec4899];
+    for (let i = 0; i < 6; i++) {
+      const geo = new THREE.BoxGeometry(1, 1, 1);
+      const mat = new THREE.MeshPhongMaterial({ color: colors[i % 3], emissive: colors[i % 3], emissiveIntensity: 0.3 });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set((Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, Math.random() * 5);
+      mesh.userData.rotSpeed = { x: (Math.random() - 0.5) * 0.01, y: (Math.random() - 0.5) * 0.01 };
+      scene.add(mesh);
+    }
+
+    const light1 = new THREE.PointLight(0x10b981, 1, 100);
+    light1.position.set(5, 5, 5);
+    scene.add(light1);
+    const light2 = new THREE.PointLight(0x06b6d4, 1, 100);
+    light2.position.set(-5, -5, 5);
+    scene.add(light2);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+
+    function animate() {
+      requestAnimationFrame(animate);
+      scene.children.forEach(obj => {
+        if (obj.userData.rotSpeed) {
+          obj.rotation.x += obj.userData.rotSpeed.x;
+          obj.rotation.y += obj.userData.rotSpeed.y;
+        }
+      });
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+
+  // Land Map Functions
+  function openLandMap() {
+    document.getElementById('land-map-modal').style.display = 'flex';
+    document.getElementById('three-canvas').style.display = 'block';
+    init3DBackground();
+    initMap();
+    setTimeout(() => { if (map) map.invalidateSize(); }, 300);
+  }
+
+  function closeLandMap() {
+    document.getElementById('land-map-modal').style.display = 'none';
+    document.getElementById('three-canvas').style.display = 'none';
+    if (map) {
+      map.remove();
+      map = null;
+    }
+  }
+
+  function initMap() {
+    if (map) return;
+    const container = document.getElementById('map-container');
+    map = L.map(container, { center: [17.2480, 80.1365], zoom: 17 });
+
+    L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+      maxZoom: 20, subdomains: ['0', '1', '2', '3']
+    }).addTo(map);
+
+    loadSamplePlots();
+  }
+
+  function loadSamplePlots() {
+    const data = {
+      "type": "FeatureCollection",
+      "features": [
+        { "type": "Feature", "properties": { "plot_number": "P-01", "size": "1950 sq.yds", "facing": "West", "status": "reserved", "price": "₹35.1L" }, "geometry": { "type": "Polygon", "coordinates": [[[80.135, 17.2475], [80.135308, 17.2475], [80.135308, 17.24772], [80.135, 17.24772], [80.135, 17.2475]]] } },
+        { "type": "Feature", "properties": { "plot_number": "P-02", "size": "2100 sq.yds", "facing": "East", "status": "available", "price": "₹42.0L" }, "geometry": { "type": "Polygon", "coordinates": [[[80.13535, 17.2475], [80.135658, 17.2475], [80.135658, 17.24772], [80.13535, 17.24772], [80.13535, 17.2475]]] } },
+        { "type": "Feature", "properties": { "plot_number": "P-03", "size": "1800 sq.yds", "facing": "North", "status": "sold", "price": "₹32.4L" }, "geometry": { "type": "Polygon", "coordinates": [[[80.1357, 17.2475], [80.135958, 17.2475], [80.135958, 17.24772], [80.1357, 17.24772], [80.1357, 17.2475]]] } }
+      ]
+    };
+    plotsData = data.features;
+    renderPlots(data);
+  }
+
+  function renderPlots(geojson) {
+    if (plotLayer) map.removeLayer(plotLayer);
+    plotLayer = L.geoJSON(geojson, {
+      style: (f) => {
+        const colors = { 'available': '#10b981', 'reserved': '#f59e0b', 'sold': '#ec4899' };
+        return { color: colors[f.properties.status] || '#10b981', weight: 2, opacity: 0.8, fillOpacity: 0.3 };
+      },
+      onEachFeature: (f, layer) => {
+        layer.bindPopup(`<b>${f.properties.plot_number}</b><br>${f.properties.size}<br>${f.properties.price}`);
+      }
+    }).addTo(map);
+  }
+
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.features) {
+          plotsData = data.features;
+          renderPlots(data);
+          alert(`✅ Loaded ${data.features.length} plots`);
+        }
+      } catch (err) {
+        alert(`❌ Error: ${err.message}`);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function toggleMapLegend() {
+    alert('📍 Plot Status:\n🟢 Green = Available\n🟡 Amber = Reserved\n🔴 Pink = Sold');
+  }
+
+  function exportLandData() {
+    const geojson = { type: 'FeatureCollection', features: plotsData };
+    const blob = new Blob([JSON.stringify(geojson, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'plots.geojson';
+    a.click();
+  }
+</script>
+
 </body>
 </html>

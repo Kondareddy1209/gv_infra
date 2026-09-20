@@ -13,10 +13,10 @@
     return;
   }
 
-  // Check if container exists
-  const container = document.getElementById('cesium-container');
+  // Check if container exists - Cesium is initialized on-demand in modal
+  const container = document.getElementById('cesium-modal-canvas');
   if (!container) {
-    console.warn('[Cesium Init] Container #cesium-container not found');
+    console.log('[Cesium Init] Cesium will be initialized on-demand when 3D modal opens');
     return;
   }
 
