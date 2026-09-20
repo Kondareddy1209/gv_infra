@@ -32,6 +32,9 @@
 
     /* Full-Bleed Satellite Map Canvas */
     #real-map {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       z-index: 1;
@@ -1410,13 +1413,26 @@
     };
 
     function initMap() {
-      map = L.map('real-map', {
-        center: currentProject.center,
-        zoom: currentProject.zoom,
-        zoomControl: false
-      });
+      try {
+        const container = document.getElementById('real-map');
+        if (!container) {
+          console.error('[Map] Container #real-map not found');
+          return;
+        }
 
-      currentTileLayer = tileProviders.googleHybrid.addTo(map);
+        map = L.map('real-map', {
+          center: currentProject.center,
+          zoom: currentProject.zoom,
+          zoomControl: false
+        });
+
+        if (!map) {
+          console.error('[Map] Failed to initialize Leaflet map');
+          return;
+        }
+
+        currentTileLayer = tileProviders.googleHybrid.addTo(map);
+        console.log('[Map] Satellite map initialized successfully');
       L.control.zoom({ position: 'bottomright' }).addTo(map);
 
       drawnItems = new L.FeatureGroup().addTo(map);
@@ -1463,6 +1479,9 @@
       });
 
       map.on('click', handleMapMeasurementClick);
+      } catch (err) {
+        console.error('[Map] Initialization error:', err);
+      }
     }
 
     /* LAND BORDER EDIT ENGINE */
