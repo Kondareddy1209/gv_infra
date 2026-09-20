@@ -1094,6 +1094,20 @@
       }
     };
 
+    // Auto-fetch API keys from backend config endpoint if available
+    (async function loadMapTokens() {
+      try {
+        const res = await fetch('/api/v1/config/public');
+        if (res.ok) {
+          const cfg = await res.json();
+          if (cfg.cesiumIonToken) window.CESIUM_ION_TOKEN = cfg.cesiumIonToken;
+          if (cfg.googleMapsApiKey) window.GOOGLE_MAPS_API_KEY = cfg.googleMapsApiKey;
+        }
+      } catch (e) {
+        // standalone or offline fallback
+      }
+    })();
+
     const PROJECTS = {
       peacock: {
         id: 'peacock',
@@ -1667,9 +1681,12 @@
 
       if (!cesiumModalViewer) {
         try {
-          // Set token if available, otherwise use defaults
+          // Set tokens if available
           if (window.CESIUM_ION_TOKEN) {
             Cesium.Ion.defaultAccessToken = window.CESIUM_ION_TOKEN;
+          }
+          if (window.GOOGLE_MAPS_API_KEY) {
+            Cesium.GoogleMaps.defaultApiKey = window.GOOGLE_MAPS_API_KEY;
           }
 
           // High-Resolution Google Hybrid Satellite Imagery Provider (Satellite Photos + Real Roads + Street Names)
@@ -1697,6 +1714,17 @@
 
           // Set globe base color to dark slate so tiles blend naturally
           cesiumModalViewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0f172a');
+
+          // Attempt to load Google Photorealistic 3D Tiles if API key is provided
+          if (window.GOOGLE_MAPS_API_KEY && typeof Cesium.createGooglePhotorealistic3DTileset === 'function') {
+            try {
+              const googleTileset = await Cesium.createGooglePhotorealistic3DTileset();
+              cesiumModalViewer.scene.primitives.add(googleTileset);
+              console.log('[Cesium] Google Photorealistic 3D Tiles loaded successfully');
+            } catch (gtErr) {
+              console.warn('[Cesium] Google Photorealistic 3D Tiles fallback to satellite:', gtErr.message);
+            }
+          }
 
           // Attempt to load world terrain, fallback to ellipsoid
           if (window.CESIUM_ION_TOKEN && typeof Cesium.createWorldTerrainAsync === 'function') {

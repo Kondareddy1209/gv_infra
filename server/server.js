@@ -83,6 +83,19 @@ app.get(
   }
 );
 
+/*
+ * Public Configuration Endpoint for Client-Side Maps
+ */
+app.get(
+  "/api/v1/config/public",
+  (req, res) => {
+    res.json({
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || "",
+      cesiumIonToken: process.env.CESIUM_ION_TOKEN || ""
+    });
+  }
+);
+
 
 /*
  * OSM GeoJSON Feature Endpoint
