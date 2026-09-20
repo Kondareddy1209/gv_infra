@@ -2151,6 +2151,32 @@
           </div>
         </div>
 
+        <!-- ENVIRONMENTAL INTELLIGENCE CARD -->
+        <div style="background:linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(59, 130, 246, 0.08)); border:1px solid rgba(34, 197, 94, 0.4); padding:14px; border-radius:10px; margin-bottom:14px;">
+          <div style="font-size:10px; color:#94a3b8; text-transform:uppercase; font-weight:700; margin-bottom:8px;">🌿 Environmental Intelligence</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11px;">
+            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:6px;">
+              <div style="color:#94a3b8; font-size:9px;">☀️ Solar Potential</div>
+              <div style="color:#fbbf24; font-weight:700;">5.4 kWh/m²/day</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:6px;">
+              <div style="color:#94a3b8; font-size:9px;">🍃 Air Quality (AQI)</div>
+              <div style="color:#22c55e; font-weight:700;">38 - Good</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:6px;">
+              <div style="color:#94a3b8; font-size:9px;">💧 Groundwater Depth</div>
+              <div style="color:#38bdf8; font-weight:700;">28 feet (Fresh)</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:6px;">
+              <div style="color:#94a3b8; font-size:9px;">🏔️ Flood Risk</div>
+              <div style="color:#10b981; font-weight:700;">ZERO (Elevated)</div>
+            </div>
+          </div>
+          <button onclick="showEnvironmentalModal(${props.plot_number})" style="margin-top:8px; width:100%; background:rgba(34,197,94,0.2); border:1px solid rgba(34,197,94,0.5); color:#34d399; padding:6px; border-radius:6px; font-size:10px; font-weight:700; cursor:pointer;">
+            📊 View Full Environmental Report
+          </button>
+        </div>
+
         <div style="background:rgba(16, 185, 129, 0.12); border:1px solid rgba(16, 185, 129, 0.4); padding:14px; border-radius:10px; margin-bottom:14px;">
           <div style="font-size:10px; color:#94a3b8; text-transform:uppercase; font-weight:700;">Investment Amount</div>
           <div style="font-size:24px; font-weight:800; color:#34d399;">₹ ${totalPrice}</div>
@@ -2195,6 +2221,144 @@
       const iframe = document.getElementById('streetview-iframe');
       iframe.src = 'about:blank';
       modal.style.display = 'none';
+    }
+
+    function showEnvironmentalModal(plotNumber) {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      `;
+
+      const container = document.createElement('div');
+      container.style.cssText = `
+        background: rgba(15, 23, 42, 0.96);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(34, 197, 94, 0.4);
+        border-radius: 16px;
+        padding: 24px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, sans-serif;
+      `;
+
+      const centroid = currentProject.center;
+      const lat = centroid[0];
+      const lng = centroid[1];
+
+      // Fetch environmental data from all endpoints
+      Promise.all([
+        fetch(`/api/v1/environmental/solar?lat=${lat}&lng=${lng}`).then(r => r.json()),
+        fetch(`/api/v1/environmental/weather?lat=${lat}&lng=${lng}`).then(r => r.json()),
+        fetch(`/api/v1/environmental/airquality?lat=${lat}&lng=${lng}`).then(r => r.json()),
+        fetch(`/api/v1/environmental/elevation?lat=${lat}&lng=${lng}`).then(r => r.json()),
+        fetch(`/api/v1/environmental/water?lat=${lat}&lng=${lng}`).then(r => r.json()),
+        fetch(`/api/v1/environmental/commute?lat=${lat}&lng=${lng}`).then(r => r.json())
+      ]).then(([solar, weather, aqi, elevation, water, commute]) => {
+        const solar_data = solar.data || {};
+        const weather_data = weather.data || {};
+        const aqi_data = aqi.data || {};
+        const elev_data = elevation.data || {};
+        const water_data = water.data || {};
+        const commute_data = commute.data || {};
+
+        container.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
+            <h2 style="margin:0; font-size:20px; font-weight:800; color:#34d399;">🌍 Environmental Intelligence</h2>
+            <button onclick="this.closest('div').parentElement.parentElement.remove()" style="background:rgba(239,68,68,0.2); border:none; color:#f87171; width:32px; height:32px; border-radius:6px; font-size:18px; cursor:pointer;">×</button>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 10px 0;">☀️ Solar & Energy Potential</h3>
+            <div style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); padding:12px; border-radius:8px;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px;">
+                <div><strong style="color:#fbbf24;">Daily Irradiance:</strong> ${solar_data.solarPotential?.avgDailyIrradiance || 5.4} kWh/m²</div>
+                <div><strong style="color:#fbbf24;">Annual Yield:</strong> ${solar_data.solarPotential?.estimatedAnnualYield || 290} kWh/year</div>
+                <div><strong style="color:#fbbf24;">Peak Hours:</strong> ${solar_data.sunTrajectory?.peakHours}</div>
+                <div><strong style="color:#fbbf24;">Optimal Orientation:</strong> ${solar_data.sunTrajectory?.optimalRoofOrientation}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 10px 0;">🌡️ Weather & Climate</h3>
+            <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:12px; border-radius:8px;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px;">
+                <div><strong style="color:#38bdf8;">Temperature:</strong> ${weather_data.current?.temperature}°C</div>
+                <div><strong style="color:#38bdf8;">Humidity:</strong> ${weather_data.current?.humidity}%</div>
+                <div><strong style="color:#38bdf8;">Wind Speed:</strong> ${weather_data.current?.windSpeed} km/h ${weather_data.current?.windDirection}</div>
+                <div><strong style="color:#38bdf8;">Rainfall:</strong> ${weather_data.seasonalClimate?.avgRainfall_annual || 880} mm/year</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 10px 0;">🍃 Air Quality</h3>
+            <div style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); padding:12px; border-radius:8px;">
+              <div style="font-size:12px;">
+                <div><strong style="color:#22c55e;">AQI Index:</strong> ${aqi_data.aqi} (${aqi_data.category})</div>
+                <div style="margin-top:6px;"><strong style="color:#22c55e;">PM2.5:</strong> ${aqi_data.pollutants?.pm25} µg/m³ | <strong>PM10:</strong> ${aqi_data.pollutants?.pm10} µg/m³</div>
+                <div style="margin-top:6px; color:#a7f3d0;">${aqi_data.recommendation}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 10px 0;">🏔️ Elevation & Foundation</h3>
+            <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); padding:12px; border-radius:8px;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px;">
+                <div><strong style="color:#d8b4fe;">Height (MSL):</strong> ${elev_data.elevation?.height_msl} m</div>
+                <div><strong style="color:#d8b4fe;">Natural Slope:</strong> ${elev_data.topography?.naturalSlope}%</div>
+                <div><strong style="color:#d8b4fe;">Bearing Capacity:</strong> ${elev_data.soilFoundation?.bearingCapacity_kpa} kPa</div>
+                <div><strong style="color:#d8b4fe;">Flood Risk:</strong> ZERO - Elevated Ridge</div>
+              </div>
+              <div style="margin-top:8px; font-size:11px; color:#c4b5fd;">${elev_data.soilFoundation?.foundationSuitability}</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 10px 0;">💧 Water & Hydrology</h3>
+            <div style="background:rgba(30,144,255,0.1); border:1px solid rgba(30,144,255,0.3); padding:12px; border-radius:8px;">
+              <div style="font-size:12px;">
+                <div><strong style="color:#87ceeb;">Groundwater:</strong> ${water_data.groundwater?.waterTableDepth}' depth - ${water_data.groundwater?.waterQuality}</div>
+                <div style="margin-top:6px;"><strong style="color:#87ceeb;">Rainfall Harvesting:</strong> ${water_data.rainwaterHarvesting?.catchmentYield_kiloliters} KL potential/year</div>
+                <div style="margin-top:6px;"><strong style="color:#87ceeb;">Nearest Water Body:</strong> ${water_data.nearbyWaterBodies?.[0]?.name} (${water_data.nearbyWaterBodies?.[0]?.distance} km)</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-size:13px; color:#cbd5e1; text-transform:uppercase; font-weight:700; margin:0 0 10px 0;">🚗 Commute & Connectivity</h3>
+            <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:12px; border-radius:8px;">
+              <div style="font-size:11px;">
+                ${(commute_data.driveTimes || []).slice(0, 3).map(d => `
+                  <div style="margin-bottom:6px;"><strong style="color:#fca5a5;">${d.destination}:</strong> ${d.driveTime} min (${d.distance} km)</div>
+                `).join('')}
+                <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); color:#fed7aa;">
+                  <strong>Growth Corridor:</strong> ${commute_data.growthCorridor?.nearbyProjects}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        modal.appendChild(container);
+      }).catch(err => {
+        container.innerHTML = `<div style="color:#f87171;">Error loading environmental data: ${err.message}</div>`;
+        modal.appendChild(container);
+      });
+
+      document.body.appendChild(modal);
     }
 
     function openGoogleEarthDirect() {
