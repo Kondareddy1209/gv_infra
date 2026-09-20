@@ -54,6 +54,34 @@
       opacity: 1 !important;
     }
 
+    /* Navigation Menu */
+    .nav-menu {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      pointer-events: auto;
+    }
+
+    .nav-link {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 200ms;
+    }
+
+    .nav-link:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: rgba(56, 189, 248, 0.5);
+      color: #38bdf8;
+    }
+
     /* Top Header Bar */
     .top-bar {
       position: absolute;
@@ -65,6 +93,7 @@
       align-items: center;
       z-index: 1000;
       pointer-events: none;
+      gap: 16px;
     }
 
     .brand-pill {
@@ -780,6 +809,14 @@
         <div class="subtitle" id="venture-subtitle">14 Acre DTCP & TS RERA Approved Project • Kadthal, Srisailam Highway</div>
       </div>
       <span class="badge" id="venture-badge">Real 3D GIS</span>
+    </div>
+
+    <!-- Top Navigation Menu -->
+    <div class="nav-menu">
+      <a href="index.html" class="nav-link">🏠 Home</a>
+      <a href="project.html" class="nav-link">📊 3D Masterplan</a>
+      <a href="exploded-3d.html" class="nav-link">💥 Exploded 3D</a>
+      <a href="admin.html" class="nav-link">⚙️ Admin</a>
     </div>
 
     <!-- Quick Navigation Pills -->
