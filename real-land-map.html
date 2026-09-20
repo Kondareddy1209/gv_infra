@@ -2209,6 +2209,8 @@
 
     let elevationHeatmap = null;
     let elevationLayer = null;
+    let elevationCanvasLayer = null;
+    let demVisualizationActive = false;
 
     function toggle3DDEM() {
       const MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN';
@@ -2247,26 +2249,48 @@
       // Render heatmap after delay
       setTimeout(() => {
         if (elevationHeatmap) map.removeLayer(elevationHeatmap);
+        if (elevationCanvasLayer) map.removeLayer(elevationCanvasLayer);
 
         if (elevationPoints.length > 0) {
           elevationHeatmap = L.heatLayer(elevationPoints, {
-            radius: 40,
-            blur: 25,
+            radius: 45,
+            blur: 30,
             maxZoom: 1,
+            minOpacity: 0.4,
             gradient: {
               0.0: '#0000ff',
-              0.25: '#00ffff',
-              0.5: '#00ff00',
-              0.75: '#ffff00',
+              0.15: '#00ffff',
+              0.3: '#00ff00',
+              0.5: '#ffff00',
+              0.75: '#ff8800',
               1.0: '#ff0000'
             }
           }).addTo(map);
 
-          console.log(`✓ 3D Elevation heatmap rendered (${elevationPoints.length} points)`);
+          // Add 3D contour label indicator
+          const contourLabel = L.control({ position: 'topleft' });
+          contourLabel.onAdd = function() {
+            const div = L.DomUtil.create('div', 'elevation-info');
+            div.style.cssText = `
+              background: rgba(15, 23, 42, 0.9);
+              border: 1px solid rgba(139, 92, 246, 0.5);
+              padding: 6px 10px;
+              border-radius: 6px;
+              color: #cbd5e1;
+              font-size: 10px;
+              font-weight: 600;
+              pointer-events: none;
+            `;
+            div.innerHTML = '🗻 3D CONTOUR VISUALIZATION';
+            return div;
+          };
+          elevationCanvasLayer = contourLabel.addTo(map);
+
+          console.log(`✓ 3D Elevation heatmap rendered (${elevationPoints.length} points with contours)`);
         }
 
         showElevationInfo(lat, lng, zoom);
-      }, 500);
+      }, 600);
 
       // Show 3D extrusion modal
       if (cesiumModalViewer) {
