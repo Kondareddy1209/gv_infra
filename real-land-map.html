@@ -1457,51 +1457,27 @@
     };
 
     function initMap() {
-      try {
-        const container = document.getElementById('real-map');
-        if (!container) {
-          console.error('[Map] Container #real-map not found');
-          return;
-        }
+      console.log('[Map] Starting initialization...');
 
-        map = L.map('real-map', {
-          center: currentProject.center,
-          zoom: currentProject.zoom,
-          zoomControl: false
-        });
+      // Create map
+      map = L.map('real-map', {
+        center: currentProject.center,
+        zoom: currentProject.zoom,
+        zoomControl: false
+      });
+      console.log('[Map] Map created:', !!map);
 
-        if (!map) {
-          console.error('[Map] Failed to initialize Leaflet map');
-          return;
-        }
+      // Add tiles
+      currentTileLayer = tileProviders.esriSatellite.addTo(map);
+      console.log('[Map] Tiles added (Esri)');
 
-        currentTileLayer = tileProviders.esriSatellite.addTo(map);
-        console.log('[Map] Satellite map initialized successfully (Esri)');
-        console.log('[Map] Map bounds:', map.getBounds());
-        console.log('[Map] Zoom level:', map.getZoom());
-        console.log('[Map] Container visible:', document.getElementById('real-map').offsetHeight > 0);
+      // Basic controls
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        // Optimize tile loading with caching
-        map.options.zoomAnimation = true;
-        map.options.fadeAnimation = true;
-
-        // Debug tile loading
-        let tilesLoaded = 0;
-        currentTileLayer.on('tileload', () => {
-          tilesLoaded++;
-          if (tilesLoaded === 1) {
-            console.log('[Map] First tile loaded successfully');
-          }
-        });
-
-        currentTileLayer.on('tileerror', (err) => {
-          console.debug('[Map] Tile load failed (expected during pan/zoom)', err);
-        });
-
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
-
+      // Drawing tools
       drawnItems = new L.FeatureGroup().addTo(map);
 
+      // Drawing control
       drawControl = new L.Control.Draw({
         draw: {
           polygon: {
@@ -1526,27 +1502,33 @@
         }
       });
 
-      addMasterplanHeaderOverlays();
-      loadPlotsData();
+      // Load overlays and data
+      try {
+        addMasterplanHeaderOverlays();
+      } catch (e) { console.warn('[Map] Masterplan overlay error:', e); }
 
-      document.getElementById('btn-google-hybrid').addEventListener('click', (e) => switchMapLayer('googleHybrid', e.target));
-      document.getElementById('btn-esri-sat').addEventListener('click', (e) => switchMapLayer('esriSatellite', e.target));
-      document.getElementById('btn-measure').addEventListener('click', toggleMeasurementMode);
-      document.getElementById('btn-share').addEventListener('click', shareVenture);
-      document.getElementById('fab-reset').addEventListener('click', () => map.flyTo(currentProject.center, currentProject.zoom));
-      document.getElementById('drawer-close').addEventListener('click', closeDrawer);
-      document.getElementById('plot-search').addEventListener('input', (e) => filterPlots(e.target.value));
+      try {
+        loadPlotsData();
+      } catch (e) { console.warn('[Map] Plot data error:', e); }
 
-      document.getElementById('opacity-range').addEventListener('input', (e) => {
-        currentOpacity = parseFloat(e.target.value);
-        if (plotLayer) plotLayer.setStyle({ fillOpacity: currentOpacity });
-        if (brochureImageOverlay) brochureImageOverlay.setOpacity(currentOpacity);
-      });
+      // Event listeners
+      try {
+        document.getElementById('btn-google-hybrid').addEventListener('click', (e) => switchMapLayer('googleHybrid', e.target));
+        document.getElementById('btn-esri-sat').addEventListener('click', (e) => switchMapLayer('esriSatellite', e.target));
+        document.getElementById('btn-measure').addEventListener('click', toggleMeasurementMode);
+        document.getElementById('btn-share').addEventListener('click', shareVenture);
+        document.getElementById('fab-reset').addEventListener('click', () => map.flyTo(currentProject.center, currentProject.zoom));
+        document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+        document.getElementById('plot-search').addEventListener('input', (e) => filterPlots(e.target.value));
+        document.getElementById('opacity-range').addEventListener('input', (e) => {
+          currentOpacity = parseFloat(e.target.value);
+          if (plotLayer) plotLayer.setStyle({ fillOpacity: currentOpacity });
+          if (brochureImageOverlay) brochureImageOverlay.setOpacity(currentOpacity);
+        });
+        map.on('click', handleMapMeasurementClick);
+      } catch (e) { console.warn('[Map] Event listener error:', e); }
 
-      map.on('click', handleMapMeasurementClick);
-      } catch (err) {
-        console.error('[Map] Initialization error:', err);
-      }
+      console.log('[Map] Initialization complete');
     }
 
     /* LAND BORDER EDIT ENGINE */
