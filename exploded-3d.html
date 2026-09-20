@@ -449,18 +449,8 @@
 
   <!-- Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- OrbitControls -->
-  <script>
-    // Load OrbitControls from CDN
-    (function() {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/three@r128/examples/js/controls/OrbitControls.js';
-      script.onload = function() {
-        console.log('OrbitControls loaded');
-      };
-      document.head.appendChild(script);
-    })();
-  </script>
+  <!-- OrbitControls - Load from unpkg with proper module support -->
+  <script src="https://unpkg.com/three@r128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
     let scene, camera, renderer, controls;
@@ -492,13 +482,14 @@
       renderer.shadowMap.type = THREE.PCFShadowShadowMap;
       renderer.debug.checkShaderErrors = false;
 
-      // Controls - use window.OrbitControls if THREE.OrbitControls not available
-      const OrbitControlsClass = window.OrbitControls || THREE.OrbitControls;
-      if (!OrbitControlsClass) {
-        console.error('OrbitControls not loaded');
+      // Controls
+      try {
+        controls = new THREE.OrbitControls(camera, canvas);
+      } catch (e) {
+        console.warn('OrbitControls not available, using simple camera control');
+        // Fallback: just allow manual camera positioning
         return;
       }
-      controls = new OrbitControlsClass(camera, canvas);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
       controls.autoRotate = autoRotateEnabled;
@@ -768,10 +759,8 @@
       renderer.render(scene, camera);
     }
 
-    // Initialize on load (with delay to ensure all scripts loaded)
-    window.addEventListener('load', () => {
-      setTimeout(initScene, 100);
-    });
+    // Initialize on load
+    window.addEventListener('load', initScene);
   </script>
 </body>
 </html>
