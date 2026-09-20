@@ -4,8 +4,12 @@
  * with automatic fallback logic and OpenAI-compatible REST endpoints.
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Helper to load .env manually if dotenv isn't present
 function loadEnv() {
@@ -222,7 +226,7 @@ async function queryAIGateway({ prompt, messages, provider = 'auto', systemPromp
   throw new Error(`AI Gateway error - all providers failed in fallback chain (${attemptedProviders.join(' -> ')}). Details: ${JSON.stringify(errors)}`);
 }
 
-module.exports = {
+export {
   queryAIGateway,
   callOllama,
   callOmniRoute,

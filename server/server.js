@@ -9,6 +9,16 @@ import { fileURLToPath } from "node:url";
 import {
   LandIntelligenceService
 } from "../src/services/landIntelligenceService.js";
+import {
+  queryAIGateway,
+  callOllama,
+  callOmniRoute,
+  callOpenRouter
+} from "./ai-gateway.js";
+import {
+  parseUserIntent,
+  buildParameterizedSQL
+} from "./ai-query-planner.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

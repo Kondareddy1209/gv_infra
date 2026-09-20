@@ -4,7 +4,7 @@
  * for PostGIS spatial queries. Enforces strict parameter validation to prevent raw SQL execution.
  */
 
-const { queryAIGateway } = require('./ai-gateway');
+import { queryAIGateway } from './ai-gateway.js';
 
 /**
  * Structured Query Filter JSON Schema definition
@@ -112,7 +112,7 @@ function buildParameterizedSQL(filter) {
   return { sql, values };
 }
 
-module.exports = {
+export {
   parseUserIntent,
   buildParameterizedSQL
 };

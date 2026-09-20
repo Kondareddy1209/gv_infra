@@ -4,7 +4,7 @@
  * Run with: node scripts/test-ai-gateway.js
  */
 
-const { queryAIGateway, callOpenRouter, callOmniRoute, callOllama } = require('../server/ai-gateway');
+import { queryAIGateway, callOpenRouter, callOmniRoute, callOllama } from '../server/ai-gateway.js';
 
 const TEST_PROMPT = "Hello, test the AI connection.";
 
